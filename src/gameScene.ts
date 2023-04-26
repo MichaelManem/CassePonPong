@@ -1,11 +1,18 @@
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
-  private gameBorders!: Phaser.Physics.Arcade.StaticGroup;
   private worldBounds!: Phaser.GameObjects.TileSprite;
-  private backButton!: Phaser.GameObjects.Text;
+  private music!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
 
   constructor() {
     super({ key: 'GameScene' });
+  }
+
+  init(data: any) {
+    if(data.musicOn && this.music && this.music.isPaused) {
+      this.music.play();
+    } else if (data.musicOn && this.music && !this.music.isPaused) {
+      this.music.stop();
+    }
   }
 
   preload() {
@@ -22,26 +29,27 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.worldBounds);
 
     const enemy = this.physics.add.sprite(700, 300, 'enemy');
-    const music = this.sound.add('music');
-    music.play();
+    this.music = this.sound.add('music');
+    this.music.setLoop(true);
+    this.music.play();
 
     this.physics.add.collider(this.player, enemy, () => {
       console.log('Collision detected!');
     });
-
-    this.createBackButton();
-  }
-
-  update() {
-    this.handlePlayerMovement();
   
     const escapeKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     escapeKey?.on('down', () => {
       if (!this.scene.isPaused()) {
+        let dataPauseScene = { sceneBeforePause: 'GameScene', music: this.music };
+        this.scene.launch('PauseScene', dataPauseScene);
         this.scene.pause();
-        this.showBackButton();
+        this.music.pause();
       }
     });
+  }
+
+  update() {
+    this.handlePlayerMovement();
   }
 
   private handlePlayerMovement() {
@@ -67,17 +75,11 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private createBackButton() {
-    this.backButton = this.add.text(this.cameras.main.width / 2, 500, 'Back to Menu', { fontSize: '32px', color: '#fff' });
-    this.backButton.setOrigin(0.5);
-    this.backButton.visible = false;
+  destroy() {
+    this.music.stop();
   }
 
-  private showBackButton() {
-    this.backButton.setVisible(true);
-    this.backButton.setInteractive();
-    this.backButton.on('pointerdown', () => {
-      this.scene.start('MenuScene');
-    });
+  stop() {
+    this.music.stop();
   }
 }
