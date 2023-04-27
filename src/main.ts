@@ -1,20 +1,22 @@
-import Phaser from 'phaser'
-import { GameScene } from './gameScene';
-import { MenuScene } from './menuScene';
-import { PauseScene } from './pauseScene';
+import Phaser from "phaser";
+import { GameScene } from "./Scenes/gameScene";
+import { MenuScene } from "./Scenes/menuScene";
+import { PauseScene } from "./Scenes/pauseScene";
+import { MainScene } from "./Scenes/mainScene";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
-	parent: 'app',
-	width: 1600,
-	height: 700,
+	parent: "app",
+	width: window.innerWidth,
+	height: window.innerHeight,
 	physics: {
-		default: 'arcade',
+		default: "arcade",
 		arcade: {
 			gravity: { y: 0 },
 		},
 	},
-	scene: [MenuScene, GameScene, PauseScene],
-}
+	// First
+	scene: [MenuScene, MainScene, GameScene, PauseScene],
+};
 
-export default new Phaser.Game(config)
+export default new Phaser.Game(config);
