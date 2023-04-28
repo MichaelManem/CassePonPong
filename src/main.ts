@@ -1,22 +1,30 @@
 import Phaser from "phaser";
-import { GameScene } from "./Scenes/gameScene";
-import { MenuScene } from "./Scenes/menuScene";
-import { PauseScene } from "./Scenes/pauseScene";
-import { MainScene } from "./Scenes/mainScene";
+import { Pong } from "./Scenes/Game/pong";
+import { Menu } from "./Scenes/menu";
+import { Option } from "./Scenes/option";
+import { Pause } from "./Scenes/pause";
+import { PreScene } from "./Scenes/preScene";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
-	parent: "app",
-	width: window.innerWidth,
-	height: window.innerHeight,
+    // Game size
+    width: 2560,
+    height: 1440,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        parent: 'game',
+        zoom: 1,  // Size of game canvas = game size * zoom
+    },
+    autoRound: false,
 	physics: {
 		default: "arcade",
 		arcade: {
 			gravity: { y: 0 },
 		},
 	},
-	// First
-	scene: [MenuScene, MainScene, GameScene, PauseScene],
+	// When game is launch, he play the first scene of this array
+	scene: [Menu, Option, PreScene, Pong, Pause]
 };
 
-export default new Phaser.Game(config);
+var game = new Phaser.Game(config);
