@@ -1,7 +1,3 @@
-// Todo - A regarder absolument pour gérer la resize de la fenetre ou le scaling
-// https://stackoverflow.com/questions/66191191/how-to-create-a-responsive-game-for-any-screen-size-with-phaser-3
-// https://photonstorm.github.io/phaser3-docs/Phaser.Scale.ScaleManager.html#:~:text=Place%20the%20scale%20config%20object,canvas%20pixels%20to%20game%20size.
-
 export class PreScene extends Phaser.Scene {
   protected WIDTH_WORLD!: number;
   protected HEIGHT_WORLD!: number;
@@ -14,12 +10,7 @@ export class PreScene extends Phaser.Scene {
   protected readonly SIZE_WIDTH_SCREEN = 1920;
   protected readonly SIZE_HEIGHT_SCREEN = 1080;
 
-  preload() {
-    this.load.image("background1", "assets/images/backgrounds/menu.jpg");
-    this.load.image("background2", "assets/images/backgrounds/bleu_rose.webp");
-    this.load.image("background3", "assets/images/backgrounds/background_vicity.png");
-    this.load.image("background4", "assets/images/backgrounds/rock_lunar.avif");
-  }
+  preload() {}
   
   create() {
     this.WIDTH_WORLD = this.game.config.width as number;

@@ -2,7 +2,6 @@ import { PreScene } from "../preScene";
 
 export class Pong extends PreScene {
   private player1!: Phaser.Physics.Arcade.Sprite;
-  private player2!: Phaser.Physics.Arcade.Sprite;
   private worldBounds!: Phaser.Physics.Arcade.World;
   private backgroundMusic!:
     | Phaser.Sound.NoAudioSound
@@ -26,7 +25,6 @@ export class Pong extends PreScene {
     this.createMusic();
     this.createBackground(this.scene.get("GameScene"));
     this.createPlayer1();
-    this.createPlayer2();
     this.createWorldBounds();
     this.createPauseKey();
   }
@@ -68,48 +66,6 @@ export class Pong extends PreScene {
       .setCollideWorldBounds(true);
     this.player1.flipX = true;
     this.player1.setCollideWorldBounds(true);  
-
-    const strokeThickness = 30;
-    const strokeColor = 0x000000;
-  
-    // Create a Graphics object
-    const graphics = this.add.graphics();
-  
-    // Draw a stroke around the player sprite
-    graphics.lineStyle(strokeThickness, strokeColor);
-    graphics.strokeRect(
-      this.player1.x - this.player1.width / 2,
-      this.player1.y - this.player1.height / 2,
-      this.player1.width,
-      this.player1.height
-    );
-  
-    // Set the depth of the graphics object to be behind the player sprite
-    graphics.setDepth(this.player1.depth - 1);
-  }
-
-  /**
-   * Creation du joueur 2
-   */
-  private createPlayer2() {
-    this.player2 = this.physics.add.sprite(this.WIDTH_WORLD / 30, this.HEIGHT_WORLD / 2, "enemy");
-    this.player2.setCollideWorldBounds(true);  const strokeThickness = 4;
-    const strokeColor = 0x000000;
-  
-    // Create a Graphics object
-    const graphics = this.add.graphics();
-  
-    // Draw a stroke around the player sprite
-    graphics.lineStyle(strokeThickness, strokeColor);
-    graphics.strokeRect(
-      this.player2.x - this.player2.width / 2,
-      this.player2.y - this.player2.height / 2,
-      this.player2.width,
-      this.player2.height
-    );
-  
-    // Set the depth of the graphics object to be behind the player sprite
-    graphics.setDepth(this.player2.depth - 1);
   }
 
   private createWorldBounds() {
@@ -120,12 +76,7 @@ export class Pong extends PreScene {
     const widthWorldBounds = this.WIDTH_WORLD - (gapBetweenBackgroundAndWorldWidth * 2);
 
     // Set up the game bounds
-    this.worldBounds = this.physics.world.setBounds(
-      gapBetweenBackgroundAndWorldHeight, 
-      gapBetweenBackgroundAndWorldWidth, 
-      widthWorldBounds, 
-      heightWorldBounds
-    );
+    this.worldBounds = this.physics.world.setBounds(0, 0, this.WIDTH_WORLD, this.HEIGHT_WORLD);
 
     // Create a rectangle graphic with black line color
     const boundsGraphic = this.add.graphics();

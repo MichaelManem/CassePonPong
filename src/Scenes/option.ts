@@ -1,7 +1,6 @@
 import { PreScene } from "./preScene";
 
 export class Option extends PreScene {
-    private backButton!: Phaser.GameObjects.Text;
     private sizeMinButton!: Phaser.GameObjects.Text;
     private sizeMaxButton!: Phaser.GameObjects.Text;
     private sizeDefaultButton!: Phaser.GameObjects.Text;

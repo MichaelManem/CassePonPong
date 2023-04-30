@@ -63,7 +63,7 @@ export class Pause extends PreScene {
         .setOrigin(0.5)
         .setInteractive()
         .on("pointerdown", () => {
-            this.scene.stop("GameScene");
+            this.scene.stop(this.dataScene.sceneBeforePause);
             this.scene.start("MenuScene");
         });
     }
