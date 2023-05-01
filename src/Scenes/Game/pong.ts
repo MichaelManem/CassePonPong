@@ -2,6 +2,7 @@ import { PreScene } from "../preScene";
 
 export class Pong extends PreScene {
   private player1!: Phaser.Physics.Arcade.Sprite;
+  private player2!: Phaser.Physics.Arcade.Sprite;
   private worldBounds!: Phaser.Physics.Arcade.World;
   private backgroundMusic!:
     | Phaser.Sound.NoAudioSound
@@ -15,8 +16,8 @@ export class Pong extends PreScene {
   }
 
   preload() {
-    this.load.image("player", "assets/images/Player.png");
-    this.load.image("enemy", "assets/images/Computer.png");
+    this.load.image("player1", "assets/images/Player.png");
+    this.load.image("player2", "assets/images/Computer.png");
     this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
   }
 
@@ -25,6 +26,7 @@ export class Pong extends PreScene {
     this.createMusic();
     this.createBackground(this.scene.get("GameScene"));
     this.createPlayer1();
+    this.createPlayer2();
     this.createWorldBounds();
     this.createPauseKey();
   }
@@ -62,10 +64,18 @@ export class Pong extends PreScene {
    * Creation du joueur 1
    */
   private createPlayer1() {
-    this.player1 = this.physics.add.sprite(this.WIDTH_WORLD / 50, this.HEIGHT_WORLD / 2, "player")
+    this.player1 = this.physics.add.sprite(this.WIDTH_WORLD / 50, this.HEIGHT_WORLD / 2, "player1")
       .setCollideWorldBounds(true);
     this.player1.flipX = true;
     this.player1.setCollideWorldBounds(true);  
+  }
+
+  private createPlayer2() {
+    console.log("posX", this.WIDTH_WORLD/10);
+    this.player2 = this.physics.add.sprite(this.WIDTH_WORLD, this.HEIGHT_WORLD / 2, "player2")
+      .setCollideWorldBounds(true);
+    this.player2.flipX = true;
+    this.player2.setCollideWorldBounds(true);  
   }
 
   private createWorldBounds() {
