@@ -14,7 +14,7 @@ export class Option extends PreScene {
 
     create() {
         super.create();
-        this.createBackground("OptionScene");
+        this.createRandomBackground("OptionScene");
         this.createTitle();
         new MenuButtons(this, []);
     }

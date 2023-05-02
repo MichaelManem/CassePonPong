@@ -1,9 +1,10 @@
 import Phaser from "phaser";
-import { Pong } from "./Scenes/Game/pong";
+import { NewPong } from "./Scenes/Game/Pong/newPong";
+import { OldPong } from "./Scenes/Game/OldPong/oldPong";
 import { Menu } from "./Scenes/menu";
 import { Option } from "./Scenes/option";
-import { Pause } from "./Scenes/pause";
-import { PreScene } from "./Scenes/preScene";
+import { GameChoice } from "./Scenes/gameChoice";
+import { Pause } from "./Scenes/Game/pause";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -24,7 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		},
 	},
 	// When game is launch, he play the first scene of this array
-	scene: [Menu, Option, Pong, Pause]
+	scene: [Menu, Option, GameChoice, NewPong, OldPong, Pause]
 };
 
 var game = new Phaser.Game(config);

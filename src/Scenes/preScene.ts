@@ -22,7 +22,7 @@ export class PreScene extends Phaser.Scene {
   /**
    * Creation de l'image du fond
    */
-  protected createBackground(nameScene: string) {
+  protected createRandomBackground(nameScene: string) {
     // Generate a random number between 1 and the total number of background options
     const randomBackgroundIndex = Phaser.Math.Between(1, 4);
     // Add the selected background image to the scene

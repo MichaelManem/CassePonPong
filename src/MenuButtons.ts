@@ -1,22 +1,28 @@
 import Phaser from "phaser";
 import { Menu } from "./Scenes/menu";
+import { GameChoice } from "./Scenes/gameChoice";
 import { Option } from "./Scenes/option";
-import { Pause } from "./Scenes/pause";
+import { Pause } from "./Scenes/Game/pause";
+type ScenesWithButtons = Menu | Option | Pause | GameChoice;
 
 export class MenuButtons {
     protected buttons: Phaser.GameObjects.Text[];
-    protected scene: Menu | Option | Pause;
+    protected scene: ScenesWithButtons;
     private selectedButtonIndex: number;
     private readonly nameButtons = {
       "Play" : "[ Play ]",
       "Option" : "[ Option ]",
+      "PlayOldPong" : "[ Original Pong ]",
+      "PlayNewPong" : "[ Fun Pong ]",
       "Resume" : "[ Resume ]",
       "BackToMenu" : "[ Back To Menu ]",
       "Exit" : "[ Exit Game ]",
     };
     private readonly alphaNotSelected = 0.8;
+    private readonly colorNotSelected = "#fff";
+    private readonly colorSelected = "gold";
     
-    constructor(scene: Menu | Option | Pause, buttons: string[]) {
+    constructor(scene: ScenesWithButtons, buttons: string[]) {
         this.scene = scene;
         this.buttons = [];
         this.createButtons(buttons);
@@ -30,13 +36,19 @@ export class MenuButtons {
     }
 
     private createButtons(buttons: string[]) {
-        buttons.forEach(nameButton => {
+        buttons.forEach((nameButton: string, order: number) => {
             switch (nameButton) {
                 case "Play":
-                    this.buttons.push(this.createPlayButton());
+                    this.buttons.push(this.createMenuPlayButton());
                     break;
                 case "Option":
                     this.buttons.push(this.createOptionButton());
+                    break;
+                case "PlayNewPong":
+                    this.buttons.push(this.createPlayButton(order, this.nameButtons.PlayNewPong));
+                    break;
+                case "PlayOldPong":
+                    this.buttons.push(this.createPlayButton(order, this.nameButtons.PlayOldPong));
                     break;
                 case "Resume":
                     this.buttons.push(this.createResumeButton());
@@ -56,8 +68,8 @@ export class MenuButtons {
      * Créer un bouton play
      * @returns Le bouton Play
      */
-    private createPlayButton() {
-        let playButton = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 3,
+    private createMenuPlayButton(): Phaser.GameObjects.Text {
+        let playButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 3,
             this.nameButtons.Play, { font: "bold 6rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
         )
         .setData({ "index": this.buttons.length }) // Key in array
@@ -68,15 +80,59 @@ export class MenuButtons {
           this.highlight(playButton);
         })
         .on("pointerdown", () => {
-          this.scene.scene.start("GameScene");
+            this.doMenuPlay();
+        })
+        .setAlpha(this.alphaNotSelected);
+
+        return playButton;
+    }
+
+    /**
+     * Créer un bouton play
+     * @returns Le bouton Play
+     */
+    private createPlayButton(order: number, nameButton: string): Phaser.GameObjects.Text {
+        let heightButton = this.getHeightButton(order);
+        let playButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, heightButton,
+            nameButton, { font: "bold 6rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
+        )
+        .setData({ "index": this.buttons.length }) // Key in array
+        .setName(nameButton)
+        .setOrigin(0.5)
+        .setInteractive({ cursor: 'pointer', cursorDelay: 100 })
+        .on("pointerover", () => {
+          this.highlight(playButton);
+        })
+        .on("pointerdown", () => {
+            if(nameButton === this.nameButtons.PlayNewPong) {
+                this.doPlayNewPong();
+            } else if(nameButton === this.nameButtons.PlayOldPong) {
+                this.doPlayOldPong();
+            }
         })
         .setAlpha(this.alphaNotSelected);
     
         return playButton;
     }
 
-    private createOptionButton() {
-      let optionButton = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 2,
+    private getHeightButton(order: number) {
+        let heightButton = this.scene.HEIGHT_WORLD / 2;
+
+        if(order === 0) {
+            heightButton = this.scene.HEIGHT_WORLD / 3;
+        }
+        if(order === 1) {
+            heightButton = this.scene.HEIGHT_WORLD / 2;
+        }
+        if(order == 2) {
+            heightButton = this.scene.HEIGHT_WORLD / 1.5;
+        }
+
+        return heightButton;
+    }
+
+    private createOptionButton(): Phaser.GameObjects.Text {
+      let optionButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 2,
         this.nameButtons.Option, { font: "bold 3rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
       )
         .setData({ "index": this.buttons.length }) // Key in array
@@ -87,15 +143,15 @@ export class MenuButtons {
           this.highlight(optionButton);
         })
         .on("pointerdown", () => {
-          this.scene.scene.start("OptionScene");
+            this.doOption();
         })
         .setAlpha(this.alphaNotSelected);
   
       return optionButton;
     }
 
-    private createExitButton() {
-      let exitButton = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.2,
+    private createExitButton(): Phaser.GameObjects.Text {
+      let exitButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.2,
         this.nameButtons.Exit, { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
       )
         .setData({ "index": this.buttons.length }) // Key in array
@@ -106,17 +162,15 @@ export class MenuButtons {
           this.highlight(exitButton);
         })
         .on("pointerdown", () => {
-            this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
-                scene.scene.stop();
-            });
+            this.doExit();
         })
         .setAlpha(this.alphaNotSelected);
   
       return exitButton;
     }
 
-    private createResumeButton() {
-        let resumeButton = this.scene.add.text(
+    private createResumeButton(): Phaser.GameObjects.Text {
+        let resumeButton: Phaser.GameObjects.Text = this.scene.add.text(
             this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.8,
             this.nameButtons.Resume, { font: "bold 6rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
         )
@@ -128,16 +182,15 @@ export class MenuButtons {
           this.highlight(resumeButton);
         })
         .on("pointerdown", () => {
-            this.scene.scene.resume(this.scene.dataScene?.sceneBeforePause);
-            this.scene.scene.stop();
+            this.doResume();
         })
         .setAlpha(this.alphaNotSelected);
 
         return resumeButton;
     }
     
-    private createBackToMenuButton() {
-        let backToMenu = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.2,
+    private createBackToMenuButton(): Phaser.GameObjects.Text {
+        let backToMenu: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.2,
         this.nameButtons.BackToMenu, { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
         )
         .setData({ "index": this.buttons.length }) // Key in array
@@ -148,10 +201,7 @@ export class MenuButtons {
           this.highlight(backToMenu);
         })
         .on("pointerdown", () => {
-            this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
-                scene.scene.stop();
-            });
-            this.scene.scene.start("MenuScene");
+            this.doBackToMenu();
         })
         .setAlpha(this.alphaNotSelected);
 
@@ -189,10 +239,10 @@ export class MenuButtons {
     }
 
     // Désélectionnez le bouton précédent
-    this.buttons[this.selectedButtonIndex].setAlpha(this.alphaNotSelected);
+    this.buttons[this.selectedButtonIndex].setAlpha(this.alphaNotSelected).setColor(this.colorNotSelected);
 
     // Sélectionnez le nouveau bouton
-    this.buttons[index].setAlpha(1);
+    this.buttons[index].setAlpha(1).setColor(this.colorSelected);
 
     this.selectedButtonIndex = index;
     }
@@ -202,50 +252,76 @@ export class MenuButtons {
     let currentButton = this.buttons[this.selectedButtonIndex];
         switch (currentButton.name) {
             case this.nameButtons.Play:
-                this.scene.scene.start("GameScene");
+                this.doMenuPlay();
                 break;
             case this.nameButtons.Option:
-                this.scene.scene.start("OptionScene");
+                this.doOption();
+                break;
+            case this.nameButtons.PlayNewPong:
+                this.doPlayNewPong();
+                break;
+            case this.nameButtons.PlayOldPong:
+                this.doPlayOldPong();
                 break;
             case this.nameButtons.Resume:
-                this.scene.scene.resume(this.scene.dataScene?.sceneBeforePause);
-                this.scene.scene.stop();
+                this.doResume();
                 break;
             case this.nameButtons.BackToMenu:
-                this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
-                    scene.scene.stop();
-                });
-                this.scene.scene.start("MenuScene");
+                this.doBackToMenu();
                 break;
             case this.nameButtons.Exit:
-                this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
-                    scene.scene.stop();
-                });
+                this.doExit();
                 break;
             // Ajoutez des cas supplémentaires pour d'autres boutons
         }
     }
 
-    private highlight(buttonToHighlight: Phaser.GameObjects.Text) {
-        console.log("hl avant - this.selectedButtonInde", this.selectedButtonIndex);
-        if (buttonToHighlight) {
-            this.selectedButtonIndex = buttonToHighlight.getData("index");
-            buttonToHighlight.setAlpha(1);
-            const otherButtons: Phaser.GameObjects.Text[] = this.buttons.filter(button => button !== buttonToHighlight);
-            otherButtons.forEach(otherButton => {
-                otherButton.setAlpha(this.alphaNotSelected);
-            });
-        }
-        console.log("hl après - this.selectedButtonInde", this.selectedButtonIndex);
+    //#region - method "do" for each button
+
+    private doMenuPlay() {
+        this.scene.scene.start("GameChoice");
     }
 
-    // private showButtonWhenSceneResume() {
-    //     console.log("this.scene.constructor.name", this.scene.constructor.name)
-    //     if(this.scene.constructor.name === "Menu") {
-    //         this.scene.events.on("resume", () => {
-    //             this.buttons.find(button => button.name === this.nameButtons.Play)?.setVisible(true);
-    //             this.buttons.find(button => button.name === this.nameButtons.Option)?.setVisible(true);
-    //         });
-    //     }
-    // }
+    private doOption() {
+        this.scene.scene.start("OptionScene");
+    }
+
+    private doPlayNewPong() {
+        this.scene.scene.start("NewPong");
+    }
+
+    private doPlayOldPong() {
+        this.scene.scene.start("OldPong");
+    }
+
+    private doResume() {
+        this.scene.scene.resume(this.scene.dataScene?.sceneBeforePause);
+        this.scene.scene.stop();
+    }
+
+    private doBackToMenu() {
+        this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
+            scene.scene.stop();
+        });
+        this.scene.scene.start("MenuScene");
+    }
+
+    private doExit() {
+        this.scene.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
+            scene.scene.stop();
+        });
+    }
+
+    //#endregion - method "do" for each button
+
+    private highlight(buttonToHighlight: Phaser.GameObjects.Text) {
+        if (buttonToHighlight) {
+            this.selectedButtonIndex = buttonToHighlight.getData("index");
+            buttonToHighlight.setAlpha(1).setColor(this.colorSelected);
+            const otherButtons: Phaser.GameObjects.Text[] = this.buttons.filter(button => button !== buttonToHighlight);
+            otherButtons.forEach(otherButton => {
+                otherButton.setAlpha(this.alphaNotSelected).setColor(this.colorNotSelected);
+            });
+        }
+    }
 }
