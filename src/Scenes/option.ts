@@ -1,3 +1,4 @@
+import { MenuButtons } from "../MenuButtons";
 import { PreScene } from "./preScene";
 
 export class Option extends PreScene {
@@ -13,8 +14,17 @@ export class Option extends PreScene {
 
     create() {
         super.create();
-        this.createBackButton();
-        this.createSizesButton();
+        this.createRandomBackground("OptionScene");
+        this.createTitle();
+        new MenuButtons(this, []);
+    }
+    private createTitle() {
+      this.add.text(this.WIDTH_WORLD / 2, this.HEIGHT_WORLD / 8,
+        "CassePonPong", { font: "bold 8rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
+      )
+        // setOrigin c'est pour définir dans quel partie de l'objet tu admet qu'il commence. 
+        // O.5 il est au milieux de l'objet, 0 tout à gauche et 1 toute à droite
+        .setOrigin(0.5);
     }
 
     private createSizesButton() {
@@ -46,27 +56,8 @@ export class Option extends PreScene {
         .setOrigin(0.5)
         .setInteractive();
         this.sizeDefaultButton.on("pointerdown", () => {
-            console.log("this.scene.get(OptionScene)", this.scene.get("OptionScene"));
-            console.log("this.scene.get(OptionScene).scale", this.scene.get("OptionScene").scale);
-            console.log("this.game.config.minWidth", this.game.config.minWidth);
-            console.log("this.game.config.minHeight", this.game.config.minHeight);
             // Update the game configuration with the new dimensions
             this.scene.get("OptionScene").scale.setGameSize(this.MIN_SIZE_WIDTH_SCREEN, this.MIN_SIZE_HEIGHT_SCREEN);
-        });
-    }
-
-    private createBackButton() {
-        this.add.text(
-            this.WIDTH_WORLD / 2,
-            this.HEIGHT_WORLD / 1.2,
-            "Back to Menu",
-            { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
-        )
-        .setOrigin(0.5)
-        .setInteractive()
-        .on("pointerdown", () => {
-            this.scene.resume("MenuScene");
-            this.scene.stop();
         });
     }
 }

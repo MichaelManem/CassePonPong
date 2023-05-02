@@ -1,6 +1,6 @@
 export class PreScene extends Phaser.Scene {
-  protected WIDTH_WORLD!: number;
-  protected HEIGHT_WORLD!: number;
+  public WIDTH_WORLD!: number;
+  public HEIGHT_WORLD!: number;
 
   // Aspect Ratio 16:9 - Portrait
   protected readonly MAX_SIZE_WIDTH_SCREEN = 2560;
@@ -22,12 +22,11 @@ export class PreScene extends Phaser.Scene {
   /**
    * Creation de l'image du fond
    */
-  protected createBackground(scene: Phaser.Scene) {
+  protected createRandomBackground(nameScene: string) {
     // Generate a random number between 1 and the total number of background options
     const randomBackgroundIndex = Phaser.Math.Between(1, 4);
-    console.log(randomBackgroundIndex)
     // Add the selected background image to the scene
-    const background = scene.add.image(0, 0, `background${randomBackgroundIndex}`).setOrigin(0, 0);
+    const background = this.scene.get(nameScene).add.image(0, 0, `background${randomBackgroundIndex}`).setOrigin(0, 0);
     background.displayWidth = this.game.canvas.width;
     background.displayHeight = this.game.canvas.height;
   }
