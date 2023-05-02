@@ -2,15 +2,14 @@ import { PreScene } from "../preScene";
 
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
+    protected sceneName!: string; 
     protected backgroundMusic!:
         | Phaser.Sound.NoAudioSound
         | Phaser.Sound.HTML5AudioSound
         | Phaser.Sound.WebAudioSound;
     private baseSpeedMovePlayer1!: number;
-    protected sceneName!: string;
 
-    //#region - phaser method
-
+    //#region [Phaser Methods]
     create() {
         super.create();
         this.createMusic();
@@ -24,23 +23,16 @@ export abstract class AbstractPong extends PreScene {
         // For player1 => sprite
         this.handlePlayer1Movement();
     }
+    //#endregion [Phaser Methods]
 
-    //#endregion - phaser method
 
-    //--------------------------
-
-    //#region - abstract method
-
+    //#region [Abstract Methods]
     protected abstract createMusic(): void;
     protected abstract createPlayer1(): void;
     protected abstract createBackground(): void;
+    //#endregion [Abstract Methods]
 
-    //#endregion - abstract method
-
-    //--------------------------
-
-    //#region - protected method
-
+    //#region [Protected Methods]
     protected setSceneName(sceneName: string): void {
         this.sceneName = sceneName;
     }
@@ -116,5 +108,5 @@ export abstract class AbstractPong extends PreScene {
         });
     }
     
-    //#endregion - protected method
+    //#endregion [Protected Methods]
 }
