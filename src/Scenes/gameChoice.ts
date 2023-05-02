@@ -1,10 +1,10 @@
 import { MenuButtons } from "../MenuButtons";
 import { PreScene } from "./preScene";
 
-export class Menu extends PreScene {
+export class GameChoice extends PreScene {
 
   constructor() {
-    super({ key: "MenuScene" });
+    super({ key: "GameChoice" });
   }
 
   preload() {
@@ -16,16 +16,16 @@ export class Menu extends PreScene {
 
   create() {
     super.create();
-    this.createRandomBackground("MenuScene");
+    this.createRandomBackground("GameChoice");
     this.createTitle();
-    new MenuButtons(this, [ "Play", "Option", "Exit" ]);
+    new MenuButtons(this, [ "PlayNewPong", "PlayOldPong" ]);
   }
 
   //#region - private method
   
   private createTitle() {
     this.add.text(this.WIDTH_WORLD / 2, this.HEIGHT_WORLD / 8,
-      "CassePonPong", { font: "bold 8rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
+      "Select Game", { font: "bold 8rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
     )
       // setOrigin c'est pour définir dans quel partie de l'objet tu admet qu'il commence. 
       // O.5 il est au milieux de l'objet, 0 tout à gauche et 1 toute à droite
