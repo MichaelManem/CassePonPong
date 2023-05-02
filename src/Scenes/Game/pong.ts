@@ -23,7 +23,7 @@ export class Pong extends PreScene {
   create() {
     super.create();
     this.createMusic();
-    this.createBackground(this.scene.get("GameScene"));
+    this.createBackground("GameScene");
     this.createPlayer1();
     this.createWorldBounds();
     this.createPauseKey();

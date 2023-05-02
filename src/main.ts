@@ -24,7 +24,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		},
 	},
 	// When game is launch, he play the first scene of this array
-	scene: [Menu, Option, PreScene, Pong, Pause]
+	scene: [Menu, Option, Pong, Pause]
 };
 
 var game = new Phaser.Game(config);

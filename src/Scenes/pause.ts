@@ -1,3 +1,4 @@
+import { MenuButtons } from "../MenuButtons";
 import { PreScene } from "./preScene";
 
 export class Pause extends PreScene {
@@ -14,9 +15,8 @@ export class Pause extends PreScene {
     create() {
         super.create();
         this.createTitle();
-        this.createBackButton();
         this.createEscapeKey();
-        this.createResumeButton();
+        new MenuButtons(this, [ "Resume" ]);
     }
 
     //#region - private method
@@ -40,32 +40,6 @@ export class Pause extends PreScene {
         // setOrigin c'est pour définir dans quel partie de l'objet tu admet qu'il commence. 
         // O.5 il est au milieux de l'objet, 0 tout à gauche et 1 toute à droite
         .setOrigin(0.5);
-    }
-
-    private createResumeButton() {
-        this.add.text(
-            this.WIDTH_WORLD / 2, this.HEIGHT_WORLD / 1.8,
-            "Resume", { font: "bold 6rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
-        )
-        .setOrigin(0.5)
-        .setInteractive()
-        .on("pointerdown", () => {
-            this.scene.resume(this.dataScene.sceneBeforePause);
-            this.scene.stop();
-        });
-    }
-
-    private createBackButton() {
-        this.add.text(
-            this.WIDTH_WORLD / 2, this.HEIGHT_WORLD / 1.2,
-            "Back to Menu", { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
-        )
-        .setOrigin(0.5)
-        .setInteractive()
-        .on("pointerdown", () => {
-            this.scene.stop(this.dataScene.sceneBeforePause);
-            this.scene.start("MenuScene");
-        });
     }
     //---------------------------
     //#endregion - private method
