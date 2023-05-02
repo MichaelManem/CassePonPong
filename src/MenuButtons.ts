@@ -99,7 +99,7 @@ export class MenuButtons {
         this.nameButtons.Exit, { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
       )
         .setData({ "index": this.buttons.length }) // Key in array
-        .setName(this.nameButtons.Option)
+        .setName(this.nameButtons.Exit)
         .setOrigin(0.5)
         .setInteractive({ cursor: 'pointer', cursorDelay: 0 })
         .on("pointerover", () => {
