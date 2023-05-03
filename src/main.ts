@@ -1,10 +1,10 @@
 import Phaser from "phaser";
-import { NewPong } from "./scenes/games/pong/newPong.ts";
-import { OldPong } from "./scenes/games/oldPong/oldPong.ts";
-import { MainMenu } from "./scenes/menus/mainMenu.ts";
-import { GameMenu } from "./scenes/menus/gameMenu.ts";
-import { PauseMenu } from "./scenes/menus/pauseMenu.ts";
-import { SettingsMenu } from "./scenes/menus/settingsMenu.ts";
+import { NewPong } from "./Scenes/games/pong/newPong.ts";
+import { OldPong } from "./Scenes/games/oldPong/oldPong.ts";
+import { MainMenu } from "./Scenes/menus/mainMenu.ts";
+import { GameMenu } from "./Scenes/menus/gameMenu.ts";
+import { PauseMenu } from "./Scenes/menus/pauseMenu.ts";
+import { SettingsMenu } from "./Scenes/menus/settingsMenu.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,

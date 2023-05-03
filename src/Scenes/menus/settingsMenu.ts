@@ -20,8 +20,8 @@ export class SettingsMenu extends AbstractMenu {
 	}
 
 	create() {
-		this.createRandomBackground("SettingsMenu");
 		this.menuTitle = "Settings :";
+		this.createRandomBackground();
 		super.create();
 	}
 

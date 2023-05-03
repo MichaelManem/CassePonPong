@@ -2,6 +2,9 @@
 
 import { PreScene } from "../preScene.ts";
 
+/**
+ * Classe abstraite AbstractMenu pour la création d'un menu avec des boutons sélectionnables.
+ */
 export abstract class AbstractMenu extends PreScene {
 	protected buttons!: Phaser.GameObjects.Text[];
 	protected selectedIndex!: number;
@@ -31,6 +34,11 @@ export abstract class AbstractMenu extends PreScene {
 	}
 	//#endregion
 
+	/**
+	 * Crée le titre du menu.
+	 *
+	 * @param title - Le titre du menu.
+	 */
 	protected createMenuTitle(title: string): void {
 		this.add
 			.text(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.125, title, {
@@ -45,11 +53,30 @@ export abstract class AbstractMenu extends PreScene {
 	}
 
 	//#region [Abstract Methods]
+	/**
+	 * Crée les éléments du menu (boutons) et retourne un tableau de références à ces boutons.
+	 *
+	 * @returns Un tableau de références à chaque bouton du menu.
+	 */
 	protected abstract createMenuItems(): Phaser.GameObjects.Text[];
+
+	/**
+	 * Action à effectuer lorsqu'un bouton du menu est sélectionné.
+	 *
+	 * @param button - Le bouton sélectionné.
+	 */
 	protected abstract onMenuItemSelect(button: Phaser.GameObjects.Text): void;
 	//#endregion
 
 	//#region [Buttons Management]
+	/**
+	 * Crée un bouton du menu avec un certain index, un nom et une taille de police.
+	 *
+	 * @param index - L'index du bouton.
+	 * @param nameButton - Le nom du bouton.
+	 * @param fontSize - La taille de police du bouton.
+	 * @returns Le bouton créé.
+	 */
 	protected createButton(index: number, nameButton: string, fontSize: number): Phaser.GameObjects.Text {
 		let heightButton = this.getHeightButton(index);
 		let button: Phaser.GameObjects.Text = this.add

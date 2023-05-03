@@ -22,8 +22,8 @@ export class MainMenu extends AbstractMenu {
 	}
 
     create() {
-		this.createRandomBackground("MainMenuScene");
 		this.menuTitle = "CassePonPong";
+		this.createRandomBackground();
         super.create();
     }
 

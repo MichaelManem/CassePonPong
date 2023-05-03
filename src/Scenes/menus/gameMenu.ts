@@ -2,6 +2,9 @@
 
 import { AbstractMenu } from "./abstractMenu.ts";
 
+/**
+ * Classe GameMenu pour la création d'un menu de jeu avec des options de jeu.
+ */
 export class GameMenu extends AbstractMenu {
 	private readonly BUTTON_NAME_NEW_PONG: string = "New Pong";
 	private readonly BUTTON_NAME_OLD_PONG: string = "Old Pong";
@@ -19,7 +22,7 @@ export class GameMenu extends AbstractMenu {
 	}
 
 	create() {
-		this.createRandomBackground("GameMenu");
+		this.createRandomBackground();
 		this.menuTitle = "Choose a game :";
 		super.create();
 	}
