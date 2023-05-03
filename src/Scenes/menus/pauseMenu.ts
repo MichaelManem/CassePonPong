@@ -16,9 +16,16 @@ export class PauseMenu extends AbstractMenu {
 	}
 	
 	create() {
-		this.createRandomBackground("PauseMenu");
 		this.menuTitle = "Pause";
+
+		// * Créer un fond d'écran légèrement transparent pour le menu de pause
+		const background: Phaser.GameObjects.Rectangle = this.createBlackRectangle();
+		background.setAlpha(0.4);
+
 		super.create();
+
+		// * On s'assure que la scene de pause soit bien au premier plan
+		this.scene.bringToTop();
 	}
 
 	// Implémenter les méthodes abstraites
@@ -44,5 +51,15 @@ export class PauseMenu extends AbstractMenu {
 				this.scene.start("MainMenuScene");
 				break;
 		}
+	}
+
+	private createBlackRectangle(): Phaser.GameObjects.Rectangle {
+		return this.add.rectangle(
+			this.cameras.main.width / 2,
+			this.cameras.main.height / 2,
+			this.cameras.main.width,
+			this.cameras.main.height,
+			0x000000
+		);
 	}
 }
