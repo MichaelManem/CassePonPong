@@ -4,7 +4,7 @@
 .DS_Store
 
 # Fichiers de configuration de l'éditeur de texte ou de l'IDE
-.vscode/
+# We don't add .vscode/ to the gitignore because we want share the settings we do
 .idea/
 *.suo
 *.user
