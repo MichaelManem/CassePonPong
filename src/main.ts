@@ -1,10 +1,10 @@
 import Phaser from "phaser";
-import { NewPong } from "./Scenes/Game/Pong/newPong";
-import { OldPong } from "./Scenes/Game/OldPong/oldPong";
-import { Menu } from "./Scenes/menu";
-import { Option } from "./Scenes/option";
-import { GameChoice } from "./Scenes/gameChoice";
-import { Pause } from "./Scenes/Game/pause";
+import { NewPong } from "./scenes/games/pong/newPong.ts";
+import { OldPong } from "./scenes/games/oldPong/oldPong.ts";
+import { MainMenu } from "./scenes/menus/mainMenu.ts";
+import { GameMenu } from "./scenes/menus/gameMenu.ts";
+import { PauseMenu } from "./scenes/menus/pauseMenu.ts";
+import { SettingsMenu } from "./scenes/menus/settingsMenu.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -25,7 +25,14 @@ const config: Phaser.Types.Core.GameConfig = {
 		},
 	},
 	// When game is launch, he play the first scene of this array
-	scene: [Menu, Option, GameChoice, NewPong, OldPong, Pause]
+	scene: [
+        MainMenu, 
+        GameMenu, 
+        PauseMenu,
+        SettingsMenu, 
+        NewPong, 
+        OldPong, 
+    ]
 };
 
 var game = new Phaser.Game(config);

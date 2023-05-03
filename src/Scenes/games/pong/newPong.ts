@@ -6,7 +6,6 @@ export class NewPong extends AbstractPong {
   constructor() {
     super({ key: "NewPong" });
     this.setSceneName("NewPong");
-    console.log("this.speedPlayer1", this.player1Speed);
     this.setPlayer1Speed(this.player1Speed);
   }
 

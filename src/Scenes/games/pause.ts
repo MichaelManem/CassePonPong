@@ -1,5 +1,5 @@
-import { MenuButtons } from "../../MenuButtons";
-import { PreScene } from "../preScene";
+import { MenuButtons } from "../../MenuButtons.ts";
+import { PreScene } from "../preScene.ts";
 
 export class Pause extends PreScene {
     private dataScene: any;
