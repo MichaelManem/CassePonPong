@@ -55,8 +55,8 @@ export class PauseMenu extends AbstractMenu {
 
 	private createBlackRectangle(): Phaser.GameObjects.Rectangle {
 		return this.add.rectangle(
-			this.cameras.main.width / 2,
-			this.cameras.main.height / 2,
+			this.cameras.main.width * 0.5,
+			this.cameras.main.height * 0.5,
 			this.cameras.main.width,
 			this.cameras.main.height,
 			0x000000
