@@ -33,7 +33,7 @@ export abstract class AbstractMenu extends PreScene {
 
 	protected createMenuTitle(title: string): void {
 		this.add
-			.text(this.WIDTH_WORLD / 2, this.HEIGHT_WORLD / 8, title, {
+			.text(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.125, title, {
 				font: `bold ${this.titleSizeFont}rem ${this.titleFont}`,
 				color: this.buttonColor,
 				stroke: this.buttonStroke,
@@ -53,7 +53,7 @@ export abstract class AbstractMenu extends PreScene {
 	protected createButton(index: number, nameButton: string, fontSize: number): Phaser.GameObjects.Text {
 		let heightButton = this.getHeightButton(index);
 		let button: Phaser.GameObjects.Text = this.add
-			.text(this.WIDTH_WORLD / 2, heightButton, nameButton, {
+			.text(this.WIDTH_WORLD * 0.5, heightButton, nameButton, {
 				font: `bold ${fontSize}rem ${this.buttonFont}`,
 				color: this.buttonColor,
 				stroke: this.buttonStroke,
@@ -158,7 +158,7 @@ export abstract class AbstractMenu extends PreScene {
 	//#region Les trucs oubliés
 
 	// private createExitButton(): Phaser.GameObjects.Text {
-	// 	let exitButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD / 2, this.scene.HEIGHT_WORLD / 1.2,
+	// 	let exitButton: Phaser.GameObjects.Text = this.scene.add.text(this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.83,
 	// 	  this.nameButtons.Exit, { font: "bold 4rem Arial", color: "#fff", stroke: '#00000', strokeThickness: 30 }
 	// 	)
 	// 	  .setData({ "index": this.buttons.length }) // Key in array

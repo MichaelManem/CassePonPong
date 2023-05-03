@@ -71,7 +71,7 @@ export class OldPong extends AbstractPong {
 
 		// Create the sprite using the generated texture
 		this.player1 = this.physics.add
-			.sprite(this.WIDTH_WORLD / 6, this.HEIGHT_WORLD / 2, "whiteRect")
+			.sprite(this.WIDTH_WORLD * 0.17, this.HEIGHT_WORLD * 0.5, "whiteRect")
 			.setCollideWorldBounds(true);
 	}
 	//----------------------------
