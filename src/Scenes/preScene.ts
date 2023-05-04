@@ -1,5 +1,3 @@
-/** @format */
-
 export class PreScene extends Phaser.Scene {
 	public WIDTH_WORLD!: number;
 	public HEIGHT_WORLD!: number;

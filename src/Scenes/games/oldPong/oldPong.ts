@@ -1,5 +1,3 @@
-/** @format */
-
 import { AbstractPong } from "../abstractPong.ts";
 
 export class OldPong extends AbstractPong {
@@ -11,12 +9,15 @@ export class OldPong extends AbstractPong {
 		this.setPlayer1Speed(this.player1Speed);
 	}
 
+	// #region preload
 	preload() {
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
+	// #endregion
 
-	//#region - private method
-	//----------------------------
+	//#region private method
+
+
 
 	/**
 	 * Creation de l'image du fond

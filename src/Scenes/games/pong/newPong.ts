@@ -1,5 +1,3 @@
-/** @format */
-
 import { AbstractPong } from "../abstractPong.ts";
 
 export class NewPong extends AbstractPong {
