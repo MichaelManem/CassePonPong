@@ -74,6 +74,30 @@ export class OldPong extends AbstractPong {
 			.sprite(this.WIDTH_WORLD * 0.17, this.HEIGHT_WORLD * 0.5, "whiteRect")
 			.setCollideWorldBounds(true);
 	}
+
+	protected createPlayer2() {
+	// Create a Graphics object
+	const graphics = this.add.graphics();
+
+	// Set the fill style to white
+	graphics.fillStyle(0xffffff);
+
+	// Draw a rectangle shape
+	graphics.fillRect(0, 0, 10, 60);
+
+	// Generate a texture from the Graphics object
+	graphics.generateTexture("whiteRect", 10, 60);
+
+	// Destroy the Graphics object
+	graphics.destroy();
+
+	// Create the sprite using the generated texture
+	this.player2 = this.physics.add
+		.sprite(this.WIDTH_WORLD * 0.83, this.HEIGHT_WORLD * 0.5, "whiteRect")
+		.setCollideWorldBounds(true);
+
+		
+	}
 	//----------------------------
 	//#endregion - private method
 }

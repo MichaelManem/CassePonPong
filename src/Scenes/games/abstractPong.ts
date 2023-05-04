@@ -16,6 +16,7 @@ export abstract class AbstractPong extends PreScene {
         this.createMusic();
         this.createBackground();
         this.createPlayer1();
+        this.createPlayer2();
         this.createWorldBounds();
         this.createPauseKey();
     }
@@ -42,6 +43,7 @@ export abstract class AbstractPong extends PreScene {
         this.baseSpeedMovePlayer1 = speed;
     }
 
+
     /**
      * Move player
      */
@@ -56,6 +58,7 @@ export abstract class AbstractPong extends PreScene {
         if (cursors?.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
+
 
         if (cursors?.down.isDown) {
             playerBody.setVelocityY(speedPlayerHeight);
