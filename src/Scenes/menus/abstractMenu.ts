@@ -1,5 +1,3 @@
-/** @format */
-
 import { PreScene } from "../preScene.ts";
 
 export abstract class AbstractMenu extends PreScene {

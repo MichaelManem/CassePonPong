@@ -1,5 +1,3 @@
-/** @format */
-
 import { AbstractMenu } from "./abstractMenu.ts";
 
 export class SettingsMenu extends AbstractMenu {
