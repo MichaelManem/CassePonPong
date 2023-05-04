@@ -20,13 +20,9 @@ CassePonPong est un jeu vidéo qui combine les éléments des jeux de casse-briq
 
 Avant de commencer à travailler sur le projet, il est nécessaire de configurer votre environnement de développement. Suivez les étapes décrites dans la section [Configuration de l'environnement de développement](https://github.com/MichaelManem/CassePonPong/wiki/GPT_Configuration-de-l'environnement-de-d%C3%A9veloppement) pour installer les outils requis, cloner le dépôt et configurer le projet.
 
-## Architecture du projet et organisation du code
-
-Le projet est organisé en plusieurs dossiers et fichiers pour faciliter la compréhension et la maintenance du code. Consultez la section [Architecture du projet et organisation du code](Architecture-du-projet-et-organisation-du-code.md) pour obtenir une vue d'ensemble de la structure du projet et des principales classes et composants utilisés.
-
 ## Bonnes pratiques
 
-Pour garantir la qualité du code et faciliter la collaboration entre les développeurs, il est important de suivre certaines bonnes pratiques lors de la contribution au projet. Consultez la section [Bonnes pratiques](Bonnes-pratiques.md) pour en savoir plus sur les conventions de codage, les messages de commit et autres recommandations.
+Pour garantir la qualité du code et faciliter la collaboration entre les développeurs, il est important de suivre certaines bonnes pratiques lors de la contribution au projet. Consultez la section [Bonnes Pratiques](https://github.com/MichaelManem/CassePonPong/wiki#bonnes-pratiques) pour en savoir plus sur les conventions de codage, les messages de commit et autres recommandations.
 
 ## FAQ et résolution de problèmes
 
