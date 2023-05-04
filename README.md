@@ -24,14 +24,6 @@ Avant de commencer à travailler sur le projet, il est nécessaire de configurer
 
 Le projet est organisé en plusieurs dossiers et fichiers pour faciliter la compréhension et la maintenance du code. Consultez la section [Architecture du projet et organisation du code](Architecture-du-projet-et-organisation-du-code.md) pour obtenir une vue d'ensemble de la structure du projet et des principales classes et composants utilisés.
 
-## Comment contribuer
-
-Si vous souhaitez contribuer au projet CassePonPong, consultez la section [Comment contribuer](Comment-contribuer.md) pour obtenir des informations sur la manière de signaler des bugs, de proposer des améliorations et de soumettre des pull requests.
-
-## Gestion des branches et des versions
-
-Le projet suit une stratégie de gestion des branches et des versions pour assurer la stabilité du code et faciliter les mises à jour et les déploiements. Pour en savoir plus sur cette stratégie, consultez la section [Gestion des branches et des versions](Gestion-des-branches-et-des-versions.md).
-
 ## Bonnes pratiques
 
 Pour garantir la qualité du code et faciliter la collaboration entre les développeurs, il est important de suivre certaines bonnes pratiques lors de la contribution au projet. Consultez la section [Bonnes pratiques](Bonnes-pratiques.md) pour en savoir plus sur les conventions de codage, les messages de commit et autres recommandations.
