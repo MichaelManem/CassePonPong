@@ -1,17 +1,16 @@
-import { PreScene } from "../preScene";
+import { PreScene } from "../preScene.ts";
 
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
     protected player2!: Phaser.Physics.Arcade.Sprite;
+    protected sceneName!: string; 
     protected backgroundMusic!:
-        | Phaser.Sound.NoAudioSound
+        Phaser.Sound.NoAudioSound
         | Phaser.Sound.HTML5AudioSound
         | Phaser.Sound.WebAudioSound;
     private baseSpeedMovePlayer1!: number;
-    protected sceneName!: string;
 
-    //#region - phaser method
-
+    //#region [Phaser Methods]
     create() {
         super.create();
         this.createMusic();
@@ -25,24 +24,16 @@ export abstract class AbstractPong extends PreScene {
         // For player1 => sprite
         this.handlePlayer1Movement();
     }
+    //#endregion
 
-    //#endregion - phaser method
-
-    //--------------------------
-
-    //#region - abstract method
-
+    //#region [Abstract Methods]
     protected abstract createMusic(): void;
     protected abstract createPlayer1(): void;
     protected abstract createPlayer2(): void;
     protected abstract createBackground(): void;
+    //#endregion
 
-    //#endregion - abstract method
-
-    //--------------------------
-
-    //#region - protected method
-
+    //#region [Protected Methods]
     protected setSceneName(sceneName: string): void {
         this.sceneName = sceneName;
     }
@@ -106,10 +97,7 @@ export abstract class AbstractPong extends PreScene {
         );
         escapeKey?.on("down", () => {
             if (!this.scene.isPaused()) {
-                let dataPauseScene = { sceneBeforePause: this.sceneName };
-                console.log("this.sceneName", this.sceneName);
-                console.log("dataPauseScene", dataPauseScene);
-                this.scene.launch("PauseScene", dataPauseScene);
+                this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
                 this.scene.pause();
                 if(this.backgroundMusic) {
                     this.backgroundMusic.pause();
@@ -118,5 +106,5 @@ export abstract class AbstractPong extends PreScene {
         });
     }
     
-    //#endregion - protected method
+    //#endregion
 }

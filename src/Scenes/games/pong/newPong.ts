@@ -6,7 +6,6 @@ export class NewPong extends AbstractPong {
   constructor() {
     super({ key: "NewPong" });
     this.setSceneName("NewPong");
-    console.log("this.speedPlayer1", this.player1Speed);
     this.setPlayer1Speed(this.player1Speed);
   }
 
@@ -43,7 +42,7 @@ export class NewPong extends AbstractPong {
    * Creation du joueur 1
    */
   protected createPlayer1(): void {
-    this.player1 = this.physics.add.sprite(this.WIDTH_WORLD / 50, this.HEIGHT_WORLD / 2, "player")
+    this.player1 = this.physics.add.sprite(this.WIDTH_WORLD * 0.02, this.HEIGHT_WORLD * 0.5, "player")
       .setCollideWorldBounds(true);
     this.player1.flipX = true;
   }
