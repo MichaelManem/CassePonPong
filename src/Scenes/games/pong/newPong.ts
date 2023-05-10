@@ -4,15 +4,18 @@ import { AbstractPong } from "../abstractPong.ts";
 
 export class NewPong extends AbstractPong {
 	private player1Speed: number = 1300;
+	private player2Speed: number = 1300;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
 		this.setPlayer1Speed(this.player1Speed);
+		this.setPlayer2Speed(this.player2Speed);
 	}
 
 	preload() {
 		this.load.image("player", "assets/images/Player.png");
+		this.load.image("player2", "assets/images/Player2.png");
 		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
@@ -50,16 +53,15 @@ export class NewPong extends AbstractPong {
 		this.player1.flipX = true;
 	}
 
-  /**
-   * Creation du joueur 2
-   */
-  protected createPlayer2() {
-    console.log("posX", this.WIDTH_WORLD/10);
-    this.player2 = this.physics.add.sprite(this.WIDTH_WORLD, this.HEIGHT_WORLD / 2, "player2")
-      .setCollideWorldBounds(true);
-    this.player2.flipX = true;
-    this.player2.setCollideWorldBounds(true);  
-  }
+	/**
+	 * Creation du joueur 2
+	 */
+	protected createPlayer2() {
+		this.player2 = this.physics.add
+			.sprite(this.WIDTH_WORLD * 0.98, this.HEIGHT_WORLD * 0.5, "player2")
+			.setCollideWorldBounds(true);
+		this.player2.flipX = true;
+	}
 
   //----------------------------------------
   //#endregion - abstract method implemented
