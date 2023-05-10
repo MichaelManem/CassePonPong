@@ -9,6 +9,7 @@ export abstract class AbstractPong extends PreScene {
         | Phaser.Sound.HTML5AudioSound
         | Phaser.Sound.WebAudioSound;
     private baseSpeedMovePlayer1!: number;
+    private baseSpeedMovePlayer2!: number;
 
     //#region [Phaser Methods]
     create() {
@@ -24,6 +25,7 @@ export abstract class AbstractPong extends PreScene {
     update() {
         // For player1 => sprite
         this.handlePlayer1Movement();
+        this.handlePlayer2Movement();
     }
     //#endregion
 
@@ -43,33 +45,43 @@ export abstract class AbstractPong extends PreScene {
         this.baseSpeedMovePlayer1 = speed;
     }
 
+    protected setPlayer2Speed(speed: number): void {
+        this.baseSpeedMovePlayer2 = speed;
+    }
+
 
     /**
      * Move player
      */
     protected handlePlayer1Movement() {
-        const cursors = this.input.keyboard?.createCursorKeys();
+        const cursors = this.input.keyboard?.addKeys('Z,S');
         const playerBody = this.player1.body as Phaser.Physics.Arcade.Body;
 
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer1;
-        let speedPlayerWidth = this.baseSpeedMovePlayer1;
 
+        if (cursors?.Z.isDown) {
+            playerBody.setVelocityY(-speedPlayerHeight);
+        }
+
+        if (cursors?.S.isDown) {
+            playerBody.setVelocityY(speedPlayerHeight);
+        }
+    }
+
+    protected handlePlayer2Movement() {
+        const cursors = this.input.keyboard?.createCursorKeys();
+        const playerBody = this.player2.body as Phaser.Physics.Arcade.Body;
+
+        playerBody.setVelocity(0);
+        let speedPlayerHeight = this.baseSpeedMovePlayer2;
+        
         if (cursors?.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
 
-
         if (cursors?.down.isDown) {
             playerBody.setVelocityY(speedPlayerHeight);
-        }
-
-        // Todo - Les controles gauche et droite servent à debuger - a supprimer
-        if (cursors?.left.isDown) {
-            playerBody.setVelocityX(-speedPlayerWidth);
-        }
-        if (cursors?.right.isDown) {
-            playerBody.setVelocityX(speedPlayerWidth);
         }
     }
 

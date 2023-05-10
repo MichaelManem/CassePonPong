@@ -3,12 +3,14 @@
 import { AbstractPong } from "../abstractPong.ts";
 
 export class OldPong extends AbstractPong {
-	private player1Speed: number = 1500;
+	private player1Speed: number = 2000;
+	private player2Speed: number = 2000;
 
 	constructor() {
 		super({ key: "OldPong" });
 		this.setSceneName("OldPong");
 		this.setPlayer1Speed(this.player1Speed);
+		this.setPlayer2Speed(this.player2Speed);
 	}
 
 	preload() {
@@ -76,27 +78,25 @@ export class OldPong extends AbstractPong {
 	}
 
 	protected createPlayer2() {
-	// Create a Graphics object
-	const graphics = this.add.graphics();
+		// Create a Graphics object
+		const graphics = this.add.graphics();
 
-	// Set the fill style to white
-	graphics.fillStyle(0xffffff);
+		// Set the fill style to white
+		graphics.fillStyle(0xffffff);
 
-	// Draw a rectangle shape
-	graphics.fillRect(0, 0, 10, 60);
+		// Draw a rectangle shape
+		graphics.fillRect(0, 0, 10, 60);
 
-	// Generate a texture from the Graphics object
-	graphics.generateTexture("whiteRect", 10, 60);
+		// Generate a texture from the Graphics object
+		graphics.generateTexture("whiteRect", 10, 60);
 
-	// Destroy the Graphics object
-	graphics.destroy();
+		// Destroy the Graphics object
+		graphics.destroy();
 
-	// Create the sprite using the generated texture
-	this.player2 = this.physics.add
-		.sprite(this.WIDTH_WORLD * 0.83, this.HEIGHT_WORLD * 0.5, "whiteRect")
-		.setCollideWorldBounds(true);
-
-		
+		// Create the sprite using the generated texture
+		this.player2 = this.physics.add
+			.sprite(this.WIDTH_WORLD * 0.83, this.HEIGHT_WORLD * 0.5, "whiteRect")
+			.setCollideWorldBounds(true);	
 	}
 	//----------------------------
 	//#endregion - private method
