@@ -12,16 +12,26 @@ export class OldPong extends AbstractPong {
 		this.setPlayer2Speed(this.player2Speed);
 	}
 
-	// #region preload
+	// #region [Phaser methods]
 	preload() {
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
+
+	create() {
+		super.create();
+		this.createTexturePlayer();
+		this.createPlayers();
+	}
 	// #endregion
 
-	//#region private method
+	//#region [Private methods]
+	private createPlayers() {
+        this.player1 = this.createPlayer(this.PLAYER_WIDTH_POSITION, "whiteRect");
+        this.player2 = this.createPlayer(1 - this.PLAYER_WIDTH_POSITION, "whiteRect");
+	}
+	//#endregion
 
-
-
+	//#region [Private methods]
 	/**
 	 * Creation de l'image du fond
 	 */
@@ -57,17 +67,7 @@ export class OldPong extends AbstractPong {
 		this.resumeMusicWhenSceneResume();
 	}
 
-	protected createPlayer1(): void {
-		this.createTexturePlayer();
-
-		// Create the sprite using the generated texture
-		this.player1 = this.physics.add
-			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
-			.setCollideWorldBounds(true);
-	}
-
 	protected createPlayer2(): void {
-		this.createTexturePlayer();
 
 		// Create the sprite using the generated texture
 		this.player2 = this.physics.add
@@ -91,6 +91,5 @@ export class OldPong extends AbstractPong {
 		// Destroy the Graphics object
 		graphics.destroy();
 	}
-	//----------------------------
-	//#endregion - private method
+	//#endregion
 }

@@ -11,33 +11,33 @@ export abstract class AbstractPong extends PreScene {
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
 	private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+    private cursorsPlayer1!: any;
+    private cursorsPlayer2!: any;
     
-    //#region [Phaser Methods]
+    // #region [Phaser Methods]
     create() {
         super.create();
         this.createMusic();
         this.createBackground();
-        this.createPlayer1();
-        this.createPlayer2();
         this.createWorldBounds();
         this.createPauseKey();
+        this.cursorsPlayer1 = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
+        this.cursorsPlayer2 = this.input.keyboard?.createCursorKeys();
     }
 
     update() {
         // For player1 => sprite
-        this.handlePlayer1Movement();
-        this.handlePlayer2Movement();
+        this.handlePlayerMovement(this.player1, this.cursorsPlayer1, this.baseSpeedMovePlayer1);
+        this.handlePlayerMovement(this.player2, this.cursorsPlayer2, this.baseSpeedMovePlayer2);
     }
-    //#endregion
+    // #endregion
 
     //#region [Abstract Methods]
     protected abstract createMusic(): void;
-    protected abstract createPlayer1(): void;
-    protected abstract createPlayer2(): void;
     protected abstract createBackground(): void;
-    //#endregion
+    // #endregion
 
-    //#region [Protected Methods]
+    // #region [Protected Methods]
     protected setSceneName(sceneName: string): void {
         this.sceneName = sceneName;
     }
@@ -50,39 +50,20 @@ export abstract class AbstractPong extends PreScene {
         this.baseSpeedMovePlayer2 = speed;
     }
 
-
     /**
      * Move player
      */
-    protected handlePlayer1Movement(): void {
-        const cursors = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
-        const playerBody = this.player1.body as Phaser.Physics.Arcade.Body;
+    protected handlePlayerMovement(player: Phaser.Physics.Arcade.Sprite, cursors: any, speed: number): void {
+        const playerBody = player.body as Phaser.Physics.Arcade.Body;
 
         playerBody.setVelocity(0);
-        let speedPlayerHeight = this.baseSpeedMovePlayer1;
-
-        if (cursors?.up.isDown) {
-            playerBody.setVelocityY(-speedPlayerHeight);
-        }
-
-        if (cursors?.down.isDown) {
-            playerBody.setVelocityY(speedPlayerHeight);
-        }
-    }
-
-    protected handlePlayer2Movement(): void {
-        const cursors = this.input.keyboard?.createCursorKeys();
-        const playerBody = this.player2.body as Phaser.Physics.Arcade.Body;
-
-        playerBody.setVelocity(0);
-        let speedPlayerHeight = this.baseSpeedMovePlayer2;
         
         if (cursors?.up.isDown) {
-            playerBody.setVelocityY(-speedPlayerHeight);
+            playerBody.setVelocityY(-speed);
         }
 
         if (cursors?.down.isDown) {
-            playerBody.setVelocityY(speedPlayerHeight);
+            playerBody.setVelocityY(speed);
         }
     }
 
@@ -129,6 +110,12 @@ export abstract class AbstractPong extends PreScene {
     protected calculatePlayerWidth(multiplier: number): number {
         return this.WIDTH_WORLD * multiplier;
     }
-    
-    //#endregion
+
+	protected createPlayer(playerWidthPosition: number, textureName: string): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+		return this.physics.add
+			.sprite(this.calculatePlayerWidth(playerWidthPosition), this.calculatePlayerHeight(), textureName)
+			.setCollideWorldBounds(true);
+	}
+
+    // #endregion
 }
