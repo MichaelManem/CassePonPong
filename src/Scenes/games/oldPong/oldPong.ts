@@ -5,12 +5,16 @@ import { AbstractPong } from "../abstractPong.ts";
 export class OldPong extends AbstractPong {
 	private player1Speed: number = 2000;
 	private player2Speed: number = 2000;
+	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER1: number = 0.17;
+	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER2: number = 0.83;
 
 	constructor() {
 		super({ key: "OldPong" });
 		this.setSceneName("OldPong");
 		this.setPlayer1Speed(this.player1Speed);
 		this.setPlayer2Speed(this.player2Speed);
+		this.multiplierPositionWidthPlayer1 = this.MULTIPLIER_POSITION_WIDTH_PLAYER1;
+		this.multiplierPositionWidthPlayer2 = this.MULTIPLIER_POSITION_WIDTH_PLAYER2;
 	}
 
 	preload() {
@@ -56,28 +60,24 @@ export class OldPong extends AbstractPong {
 	}
 
 	protected createPlayer1() {
-		// Create a Graphics object
-		const graphics = this.add.graphics();
-
-		// Set the fill style to white
-		graphics.fillStyle(0xffffff);
-
-		// Draw a rectangle shape
-		graphics.fillRect(0, 0, 10, 60);
-
-		// Generate a texture from the Graphics object
-		graphics.generateTexture("whiteRect", 10, 60);
-
-		// Destroy the Graphics object
-		graphics.destroy();
+		this.createTexturePlayer();
 
 		// Create the sprite using the generated texture
 		this.player1 = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.17, this.HEIGHT_WORLD * 0.5, "whiteRect")
+			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer1), this.positionHeightPlayer(), "whiteRect")
 			.setCollideWorldBounds(true);
 	}
 
 	protected createPlayer2() {
+		this.createTexturePlayer();
+
+		// Create the sprite using the generated texture
+		this.player2 = this.physics.add
+			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer2), this.positionHeightPlayer(), "whiteRect")
+			.setCollideWorldBounds(true);	
+	}
+
+	private createTexturePlayer() {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
 
@@ -92,11 +92,6 @@ export class OldPong extends AbstractPong {
 
 		// Destroy the Graphics object
 		graphics.destroy();
-
-		// Create the sprite using the generated texture
-		this.player2 = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.83, this.HEIGHT_WORLD * 0.5, "whiteRect")
-			.setCollideWorldBounds(true);	
 	}
 	//----------------------------
 	//#endregion - private method

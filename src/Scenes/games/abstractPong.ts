@@ -10,7 +10,10 @@ export abstract class AbstractPong extends PreScene {
         | Phaser.Sound.WebAudioSound;
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
-
+    protected multiplierPositionWidthPlayer1!: number;
+    protected multiplierPositionWidthPlayer2!: number;
+	private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+    
     //#region [Phaser Methods]
     create() {
         super.create();
@@ -54,17 +57,17 @@ export abstract class AbstractPong extends PreScene {
      * Move player
      */
     protected handlePlayer1Movement() {
-        const cursors = this.input.keyboard?.addKeys('Z,S');
+        const cursors = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
         const playerBody = this.player1.body as Phaser.Physics.Arcade.Body;
 
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer1;
 
-        if (cursors?.Z.isDown) {
+        if (cursors?.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
 
-        if (cursors?.S.isDown) {
+        if (cursors?.down.isDown) {
             playerBody.setVelocityY(speedPlayerHeight);
         }
     }
@@ -119,6 +122,14 @@ export abstract class AbstractPong extends PreScene {
                 }
             }
         });
+    }
+
+    protected positionHeightPlayer() {
+        return this.HEIGHT_WORLD * this.MULTIPLIER_POSITION_HEIGHT_PLAYER;
+    }
+
+    protected positionWidthPlayer(multiplier: number) {
+        return this.WIDTH_WORLD * multiplier;
     }
     
     //#endregion

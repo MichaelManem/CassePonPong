@@ -5,12 +5,16 @@ import { AbstractPong } from "../abstractPong.ts";
 export class NewPong extends AbstractPong {
 	private player1Speed: number = 1300;
 	private player2Speed: number = 1300;
+	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER1: number = 0.02;
+	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER2: number = 0.98;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
 		this.setPlayer1Speed(this.player1Speed);
 		this.setPlayer2Speed(this.player2Speed);
+		this.multiplierPositionWidthPlayer1 = this.MULTIPLIER_POSITION_WIDTH_PLAYER1;
+		this.multiplierPositionWidthPlayer2 = this.MULTIPLIER_POSITION_WIDTH_PLAYER2;
 	}
 
 	preload() {
@@ -48,7 +52,7 @@ export class NewPong extends AbstractPong {
 	 */
 	protected createPlayer1(): void {
 		this.player1 = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.02, this.HEIGHT_WORLD * 0.5, "player")
+			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer1), this.positionHeightPlayer(), "player")
 			.setCollideWorldBounds(true);
 		this.player1.flipX = true;
 	}
@@ -58,7 +62,7 @@ export class NewPong extends AbstractPong {
 	 */
 	protected createPlayer2() {
 		this.player2 = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.98, this.HEIGHT_WORLD * 0.5, "player2")
+			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer2), this.positionHeightPlayer(), "player2")
 			.setCollideWorldBounds(true);
 		this.player2.flipX = true;
 	}
