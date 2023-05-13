@@ -5,16 +5,14 @@ import { AbstractPong } from "../abstractPong.ts";
 export class NewPong extends AbstractPong {
 	private player1Speed: number = 1300;
 	private player2Speed: number = 1300;
-	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER1: number = 0.02;
-	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER2: number = 0.98;
+	private readonly PLAYER_WIDTH_POSITION: number = 0.02;
+
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
 		this.setPlayer1Speed(this.player1Speed);
 		this.setPlayer2Speed(this.player2Speed);
-		this.multiplierPositionWidthPlayer1 = this.MULTIPLIER_POSITION_WIDTH_PLAYER1;
-		this.multiplierPositionWidthPlayer2 = this.MULTIPLIER_POSITION_WIDTH_PLAYER2;
 	}
 
 	preload() {
@@ -30,7 +28,7 @@ export class NewPong extends AbstractPong {
 	/**
 	 * Creation de l'image du fond
 	 */
-	protected createBackground() {
+	protected createBackground(): void {
 		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
 		background.displayWidth = this.game.canvas.width;
 		background.displayHeight = this.game.canvas.height;
@@ -39,7 +37,7 @@ export class NewPong extends AbstractPong {
 	/**
 	 * Créer la music en fond
 	 */
-	protected createMusic() {
+	protected createMusic(): void {
 		this.backgroundMusic = this.sound.add("music", { loop: true, volume: 0.5 });
 		this.backgroundMusic.play();
 
@@ -52,7 +50,7 @@ export class NewPong extends AbstractPong {
 	 */
 	protected createPlayer1(): void {
 		this.player1 = this.physics.add
-			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer1), this.positionHeightPlayer(), "player")
+			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player")
 			.setCollideWorldBounds(true);
 		this.player1.flipX = true;
 	}
@@ -60,9 +58,9 @@ export class NewPong extends AbstractPong {
 	/**
 	 * Creation du joueur 2
 	 */
-	protected createPlayer2() {
+	protected createPlayer2(): void {
 		this.player2 = this.physics.add
-			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer2), this.positionHeightPlayer(), "player2")
+			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player2")
 			.setCollideWorldBounds(true);
 		this.player2.flipX = true;
 	}

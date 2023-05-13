@@ -10,8 +10,6 @@ export abstract class AbstractPong extends PreScene {
         | Phaser.Sound.WebAudioSound;
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
-    protected multiplierPositionWidthPlayer1!: number;
-    protected multiplierPositionWidthPlayer2!: number;
 	private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     
     //#region [Phaser Methods]
@@ -56,7 +54,7 @@ export abstract class AbstractPong extends PreScene {
     /**
      * Move player
      */
-    protected handlePlayer1Movement() {
+    protected handlePlayer1Movement(): void {
         const cursors = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
         const playerBody = this.player1.body as Phaser.Physics.Arcade.Body;
 
@@ -72,7 +70,7 @@ export abstract class AbstractPong extends PreScene {
         }
     }
 
-    protected handlePlayer2Movement() {
+    protected handlePlayer2Movement(): void {
         const cursors = this.input.keyboard?.createCursorKeys();
         const playerBody = this.player2.body as Phaser.Physics.Arcade.Body;
 
@@ -91,7 +89,7 @@ export abstract class AbstractPong extends PreScene {
     /**
      * Reprend la music lorsque cette scene reprend
      */
-    protected resumeMusicWhenSceneResume() {
+    protected resumeMusicWhenSceneResume(): void {
         this.events.on("resume", () => {
             if (this.backgroundMusic.isPaused) {
                 this.backgroundMusic.resume();
@@ -99,7 +97,7 @@ export abstract class AbstractPong extends PreScene {
         });
     }
 
-    protected createWorldBounds() {
+    protected createWorldBounds(): void {
         // Set up the game bounds
         this.physics.world.setBounds(0, 0, this.WIDTH_WORLD, this.HEIGHT_WORLD);
 
@@ -109,7 +107,7 @@ export abstract class AbstractPong extends PreScene {
         // boundsGraphic.strokeRect(this.physics.world.bounds.x, this.physics.world.bounds.y, this.physics.world.bounds.width, this.physics.world.bounds.height);
     }
 
-    protected createPauseKey() {
+    protected createPauseKey(): void {
         const escapeKey = this.input.keyboard?.addKey(
             Phaser.Input.Keyboard.KeyCodes.ESC
         );
@@ -124,11 +122,11 @@ export abstract class AbstractPong extends PreScene {
         });
     }
 
-    protected positionHeightPlayer() {
+    protected calculatePlayerHeight(): number {
         return this.HEIGHT_WORLD * this.MULTIPLIER_POSITION_HEIGHT_PLAYER;
     }
 
-    protected positionWidthPlayer(multiplier: number) {
+    protected calculatePlayerWidth(multiplier: number): number {
         return this.WIDTH_WORLD * multiplier;
     }
     

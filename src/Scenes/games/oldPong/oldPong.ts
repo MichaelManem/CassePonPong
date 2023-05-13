@@ -5,16 +5,13 @@ import { AbstractPong } from "../abstractPong.ts";
 export class OldPong extends AbstractPong {
 	private player1Speed: number = 2000;
 	private player2Speed: number = 2000;
-	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER1: number = 0.17;
-	private readonly MULTIPLIER_POSITION_WIDTH_PLAYER2: number = 0.83;
+	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
 
 	constructor() {
 		super({ key: "OldPong" });
 		this.setSceneName("OldPong");
 		this.setPlayer1Speed(this.player1Speed);
 		this.setPlayer2Speed(this.player2Speed);
-		this.multiplierPositionWidthPlayer1 = this.MULTIPLIER_POSITION_WIDTH_PLAYER1;
-		this.multiplierPositionWidthPlayer2 = this.MULTIPLIER_POSITION_WIDTH_PLAYER2;
 	}
 
 	preload() {
@@ -27,7 +24,7 @@ export class OldPong extends AbstractPong {
 	/**
 	 * Creation de l'image du fond
 	 */
-	protected createBackground() {
+	protected createBackground(): void {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
 
@@ -51,7 +48,7 @@ export class OldPong extends AbstractPong {
 	/**
 	 * Créer la music en fond
 	 */
-	protected createMusic() {
+	protected createMusic(): void {
 		this.backgroundMusic = this.sound.add("music", { loop: true, volume: 0.5 });
 		this.backgroundMusic.play();
 
@@ -59,25 +56,25 @@ export class OldPong extends AbstractPong {
 		this.resumeMusicWhenSceneResume();
 	}
 
-	protected createPlayer1() {
+	protected createPlayer1(): void {
 		this.createTexturePlayer();
 
 		// Create the sprite using the generated texture
 		this.player1 = this.physics.add
-			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer1), this.positionHeightPlayer(), "whiteRect")
+			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
 			.setCollideWorldBounds(true);
 	}
 
-	protected createPlayer2() {
+	protected createPlayer2(): void {
 		this.createTexturePlayer();
 
 		// Create the sprite using the generated texture
 		this.player2 = this.physics.add
-			.sprite(this.positionWidthPlayer(this.multiplierPositionWidthPlayer2), this.positionHeightPlayer(), "whiteRect")
+			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
 			.setCollideWorldBounds(true);	
 	}
 
-	private createTexturePlayer() {
+	private createTexturePlayer(): void {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
 
