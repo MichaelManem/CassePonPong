@@ -118,11 +118,11 @@ export class OldPong extends AbstractPong {
 		this.ball.setBounce(1);
 
 		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
-			ball.setVelocity(ball.body.velocity.x, ball.body.velocity.y);
+			ball.setVelocity(startX, ball.body.velocity.y);
 		});
 		
 		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
-			ball.setVelocity(-ball.body.velocity.x, ball.body.velocity.y);
+			ball.setVelocity(-startX, ball.body.velocity.y);
 		});
 	}
 
