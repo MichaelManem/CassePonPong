@@ -1,9 +1,10 @@
 import { AbstractPong } from "../abstractPong.ts";
 
 export class OldPong extends AbstractPong {
-	private player1Speed: number = 2000;
-	private player2Speed: number = 2000;
+	private player1Speed: number = 1000;
+	private player2Speed: number = 1000;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
+	private ball: Phaser.Physics.Arcade.Sprite;
 
 	constructor() {
 		super({ key: "OldPong" });
@@ -16,11 +17,14 @@ export class OldPong extends AbstractPong {
 	preload() {
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
+
+	create() {
+		super.create();
+		this.createBall();
+	}
 	// #endregion
 
 	//#region private method
-
-
 
 	/**
 	 * Creation de l'image du fond
@@ -72,7 +76,7 @@ export class OldPong extends AbstractPong {
 		// Create the sprite using the generated texture
 		this.player2 = this.physics.add
 			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
-			.setCollideWorldBounds(true);	
+			.setCollideWorldBounds(true);
 	}
 
 	private createTexturePlayer(): void {
@@ -93,4 +97,36 @@ export class OldPong extends AbstractPong {
 	}
 	//----------------------------
 	//#endregion - private method
+
+	private createBall(): void {
+		const graphics = this.add.graphics();
+		graphics.fillStyle(0xffffff);
+		graphics.fillRect(0, 0, 10, 10);
+		graphics.generateTexture("whiteCube", 10, 10);
+		graphics.destroy();
+
+		this.ball = this.physics.add
+			.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube")
+			.setCollideWorldBounds(true);
+
+		const startY: number = this.getRandomArbitrary(-250, 250);
+		const startX: number = 500;
+		console.log(startY);
+		
+
+		this.ball.setVelocity(startX, startY);
+		this.ball.setBounce(1);
+
+		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
+			ball.setVelocity(ball.body.velocity.x, ball.body.velocity.y);
+		});
+		
+		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
+			ball.setVelocity(-ball.body.velocity.x, ball.body.velocity.y);
+		});
+	}
+
+	getRandomArbitrary(min: number, max: number) {
+		return Math.random() * (max - min) + min;
+	}
 }
