@@ -18,9 +18,12 @@ export class OldPong extends AbstractPong {
 	}
 	// #endregion
 
+	create() {
+		super.create();
+		this.createMiddleLine();
+	}
+
 	//#region private method
-
-
 
 	/**
 	 * Creation de l'image du fond
@@ -72,7 +75,15 @@ export class OldPong extends AbstractPong {
 		// Create the sprite using the generated texture
 		this.player2 = this.physics.add
 			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
-			.setCollideWorldBounds(true);	
+			.setCollideWorldBounds(true);
+	}
+
+	private createMiddleLine(): void {
+		this.createMiddleLinePart();
+
+		for (let i = 0; i <= 1.05; i += 0.05) {
+			this.physics.add.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * i, "middleLinePart");
+		}
 	}
 
 	private createTexturePlayer(): void {
@@ -87,6 +98,23 @@ export class OldPong extends AbstractPong {
 
 		// Generate a texture from the Graphics object
 		graphics.generateTexture("whiteRect", 10, 60);
+
+		// Destroy the Graphics object
+		graphics.destroy();
+	}
+
+	private createMiddleLinePart(): void {
+		// Create a Graphics object
+		const graphics = this.add.graphics();
+
+		// Set the fill style to white
+		graphics.fillStyle(0xffffff);
+
+		// Draw a rectangle shape
+		graphics.fillRect(0, 0, 5, 25);
+
+		// Generate a texture from the Graphics object
+		graphics.generateTexture("middleLinePart", 5, 25);
 
 		// Destroy the Graphics object
 		graphics.destroy();
