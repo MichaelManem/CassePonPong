@@ -1,4 +1,5 @@
 import { PreScene } from "../preScene.ts";
+import { Ball } from "../../gameObjects/ball.ts";
 
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
@@ -11,6 +12,7 @@ export abstract class AbstractPong extends PreScene {
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
 	private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+    private ball: Ball;
     
     //#region [Phaser Methods]
     create() {
@@ -56,7 +58,7 @@ export abstract class AbstractPong extends PreScene {
      */
     protected handlePlayer1Movement(): void {
         const cursors = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
-        const playerBody = this.player1.body as Phaser.Physics.Arcade.Body;
+        const playerBody = this.player1;
 
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer1;
@@ -72,7 +74,7 @@ export abstract class AbstractPong extends PreScene {
 
     protected handlePlayer2Movement(): void {
         const cursors = this.input.keyboard?.createCursorKeys();
-        const playerBody = this.player2.body as Phaser.Physics.Arcade.Body;
+        const playerBody = this.player2;
 
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer2;

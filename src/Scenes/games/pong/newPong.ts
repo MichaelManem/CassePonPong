@@ -5,7 +5,6 @@ export class NewPong extends AbstractPong {
 	private player2Speed: number = 1300;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.02;
 
-
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
