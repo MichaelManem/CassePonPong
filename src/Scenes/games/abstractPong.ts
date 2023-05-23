@@ -4,16 +4,17 @@ import { Ball } from "../../gameObjects/ball.ts";
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
     protected player2!: Phaser.Physics.Arcade.Sprite;
-    protected sceneName!: string; 
-    protected backgroundMusic!:
-        Phaser.Sound.NoAudioSound
-        | Phaser.Sound.HTML5AudioSound
-        | Phaser.Sound.WebAudioSound;
+    protected sceneName!: string;
+    protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    private scorePlayer1!: number;
+    private scorePlayer2!: number;
+    private scoreTextPlayer1!: Phaser.GameObjects.Text;
+    private scoreTextPlayer2!: Phaser.GameObjects.Text;
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
-	private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+    private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     private ball: Ball;
-    
+
     //#region [Phaser Methods]
     create() {
         super.create();
@@ -23,6 +24,8 @@ export abstract class AbstractPong extends PreScene {
         this.createPlayer2();
         this.createWorldBounds();
         this.createPauseKey();
+        this.scoreTextPlayer1 = this.createScore(0.35, this.scorePlayer1);
+        this.scoreTextPlayer2 = this.createScore(0.65, this.scorePlayer2);
     }
 
     update() {
@@ -52,12 +55,14 @@ export abstract class AbstractPong extends PreScene {
         this.baseSpeedMovePlayer2 = speed;
     }
 
-
     /**
      * Move player
      */
     protected handlePlayer1Movement(): void {
-        const cursors = this.input.keyboard?.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.Z, 'down': Phaser.Input.Keyboard.KeyCodes.S});
+        const cursors = this.input.keyboard?.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.Z,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+        });
         const playerBody = this.player1;
 
         playerBody.setVelocity(0);
@@ -78,7 +83,7 @@ export abstract class AbstractPong extends PreScene {
 
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer2;
-        
+
         if (cursors?.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
@@ -102,22 +107,15 @@ export abstract class AbstractPong extends PreScene {
     protected createWorldBounds(): void {
         // Set up the game bounds
         this.physics.world.setBounds(0, 0, this.WIDTH_WORLD, this.HEIGHT_WORLD);
-
-        // Create a rectangle graphic with black line color
-        // const boundsGraphic = this.add.graphics();
-        // boundsGraphic.lineStyle(20, 0xFFFFFF);
-        // boundsGraphic.strokeRect(this.physics.world.bounds.x, this.physics.world.bounds.y, this.physics.world.bounds.width, this.physics.world.bounds.height);
     }
 
     protected createPauseKey(): void {
-        const escapeKey = this.input.keyboard?.addKey(
-            Phaser.Input.Keyboard.KeyCodes.ESC
-        );
+        const escapeKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         escapeKey?.on("down", () => {
             if (!this.scene.isPaused()) {
                 this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
                 this.scene.pause();
-                if(this.backgroundMusic) {
+                if (this.backgroundMusic) {
                     this.backgroundMusic.pause();
                 }
             }
@@ -131,6 +129,30 @@ export abstract class AbstractPong extends PreScene {
     protected calculatePlayerWidth(multiplier: number): number {
         return this.WIDTH_WORLD * multiplier;
     }
-    
+
+
+    private createScore(widthPositionMultiplier: number, scorePlayer: number): Phaser.GameObjects.Text {
+        scorePlayer = 0;
+        return this.add.text(
+            this.WIDTH_WORLD * widthPositionMultiplier,
+            this.HEIGHT_WORLD * 0.125,
+            scorePlayer.toString(),
+            {
+                font: `6rem Arial`,
+                color: "#fff",
+                stroke: "#00000",
+                strokeThickness: 30,
+            })
+            // setOrigin c'est pour définir dans quel partie de l'objet tu admet qu'il commence.
+            // O.5 il est au milieux de l'objet, 0 tout à gauche et 1 toute à droite
+            .setOrigin(0.5);
+
+    }
+
+    private incrementScorePlayer(scorePlayer: number, scoreTextPlayer: Phaser.GameObjects.Text): void {
+        scorePlayer += 1;
+        scoreTextPlayer.setText(scorePlayer.toString());
+    }
+
     //#endregion
 }
