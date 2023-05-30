@@ -4,7 +4,6 @@ export class OldPong extends AbstractPong {
 	private player1Speed: number = 1000;
 	private player2Speed: number = 1000;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
-	private ball: Phaser.Physics.Arcade.Sprite;
 
 	constructor() {
 		super({ key: "OldPong" });
@@ -137,8 +136,6 @@ export class OldPong extends AbstractPong {
 
 		const startY: number = this.getRandomArbitrary(-250, 250);
 		const startX: number = 500;
-		console.log(startY);
-		
 
 		this.ball.setVelocity(startX, startY);
 		this.ball.setBounce(1);
@@ -146,13 +143,10 @@ export class OldPong extends AbstractPong {
 		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
 			ball.setVelocity(startX, ball.body.velocity.y);
 		});
-		
+
 		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
 			ball.setVelocity(-startX, ball.body.velocity.y);
 		});
 	}
 
-	getRandomArbitrary(min: number, max: number) {
-		return Math.random() * (max - min) + min;
-	}
 }

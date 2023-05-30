@@ -1,6 +1,4 @@
 import { PreScene } from "../preScene.ts";
-import { Ball } from "../../gameObjects/ball.ts";
-
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
     protected player2!: Phaser.Physics.Arcade.Sprite;
@@ -13,7 +11,8 @@ export abstract class AbstractPong extends PreScene {
     private baseSpeedMovePlayer1!: number;
     private baseSpeedMovePlayer2!: number;
     private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
-    private ball: Ball;
+    private readonly SCORE_MAX: number = 7;
+    protected ball!: Phaser.Physics.Arcade.Sprite;
 
     //#region [Phaser Methods]
     create() {
@@ -24,15 +23,19 @@ export abstract class AbstractPong extends PreScene {
         this.createPlayer2();
         this.createWorldBounds();
         this.createPauseKey();
-        this.scoreTextPlayer1 = this.createScore(0.35, this.scorePlayer1);
-        this.scoreTextPlayer2 = this.createScore(0.65, this.scorePlayer2);
+        this.scorePlayer1 = 0;
+        this.scorePlayer2 = 0;
+        this.scoreTextPlayer1 = this.createScore(0.35);
+        this.scoreTextPlayer2 = this.createScore(0.65);
     }
 
     update() {
         // For player1 => sprite
         this.handlePlayer1Movement();
         this.handlePlayer2Movement();
+        this.handleScoring();
     }
+
     //#endregion
 
     //#region [Abstract Methods]
@@ -93,6 +96,28 @@ export abstract class AbstractPong extends PreScene {
         }
     }
 
+    private handleScoring(): void {
+        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05;
+
+        if (this.ball.x < this.player1.x - worldWidthSmallPart) {
+            this.scorePlayer2 += 1;
+            this.scoreTextPlayer2.setText(this.scorePlayer2.toString());
+            this.resetBallPosition();
+
+        } else if (this.ball.x > this.player2.x + worldWidthSmallPart) {
+            this.scorePlayer1 += 1;
+            this.scoreTextPlayer1.setText(this.scorePlayer1.toString());
+            this.resetBallPosition();
+
+        } else if (this.scorePlayer1 === this.SCORE_MAX || this.scorePlayer2 === this.SCORE_MAX) {
+            this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
+            this.scene.pause();
+            if (this.backgroundMusic) {
+                this.backgroundMusic.pause();
+            }
+        }
+    }
+
     /**
      * Reprend la music lorsque cette scene reprend
      */
@@ -131,12 +156,11 @@ export abstract class AbstractPong extends PreScene {
     }
 
 
-    private createScore(widthPositionMultiplier: number, scorePlayer: number): Phaser.GameObjects.Text {
-        scorePlayer = 0;
+    private createScore(widthPositionMultiplier: number): Phaser.GameObjects.Text {
         return this.add.text(
             this.WIDTH_WORLD * widthPositionMultiplier,
             this.HEIGHT_WORLD * 0.125,
-            scorePlayer.toString(),
+            "0",
             {
                 font: `6rem Arial`,
                 color: "#fff",
@@ -149,9 +173,18 @@ export abstract class AbstractPong extends PreScene {
 
     }
 
-    private incrementScorePlayer(scorePlayer: number, scoreTextPlayer: Phaser.GameObjects.Text): void {
-        scorePlayer += 1;
-        scoreTextPlayer.setText(scorePlayer.toString());
+    private resetBallPosition(): void {
+        this.ball.x = this.WIDTH_WORLD * 0.5;
+        this.ball.y = this.HEIGHT_WORLD * 0.5;
+
+        // Reset random ball velocity
+        const startY: number = this.getRandomArbitrary(-250, 250);
+        const startX: number = 500;
+        this.ball.setVelocity(startX, startY);
+    }
+
+    protected getRandomArbitrary(min: number, max: number): number {
+        return Math.random() * (max - min) + min;
     }
 
     //#endregion
