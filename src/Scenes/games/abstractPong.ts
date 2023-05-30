@@ -109,7 +109,7 @@ export abstract class AbstractPong extends PreScene {
             this.scoreTextPlayer1.setText(this.scorePlayer1.toString());
             this.resetBallPosition();
 
-        } else if (this.scorePlayer1 === this.SCORE_MAX || this.scorePlayer2 === this.SCORE_MAX) {
+        } else if (this.scorePlayer1 >= this.SCORE_MAX || this.scorePlayer2 >= this.SCORE_MAX) {
             this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
             this.scene.pause();
             if (this.backgroundMusic) {
