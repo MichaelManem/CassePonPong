@@ -10,7 +10,7 @@
     "regionHighlighter.defaultTheme": "Default Color",
     "regionHighlighter.defaultColor": "rgba(13, 13, 13, 0.3)",
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "prettier.useTabs": true,
     "prettier.printWidth": 120,
