@@ -1,5 +1,8 @@
 import { PreScene } from "../preScene.ts";
+
 export abstract class AbstractPong extends PreScene {
+	private dataScene: any;
+    private wantMusic: boolean = true;
     protected player1!: Phaser.Physics.Arcade.Sprite;
     protected player2!: Phaser.Physics.Arcade.Sprite;
     protected sceneName!: string;
@@ -13,6 +16,11 @@ export abstract class AbstractPong extends PreScene {
     private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     private readonly SCORE_MAX: number = 7;
     protected ball!: Phaser.Physics.Arcade.Sprite;
+
+	init(data: any) {
+		this.dataScene = data;
+        this.wantMusic = this.dataScene?.wantMusic;
+	}
 
     //#region [Phaser Methods]
     create() {
@@ -110,7 +118,7 @@ export abstract class AbstractPong extends PreScene {
             this.resetBallPosition();
 
         } else if (this.scorePlayer1 >= this.SCORE_MAX || this.scorePlayer2 >= this.SCORE_MAX) {
-            this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
+            this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName, wantMusic: this.wantMusic });
             this.scene.pause();
             if (this.backgroundMusic) {
                 this.backgroundMusic.pause();
@@ -123,7 +131,7 @@ export abstract class AbstractPong extends PreScene {
      */
     protected resumeMusicWhenSceneResume(): void {
         this.events.on("resume", () => {
-            if (this.backgroundMusic.isPaused) {
+            if (this.backgroundMusic.isPaused && this.wantMusic) {
                 this.backgroundMusic.resume();
             }
         });
@@ -138,7 +146,7 @@ export abstract class AbstractPong extends PreScene {
         const escapeKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         escapeKey?.on("down", () => {
             if (!this.scene.isPaused()) {
-                this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
+                this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName, wantMusic: this.wantMusic });
                 this.scene.pause();
                 if (this.backgroundMusic) {
                     this.backgroundMusic.pause();
@@ -154,7 +162,6 @@ export abstract class AbstractPong extends PreScene {
     protected calculatePlayerWidth(multiplier: number): number {
         return this.WIDTH_WORLD * multiplier;
     }
-
 
     private createScore(widthPositionMultiplier: number): Phaser.GameObjects.Text {
         return this.add.text(
@@ -178,7 +185,7 @@ export abstract class AbstractPong extends PreScene {
         this.ball.y = this.HEIGHT_WORLD * 0.5;
 
         // Reset random ball velocity
-        const startY: number = this.getRandomArbitrary(-250, 250);
+        const startY: number = this.getRandomArbitrary(-500, 500);
         const startX: number = 500;
         this.ball.setVelocity(startX, startY);
     }
@@ -186,6 +193,5 @@ export abstract class AbstractPong extends PreScene {
     protected getRandomArbitrary(min: number, max: number): number {
         return Math.random() * (max - min) + min;
     }
-
     //#endregion
 }

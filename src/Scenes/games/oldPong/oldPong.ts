@@ -67,6 +67,7 @@ export class OldPong extends AbstractPong {
 		// Create the sprite using the generated texture
 		this.player1 = this.physics.add
 			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
+			.setImmovable(true)
 			.setCollideWorldBounds(true);
 	}
 
@@ -76,6 +77,7 @@ export class OldPong extends AbstractPong {
 		// Create the sprite using the generated texture
 		this.player2 = this.physics.add
 			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
+			.setImmovable(true)
 			.setCollideWorldBounds(true);
 	}
 
@@ -140,8 +142,25 @@ export class OldPong extends AbstractPong {
 		this.ball.setVelocity(startX, startY);
 		this.ball.setBounce(1);
 
-		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
-			ball.setVelocity(startX, ball.body.velocity.y);
+		this.physics.add.collider(this.player1, this.ball, (player, ball) => {
+			//ball.setVelocity(startX, ball.body.velocity.y);
+			const impactPoint = ball.body.center;
+			console.log("impactPoint", impactPoint);
+			
+			// Déterminer la position relative du point de contact par rapport au joueur1
+			const relativeY = impactPoint.y - player.y;
+			console.log("relativeY", relativeY);
+			
+			// Calculer l'angle de rebond en fonction de la position relative
+			const normalizedY = relativeY / player.height;
+			console.log("normalizedY", normalizedY);
+			const angle = Phaser.Math.Linear(Phaser.Math.PI2, -Phaser.Math.PI2, normalizedY);
+			console.log("angle", angle);
+			
+			// Appliquer la nouvelle direction de rebond à la balle
+			const speed = ball.body.speed;
+			console.log("normalizedY", normalizedY);
+			ball.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
 		});
 
 		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
