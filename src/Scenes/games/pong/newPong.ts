@@ -19,21 +19,20 @@ export class NewPong extends AbstractPong {
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
 
+	create() {
+		super.create();
+		this.createBall();
+	}
+
 	//#region - abstract method implemented
 	//-------------------------------------
 
-	/**
-	 * Creation de l'image du fond
-	 */
 	protected createBackground(): void {
 		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
 		background.displayWidth = this.game.canvas.width;
 		background.displayHeight = this.game.canvas.height;
 	}
 
-	/**
-	 * Créer la music en fond
-	 */
 	protected createMusic(): void {
 		this.backgroundMusic = this.sound.add("music", { loop: true, volume: 0.5 });
 		this.backgroundMusic.play();
@@ -42,9 +41,6 @@ export class NewPong extends AbstractPong {
 		this.resumeMusicWhenSceneResume();
 	}
 
-	/**
-	 * Creation du joueur 1
-	 */
 	protected createPlayer1(): void {
 		this.player1 = this.physics.add
 			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player")
@@ -52,9 +48,6 @@ export class NewPong extends AbstractPong {
 		this.player1.flipX = true;
 	}
 
-	/**
-	 * Creation du joueur 2
-	 */
 	protected createPlayer2(): void {
 		this.player2 = this.physics.add
 			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player2")
@@ -62,6 +55,35 @@ export class NewPong extends AbstractPong {
 		this.player2.flipX = true;
 	}
 
-  //----------------------------------------
-  //#endregion - abstract method implemented
+	protected createBall(): void {
+		const graphics = this.add.graphics();
+		graphics.fillStyle(0xffffff);
+		graphics.fillRect(0, 0, 10, 10);
+		graphics.generateTexture("whiteCube", 10, 10);
+		graphics.destroy();
+
+		this.ball = this.physics.add
+			.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube")
+			.setCollideWorldBounds(true);
+
+		const startY: number = this.getRandomArbitrary(-250, 250);
+		const startX: number = 500;
+
+		this.ball.setVelocity(startX, startY);
+		this.ball.setBounce(1);
+
+		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
+			if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
+				ball.setVelocity(startX, ball.body.velocity.y);
+			}
+		});
+
+		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
+			if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
+				ball.setVelocity(-startX, ball.body.velocity.y);
+			}
+		});
+	}
+	//----------------------------------------
+	//#endregion - abstract method implemented
 }

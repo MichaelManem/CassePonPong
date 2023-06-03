@@ -42,6 +42,7 @@ export abstract class AbstractPong extends PreScene {
     protected abstract createMusic(): void;
     protected abstract createPlayer1(): void;
     protected abstract createPlayer2(): void;
+    protected abstract createBall(): void;
     protected abstract createBackground(): void;
     //#endregion
 
@@ -104,6 +105,19 @@ export abstract class AbstractPong extends PreScene {
 
     private handleScoring(): void {
         let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05;
+
+        if (!this.ball) {
+            console.error("Ball doesn't exist");
+            return;
+        }
+        if (!this.player1) {
+            console.error("Player1 doesn't exist");
+            return;
+        }
+        if (!this.player2) {
+            console.error("Player2 doesn't exist");
+            return;
+        }
 
         if (this.ball.x < this.player1.x - worldWidthSmallPart) {
             this.scorePlayer2 += 1;

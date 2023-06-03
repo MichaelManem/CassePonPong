@@ -124,7 +124,7 @@ export class OldPong extends AbstractPong {
 	//----------------------------
 	//#endregion - private method
 
-	private createBall(): void {
+	protected createBall(): void {
 		const graphics = this.add.graphics();
 		graphics.fillStyle(0xffffff);
 		graphics.fillRect(0, 0, 10, 10);
