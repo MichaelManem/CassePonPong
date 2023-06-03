@@ -65,36 +65,42 @@ export abstract class AbstractPong extends PreScene {
         const cursors = this.input.keyboard?.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.Z,
             down: Phaser.Input.Keyboard.KeyCodes.S,
-        });
-        const playerBody = this.player1;
+        }) as Phaser.Types.Input.Keyboard.CursorKeys | undefined;
 
+        if (!cursors) return;
+
+        const playerBody = this.player1;
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer1;
 
-        if (cursors?.up.isDown) {
+        if (cursors.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
 
-        if (cursors?.down.isDown) {
+        if (cursors.down.isDown) {
             playerBody.setVelocityY(speedPlayerHeight);
         }
     }
 
     protected handlePlayer2Movement(): void {
-        const cursors = this.input.keyboard?.createCursorKeys();
-        const playerBody = this.player2;
+        const cursors = this.input.keyboard?.createCursorKeys() as Phaser.Types.Input.Keyboard.CursorKeys | undefined;
 
+        if (!cursors) return;
+
+        const playerBody = this.player2;
         playerBody.setVelocity(0);
         let speedPlayerHeight = this.baseSpeedMovePlayer2;
 
-        if (cursors?.up.isDown) {
+        if (cursors.up.isDown) {
             playerBody.setVelocityY(-speedPlayerHeight);
         }
 
-        if (cursors?.down.isDown) {
+        if (cursors.down.isDown) {
             playerBody.setVelocityY(speedPlayerHeight);
         }
     }
+
+
 
     private handleScoring(): void {
         let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05;
