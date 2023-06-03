@@ -39,7 +39,7 @@ export class PauseMenu extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_RESUME:
-				this.scene.resume(this.dataScene?.sceneBeforePause);
+				this.scene.resume(this.dataScene?.sceneToResume);
 				this.scene.stop();
 				break;
 			case this.BUTTON_NAME_MAIN_MENU:

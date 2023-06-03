@@ -110,8 +110,8 @@ export abstract class AbstractPong extends PreScene {
             this.resetBallPosition();
 
         } else if (this.scorePlayer1 >= this.SCORE_MAX || this.scorePlayer2 >= this.SCORE_MAX) {
-            this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
-            this.scene.pause();
+            this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName });
+            this.scene.stop();
             if (this.backgroundMusic) {
                 this.backgroundMusic.pause();
             }
@@ -138,7 +138,7 @@ export abstract class AbstractPong extends PreScene {
         const escapeKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         escapeKey?.on("down", () => {
             if (!this.scene.isPaused()) {
-                this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
+                this.scene.launch("PauseMenu", { sceneToResume: this.sceneName });
                 this.scene.pause();
                 if (this.backgroundMusic) {
                     this.backgroundMusic.pause();
