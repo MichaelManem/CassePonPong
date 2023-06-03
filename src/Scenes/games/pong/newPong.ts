@@ -1,3 +1,4 @@
+import { Ball } from "../../../gameObjects/ball.ts";
 import { AbstractPong } from "../abstractPong.ts";
 
 export class NewPong extends AbstractPong {
@@ -56,33 +57,25 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createBall(): void {
-		const graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff);
-		graphics.fillRect(0, 0, 10, 10);
-		graphics.generateTexture("whiteCube", 10, 10);
-		graphics.destroy();
+        // Create a new instance of the Ball class
+		const ballInstance: Ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube"); 
+        this.ball = ballInstance.getSprite();
 
-		this.ball = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube")
-			.setCollideWorldBounds(true);
+        const startX: number = 500;
+        
+        // Add collider with player1
+        ballInstance.addColliderWith(this.player1, function (player, ball) {
+            if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
+                ball.setVelocity(startX, ball.body.velocity.y);
+            }
+        });
 
-		const startY: number = this.getRandomArbitrary(-250, 250);
-		const startX: number = 500;
-
-		this.ball.setVelocity(startX, startY);
-		this.ball.setBounce(1);
-
-		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
-			if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
-				ball.setVelocity(startX, ball.body.velocity.y);
-			}
-		});
-
-		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
-			if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
-				ball.setVelocity(-startX, ball.body.velocity.y);
-			}
-		});
+        // Add collider with player2
+        ballInstance.addColliderWith(this.player2, function (player, ball) {
+            if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
+                ball.setVelocity(-startX, ball.body.velocity.y);
+            }
+        });
 	}
 	//----------------------------------------
 	//#endregion - abstract method implemented

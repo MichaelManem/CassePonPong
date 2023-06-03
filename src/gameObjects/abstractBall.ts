@@ -1,21 +1,16 @@
-import { PreScene } from "../scenes/preScene";
-
 export abstract class AbstractBall {
-    protected scene: PreScene;
     protected positionHeight: number = 0;
     protected positionWidth: number = 0;
-    protected texture: any; //todo définir le type de variable
     protected velocity: number = 0;
     
-    protected abstract createTextureBall(): void;
-
-    protected setVelocity(newVelocity: number): void {
-        this.velocity = newVelocity;
+    constructor() {
+    }
+    
+    public createBall(scene: Phaser.Scene, x: number, y: number, textureName: string): Phaser.Physics.Arcade.Sprite {
+        this.addGraphicInScene(scene, textureName);
+        return this.generateSprite(scene, x, y, textureName);
     }
 
-    protected setPosition(newPositionHeight: number, newPositionWidth: number): void {
-        this.positionHeight = newPositionHeight;
-        this.positionWidth = newPositionWidth;
-    }
-
+    protected abstract addGraphicInScene(scene: Phaser.Scene, textureName: string): void;
+    protected abstract generateSprite(scene: Phaser.Scene, x: number, y: number, textureName: string): Phaser.Physics.Arcade.Sprite;
 }
