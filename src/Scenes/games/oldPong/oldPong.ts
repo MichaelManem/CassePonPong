@@ -1,9 +1,12 @@
 import { AbstractPong } from "../abstractPong.ts";
 
 export class OldPong extends AbstractPong {
-	private player1Speed: number = 1000;
-	private player2Speed: number = 1000;
+	private player1Speed: number = 1500;
+	private player2Speed: number = 1500;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
+	private readonly PLAYER_WIDTH: number = 20;
+	private readonly PLAYER_HEIGHT: number = 150;
+	private readonly BALL_DIAMETER: number = 20;
 
 	constructor() {
 		super({ key: "OldPong" });
@@ -97,10 +100,10 @@ export class OldPong extends AbstractPong {
 		graphics.fillStyle(0xffffff);
 
 		// Draw a rectangle shape
-		graphics.fillRect(0, 0, 10, 60);
+		graphics.fillRect(0, 0, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Generate a texture from the Graphics object
-		graphics.generateTexture("whiteRect", 10, 60);
+		graphics.generateTexture("whiteRect", this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Destroy the Graphics object
 		graphics.destroy();
@@ -128,43 +131,44 @@ export class OldPong extends AbstractPong {
 	private createBall(): void {
 		const graphics = this.add.graphics();
 		graphics.fillStyle(0xffffff);
-		graphics.fillRect(0, 0, 10, 10);
-		graphics.generateTexture("whiteCube", 10, 10);
+		graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
+		graphics.generateTexture("whiteCube", this.BALL_DIAMETER, this.BALL_DIAMETER);
 		graphics.destroy();
 
 		this.ball = this.physics.add
 			.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube")
 			.setCollideWorldBounds(true);
 
-		const startY: number = this.getRandomArbitrary(-250, 250);
-		const startX: number = 500;
+		this.resetBallPosition();
+		let ballSpeedX = this.ballSpeed;
+		let ballSpeedY = this.ballSpeed / 2;
 
-		this.ball.setVelocity(startX, startY);
-		this.ball.setBounce(1);
-
-		this.physics.add.collider(this.player1, this.ball, (player, ball) => {
-			//ball.setVelocity(startX, ball.body.velocity.y);
-			const impactPoint = ball.body.center;
-			console.log("impactPoint", impactPoint);
-			
-			// Déterminer la position relative du point de contact par rapport au joueur1
-			const relativeY = impactPoint.y - player.y;
-			console.log("relativeY", relativeY);
-			
-			// Calculer l'angle de rebond en fonction de la position relative
-			const normalizedY = relativeY / player.height;
-			console.log("normalizedY", normalizedY);
-			const angle = Phaser.Math.Linear(Phaser.Math.PI2, -Phaser.Math.PI2, normalizedY);
-			console.log("angle", angle);
-			
-			// Appliquer la nouvelle direction de rebond à la balle
-			const speed = ball.body.speed;
-			console.log("normalizedY", normalizedY);
-			ball.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+		this.physics.add.overlap(this.player1, this.ball, (player, ball) => {
+			// Le y = 0 est en haut de l'écran
+			//        35° - 90° - 35°
+			//Pong => Top   milieu  bot
+			//   	  100     0    100
+			let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+			let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+			if(ball.y < player.y) {
+				ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+				ballDirection = -1;
+			}
+			ball.setVelocity(ballSpeedX, ballDirection * ballSpeedY * ballPosPercentPlayer);
 		});
 
-		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
-			ball.setVelocity(-startX, ball.body.velocity.y);
+		this.physics.add.overlap(this.player2, this.ball, function (player, ball) {
+			// Le y = 0 est en haut de l'écran
+			//        35° - 90° - 35°
+			//Pong => Top   milieu  bot
+			//   	  100     0    100
+			let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+			let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+			if(ball.y < player.y) {
+				ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+				ballDirection = -1;
+			}
+			ball.setVelocity(-ballSpeedX, ballDirection * ballSpeedY * ballPosPercentPlayer);
 		});
 	}
 

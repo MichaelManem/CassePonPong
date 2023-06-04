@@ -2,9 +2,7 @@ import { AbstractMenu } from "./abstractMenu.ts";
 
 export class PauseMenu extends AbstractMenu {
 	private dataScene: any;
-	private wantMusic: boolean = true;
 	private readonly BUTTON_NAME_RESUME: string = "Resume";
-	private readonly BUTTON_NAME_MUSIC: string = "Music On/Off";
 	private readonly BUTTON_NAME_MAIN_MENU: string = "Go to Main Menu";
 
 	constructor() {
@@ -13,9 +11,6 @@ export class PauseMenu extends AbstractMenu {
 
 	init(data: any) {
 		this.dataScene = data;
-		this.wantMusic = this.dataScene ? this.dataScene.wantMusic : true;
-		console.log("this.dataScene.wantMusic", this.dataScene?.wantMusic);
-		console.log("this.wantMusic", this.wantMusic);
 	}
 	
 	create() {
@@ -36,8 +31,7 @@ export class PauseMenu extends AbstractMenu {
 		const menuItems: Phaser.GameObjects.Text[] = [];
 
 		menuItems.push(this.createButton(0, this.BUTTON_NAME_RESUME, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(1, this.BUTTON_NAME_MUSIC, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(2, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
 
 		return menuItems;
 	}
@@ -45,13 +39,8 @@ export class PauseMenu extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_RESUME:
-				this.scene.resume(this.dataScene?.sceneBeforePause, { wantMusic: this.wantMusic });
+				this.scene.resume(this.dataScene?.sceneBeforePause);
 				this.scene.stop();
-				break;
-			case this.BUTTON_NAME_MUSIC:
-				console.log("this.dataScene.wantMusic", this.dataScene?.wantMusic);
-				console.log("this.wantMusic", this.wantMusic);
-				this.wantMusic = !this.wantMusic;
 				break;
 			case this.BUTTON_NAME_MAIN_MENU:
 				this.scene.manager.scenes.forEach((scene: Phaser.Scene) => {
