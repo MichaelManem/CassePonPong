@@ -30,7 +30,7 @@ export class Ball extends AbstractBall {
         sprite.setVelocity(startX, startY);
         sprite.setBounce(1);
 
-        return sprite
+        return sprite;
     }
 
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
