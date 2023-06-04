@@ -16,10 +16,6 @@ export abstract class AbstractPong extends PreScene {
     protected ball!: Phaser.Physics.Arcade.Sprite;
 	protected ballSpeed: number = 1200;
 
-	init(data: any) {
-		this.dataScene = data;
-	}
-
     //#region [Phaser Methods]
     create() {
         super.create();
