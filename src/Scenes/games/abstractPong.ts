@@ -179,7 +179,8 @@ export abstract class AbstractPong extends PreScene {
 
         // Reset random ball velocity
         const startY: number = this.getRandomArbitrary(-250, 250);
-        const startX: number = 500;
+        // 'Math.random() < 0.5' return a random boolean
+        const startX: number = Math.random() < 0.5 ? -500 : 500;
         this.ball.setVelocity(startX, startY);
     }
 
