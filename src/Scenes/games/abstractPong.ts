@@ -104,7 +104,7 @@ export abstract class AbstractPong extends PreScene {
 
 
     private handleScoring(): void {
-        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05;
+        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05; // TODO : Handle newPong, 0.05 is too high
 
         if (!this.ball) {
             console.error("Ball doesn't exist");

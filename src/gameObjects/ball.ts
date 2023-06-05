@@ -1,15 +1,15 @@
 import { MathUtils } from "../utils/mathUtils";
-import { AbstractBall } from "./abstractBall";
 
-export class Ball extends AbstractBall {
+export class Ball extends Phaser.Physics.Arcade.Sprite {
 
-    private sprite: Phaser.Physics.Arcade.Sprite;
-    private scene: Phaser.Scene;
 
     constructor(scene: Phaser.Scene, x: number, y: number, textureName: string) {
-        super();
+        super(scene, x, y, textureName);
         this.scene = scene;
-        this.sprite = this.createBall(scene, x, y, textureName);
+
+        this.addGraphicInScene(scene, textureName);
+
+        this.createBall(scene, x, y, textureName);
     }
 
     protected addGraphicInScene(scene: Phaser.Scene, textureName: string) {
@@ -34,10 +34,10 @@ export class Ball extends AbstractBall {
     }
 
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
-        this.scene.physics.add.collider(object, this.sprite, callback);
+        this.scene.physics.add.collider(object, this, callback);
     }
 
-    public getSprite(): Phaser.Physics.Arcade.Sprite {
-        return this.sprite;
+    public createBall(scene: Phaser.Scene, x: number, y: number, textureName: string): Phaser.Physics.Arcade.Sprite {
+        return this.generateSprite(scene, x, y, textureName);
     }
 }
