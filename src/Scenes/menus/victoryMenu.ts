@@ -6,13 +6,18 @@ export class VictoryMenu extends AbstractMenu {
     private readonly BUTTON_NAME_RESTART: string = "Restart";
     private readonly VICTORY_MUSIC: string = "VictoryMusic";
     private readonly BUTTON_NAME_MAIN_MENU: string = "Go to Main Menu";
+    private winner: string ;
+    private scores: number;
 
     constructor() {
         super({ key: "VictoryMenu" });
+        this.winner = "";
+        this.scores = 0;
     }
 
     init(data: any) {
 		this.dataScene = data;
+        this.winner = this.dataScene?.winnerName;
 	}
 
     preload() {
@@ -20,7 +25,7 @@ export class VictoryMenu extends AbstractMenu {
     }
    
     create() {
-        this.menuTitle = "Victoire";
+        this.menuTitle = `Victoire de ${this.winner}`;
         this.createBlackRectangle();
         this.sound.add(this.VICTORY_MUSIC, { loop: false, volume: 0.5 }).play();
         super.create();

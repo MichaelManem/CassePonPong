@@ -110,7 +110,15 @@ export abstract class AbstractPong extends PreScene {
             this.resetBallPosition();
 
         } else if (this.scorePlayer1 >= this.SCORE_MAX || this.scorePlayer2 >= this.SCORE_MAX) {
-            this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName });
+            let winner : string = "";
+
+            if (this.scorePlayer1 >= this.SCORE_MAX) {
+                winner = "Joueur 1";
+            } else {
+                winner = "Joueur 2";
+            }
+
+            this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : winner });
             this.scene.stop();
             if (this.backgroundMusic) {
                 this.backgroundMusic.pause();
