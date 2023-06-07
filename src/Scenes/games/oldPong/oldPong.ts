@@ -1,15 +1,12 @@
 import { AbstractPong } from "../abstractPong.ts";
+import { Player } from "../../../gameObjects/player.ts";
 
 export class OldPong extends AbstractPong {
-	private player1Speed: number = 1000;
-	private player2Speed: number = 1000;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
 
 	constructor() {
 		super({ key: "OldPong" });
 		this.setSceneName("OldPong");
-		this.setPlayer1Speed(this.player1Speed);
-		this.setPlayer2Speed(this.player2Speed);
 	}
 
 	// #region preload
@@ -60,34 +57,8 @@ export class OldPong extends AbstractPong {
 		// Créer un evenement qui va etre appelé lors du 'resume' de cette scene
 		this.resumeMusicWhenSceneResume();
 	}
-
-	protected createPlayer1(): void {
-		this.createTexturePlayer();
-
-		// Create the sprite using the generated texture
-		this.player1 = this.physics.add
-			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
-			.setCollideWorldBounds(true);
-	}
-
-	protected createPlayer2(): void {
-		this.createTexturePlayer();
-
-		// Create the sprite using the generated texture
-		this.player2 = this.physics.add
-			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "whiteRect")
-			.setCollideWorldBounds(true);
-	}
-
-	private createMiddleLine(): void {
-		this.createMiddleLinePart();
-
-		for (let i = 0; i <= 1.05; i += 0.05) {
-			this.physics.add.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * i, "middleLinePart");
-		}
-	}
-
-	private createTexturePlayer(): void {
+	
+	protected createTexturePlayer(): void {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
 
@@ -98,10 +69,26 @@ export class OldPong extends AbstractPong {
 		graphics.fillRect(0, 0, 10, 60);
 
 		// Generate a texture from the Graphics object
-		graphics.generateTexture("whiteRect", 10, 60);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER, 10, 60);
 
 		// Destroy the Graphics object
 		graphics.destroy();
+	}
+
+	protected createPlayer1(): void {
+		this.player1 = new Player(this, this.calculatePlayerWidthPosition(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Z', 'S');
+	}
+
+	protected createPlayer2(): void {
+		this.player2 = new Player(this, this.calculatePlayerWidthPosition(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Up', 'Down');
+	}
+
+	private createMiddleLine(): void {
+		this.createMiddleLinePart();
+
+		for (let i = 0; i <= 1.05; i += 0.05) {
+			this.physics.add.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * i, "middleLinePart");
+		}
 	}
 
 	private createMiddleLinePart(): void {

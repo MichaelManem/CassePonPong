@@ -1,15 +1,12 @@
 import { AbstractPong } from "../abstractPong.ts";
+import { Player } from "../../../gameObjects/player.ts";
 
 export class NewPong extends AbstractPong {
-	private player1Speed: number = 1300;
-	private player2Speed: number = 1300;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.02;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
-		this.setPlayer1Speed(this.player1Speed);
-		this.setPlayer2Speed(this.player2Speed);
 	}
 
 	preload() {
@@ -41,25 +38,30 @@ export class NewPong extends AbstractPong {
 		// Créer un evenement qui va etre appelé lors du 'resume' de cette scene
 		this.resumeMusicWhenSceneResume();
 	}
+	
+	protected createTexturePlayer(): void {
+		// Create a Graphics object
+		const graphics = this.add.graphics();
 
-	/**
-	 * Creation du joueur 1
-	 */
-	protected createPlayer1(): void {
-		this.player1 = this.physics.add
-			.sprite(this.calculatePlayerWidth(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player")
-			.setCollideWorldBounds(true);
-		this.player1.flipX = true;
+		// Set the fill style to white
+		graphics.fillStyle(0xffffff);
+
+		// Draw a rectangle shape
+		graphics.fillRect(0, 0, 10, 60);
+
+		// Generate a texture from the Graphics object
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER, 10, 60);
+
+		// Destroy the Graphics object
+		graphics.destroy();
 	}
 
-	/**
-	 * Creation du joueur 2
-	 */
+	protected createPlayer1(): void {
+		this.player1 = new Player(this, this.calculatePlayerWidthPosition(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Z', 'S');
+	}
+
 	protected createPlayer2(): void {
-		this.player2 = this.physics.add
-			.sprite(this.calculatePlayerWidth(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeight(), "player2")
-			.setCollideWorldBounds(true);
-		this.player2.flipX = true;
+		this.player2 = new Player(this, this.calculatePlayerWidthPosition(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Up', 'Down');
 	}
 
   //----------------------------------------

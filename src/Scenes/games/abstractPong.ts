@@ -1,24 +1,25 @@
+import { Player } from "../../gameObjects/player.ts";
 import { PreScene } from "../preScene.ts";
 export abstract class AbstractPong extends PreScene {
-    protected player1!: Phaser.Physics.Arcade.Sprite;
-    protected player2!: Phaser.Physics.Arcade.Sprite;
+    private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+	protected readonly NAME_TEXTURE_PLAYER: string = "texturePlayer";
     protected sceneName!: string;
     protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    protected player1!: Player;
+    protected player2!: Player;
+    protected ball!: Phaser.Physics.Arcade.Sprite;
     private scorePlayer1!: number;
     private scorePlayer2!: number;
     private scoreTextPlayer1!: Phaser.GameObjects.Text;
     private scoreTextPlayer2!: Phaser.GameObjects.Text;
-    private baseSpeedMovePlayer1!: number;
-    private baseSpeedMovePlayer2!: number;
-    private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     private readonly SCORE_MAX: number = 7;
-    protected ball!: Phaser.Physics.Arcade.Sprite;
 
     //#region [Phaser Methods]
     create() {
         super.create();
         this.createMusic();
         this.createBackground();
+        this.createTexturePlayer();
         this.createPlayer1();
         this.createPlayer2();
         this.createWorldBounds();
@@ -30,9 +31,8 @@ export abstract class AbstractPong extends PreScene {
     }
 
     update() {
-        // For player1 => sprite
-        this.handlePlayer1Movement();
-        this.handlePlayer2Movement();
+        this.player1.move();
+        this.player2.move();
         this.handleScoring();
     }
 
@@ -40,6 +40,7 @@ export abstract class AbstractPong extends PreScene {
 
     //#region [Abstract Methods]
     protected abstract createMusic(): void;
+    protected abstract createTexturePlayer(): void;
     protected abstract createPlayer1(): void;
     protected abstract createPlayer2(): void;
     protected abstract createBackground(): void;
@@ -48,52 +49,6 @@ export abstract class AbstractPong extends PreScene {
     //#region [Protected Methods]
     protected setSceneName(sceneName: string): void {
         this.sceneName = sceneName;
-    }
-
-    protected setPlayer1Speed(speed: number): void {
-        this.baseSpeedMovePlayer1 = speed;
-    }
-
-    protected setPlayer2Speed(speed: number): void {
-        this.baseSpeedMovePlayer2 = speed;
-    }
-
-    /**
-     * Move player
-     */
-    protected handlePlayer1Movement(): void {
-        const cursors = this.input.keyboard?.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.Z,
-            down: Phaser.Input.Keyboard.KeyCodes.S,
-        });
-        const playerBody = this.player1;
-
-        playerBody.setVelocity(0);
-        let speedPlayerHeight = this.baseSpeedMovePlayer1;
-
-        if (cursors?.up.isDown) {
-            playerBody.setVelocityY(-speedPlayerHeight);
-        }
-
-        if (cursors?.down.isDown) {
-            playerBody.setVelocityY(speedPlayerHeight);
-        }
-    }
-
-    protected handlePlayer2Movement(): void {
-        const cursors = this.input.keyboard?.createCursorKeys();
-        const playerBody = this.player2;
-
-        playerBody.setVelocity(0);
-        let speedPlayerHeight = this.baseSpeedMovePlayer2;
-
-        if (cursors?.up.isDown) {
-            playerBody.setVelocityY(-speedPlayerHeight);
-        }
-
-        if (cursors?.down.isDown) {
-            playerBody.setVelocityY(speedPlayerHeight);
-        }
     }
 
     private handleScoring(): void {
@@ -147,11 +102,11 @@ export abstract class AbstractPong extends PreScene {
         });
     }
 
-    protected calculatePlayerHeight(): number {
+    protected calculatePlayerHeightPosition(): number {
         return this.HEIGHT_WORLD * this.MULTIPLIER_POSITION_HEIGHT_PLAYER;
     }
 
-    protected calculatePlayerWidth(multiplier: number): number {
+    protected calculatePlayerWidthPosition(multiplier: number): number {
         return this.WIDTH_WORLD * multiplier;
     }
 
