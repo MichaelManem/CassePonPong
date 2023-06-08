@@ -29,28 +29,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.scene.input.keyboard) {
             return;
         }
-        
-        // this.cursors = this.scene.input.keyboard.addKeys(
-        //     { 
-        //         'up': this.keyCodes[keyUp], 
-        //         'down': this.keyCodes[keyDown] 
-        //     }
-        // );
-        this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.cursors.up = this.scene.input.keyboard.addKey(this.keyCodes[keyUp]);
-        this.cursors.down = this.scene.input.keyboard.addKey(this.keyCodes[keyDown]);
+
+        this.cursors = this.scene.input.keyboard.addKeys(
+            {
+                'up': this.keyCodes[keyUp],
+                'down': this.keyCodes[keyDown] 
+            }
+        );
     }
 
     public move(): void {
         this.setVelocity(0);
-
+        
         let multiplicatorUpDown: number = 0;
         if (this.cursors && this.cursors.up.isDown) {
             multiplicatorUpDown = -1;
         } else if (this.cursors && this.cursors.down.isDown) {
             multiplicatorUpDown = 1;
         }
-        
+
         this.setVelocityY(this.speed * multiplicatorUpDown);
     }
 }
