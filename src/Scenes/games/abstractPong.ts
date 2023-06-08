@@ -59,12 +59,12 @@ export abstract class AbstractPong extends PreScene {
         this.sceneName = sceneName;
     }
 
-	protected getMultiplierXLimitScore() {
+	protected getMultiplierPositionXForLimitToScore() {
 		return (this.MULTIPLIUER_POSITION_SCORE_TO_PLAYER) * this.PLAYER_WIDTH_POSITION;
 	}
 
     private handleScoring(): void {
-        let worldWidthSmallPart: number = this.WIDTH_WORLD * this.getMultiplierXLimitScore();
+        let worldWidthSmallPart: number = this.WIDTH_WORLD * this.getMultiplierPositionXForLimitToScore();
 
         if (!this.ball) {
             console.error("Ball doesn't exist");
