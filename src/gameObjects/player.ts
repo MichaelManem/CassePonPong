@@ -1,3 +1,5 @@
+import { PreScene } from "../scenes/preScene";
+
 export class Player extends Phaser.Physics.Arcade.Sprite {
     private readonly SPEED_START: number = 1000;
     private speed: number = this.SPEED_START;
@@ -9,20 +11,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         'Down': Phaser.Input.Keyboard.KeyCodes.DOWN,
     }
 
-    constructor(scene: Phaser.Scene, x: number, y: number, nameTexturePlayer: string, keyUp: string, keyDown: string) {
-      super(scene, x, y, nameTexturePlayer);
+    constructor(scene: PreScene, multiplierPositionX: number, multiplierPositionY: number, nameTexturePlayer: string, keyUp: string, keyDown: string) {
+      super(scene, 0, 0, nameTexturePlayer);
+      this.setPositionXWithMultiplier(multiplierPositionX);
+      this.setPositionYWithMultiplier(multiplierPositionY);
       scene.add.existing(this);
       scene.physics.add.existing(this);
       this.setCollideWorldBounds(true);
+      this.setImmovable(true);
       this.setMovementKey(keyUp, keyDown);
     }
 
-    public getSpeed(): number {
-        return this.speed;
+    protected setPositionXWithMultiplier(multiplierX: number): void {
+        this.x = this.scene.WIDTH_WORLD * multiplierX;
     }
 
-    public setSpeed(speedP1: number) {
-        this.speed = speedP1;
+    protected setPositionYWithMultiplier(multiplierY: number): void {
+        this.y = this.scene.HEIGHT_WORLD * multiplierY;
     }
 
     public setMovementKey(keyUp: string, keyDown: string) {

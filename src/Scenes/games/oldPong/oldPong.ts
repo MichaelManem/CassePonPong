@@ -1,8 +1,10 @@
+import { Ball } from "../../../gameObjects/ball.ts";
 import { AbstractPong } from "../abstractPong.ts";
 import { Player } from "../../../gameObjects/player.ts";
 
 export class OldPong extends AbstractPong {
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
+
 
 	constructor() {
 		super({ key: "OldPong" });
@@ -22,10 +24,6 @@ export class OldPong extends AbstractPong {
 	// #endregion
 
 	//#region private method
-
-	/**
-	 * Creation de l'image du fond
-	 */
 	protected createBackground(): void {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
@@ -47,9 +45,6 @@ export class OldPong extends AbstractPong {
 		background.displayHeight = this.game.canvas.height;
 	}
 
-	/**
-	 * Créer la music en fond
-	 */
 	protected createMusic(): void {
 		this.backgroundMusic = this.sound.add("music", { loop: true, volume: 0.5 });
 		this.backgroundMusic.play();
@@ -69,18 +64,46 @@ export class OldPong extends AbstractPong {
 		graphics.fillRect(0, 0, 10, 60);
 
 		// Generate a texture from the Graphics object
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER, 10, 60);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, 10, 60);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, 10, 60);
 
 		// Destroy the Graphics object
 		graphics.destroy();
 	}
 
 	protected createPlayer1(): void {
-		this.player1 = new Player(this, this.calculatePlayerWidthPosition(this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Z', 'S');
+		this.player1 = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER1, 'Z', 'S');
 	}
 
 	protected createPlayer2(): void {
-		this.player2 = new Player(this, this.calculatePlayerWidthPosition(1 - this.PLAYER_WIDTH_POSITION), this.calculatePlayerHeightPosition(), this.NAME_TEXTURE_PLAYER, 'Up', 'Down');
+		this.player2 = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
+	}
+	
+    protected createTextureBall() {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0xffffff);
+        graphics.fillRect(0, 0, 10, 10);
+        graphics.generateTexture(this.NAME_TEXTURE_BALL, 10, 10);
+        graphics.destroy();
+    }
+
+	protected createBall(): void {
+        // Create a new instance of the Ball class
+		this.ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL); 
+        
+        // Add collider with player1
+        this.ball.addColliderWith(this.player1, function (player, ball) {
+            if (ball instanceof Ball && ball.body) {
+                ball.setVelocity(ball.speedX, ball.body.velocity.y);
+            }
+        });
+
+        // Add collider with player2
+        this.ball.addColliderWith(this.player2, function (player, ball) {
+            if (ball instanceof Ball && ball.body) {
+                ball.setVelocity(-ball.speedX, ball.body.velocity.y);
+            }
+        });
 	}
 
 	private createMiddleLine(): void {
@@ -109,31 +132,4 @@ export class OldPong extends AbstractPong {
 	}
 	//----------------------------
 	//#endregion - private method
-
-	private createBall(): void {
-		const graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff);
-		graphics.fillRect(0, 0, 10, 10);
-		graphics.generateTexture("whiteCube", 10, 10);
-		graphics.destroy();
-
-		this.ball = this.physics.add
-			.sprite(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube")
-			.setCollideWorldBounds(true);
-
-		const startY: number = this.getRandomArbitrary(-250, 250);
-		const startX: number = 500;
-
-		this.ball.setVelocity(startX, startY);
-		this.ball.setBounce(1);
-
-		this.physics.add.collider(this.player1, this.ball, function (player, ball) {
-			ball.setVelocity(startX, ball.body.velocity.y);
-		});
-
-		this.physics.add.collider(this.player2, this.ball, function (player, ball) {
-			ball.setVelocity(-startX, ball.body.velocity.y);
-		});
-	}
-
 }

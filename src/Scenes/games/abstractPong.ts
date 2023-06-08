@@ -1,13 +1,16 @@
+import { Ball } from "../../gameObjects/ball.ts";
 import { Player } from "../../gameObjects/player.ts";
 import { PreScene } from "../preScene.ts";
 export abstract class AbstractPong extends PreScene {
-    private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
-	protected readonly NAME_TEXTURE_PLAYER: string = "texturePlayer";
-    protected sceneName!: string;
-    protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    protected readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
+	protected readonly NAME_TEXTURE_PLAYER1: string = "texturePlayer1";
+	protected readonly NAME_TEXTURE_PLAYER2: string = "texturePlayer2";
+	protected readonly NAME_TEXTURE_BALL: string = "textureBall";
     protected player1!: Player;
     protected player2!: Player;
-    protected ball!: Phaser.Physics.Arcade.Sprite;
+    protected ball!: Ball;
+    protected sceneName!: string;
+    protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
     private scorePlayer1!: number;
     private scorePlayer2!: number;
     private scoreTextPlayer1!: Phaser.GameObjects.Text;
@@ -22,6 +25,7 @@ export abstract class AbstractPong extends PreScene {
         this.createTexturePlayer();
         this.createPlayer1();
         this.createPlayer2();
+        this.createTextureBall();
         this.createWorldBounds();
         this.createPauseKey();
         this.scorePlayer1 = 0;
@@ -43,6 +47,8 @@ export abstract class AbstractPong extends PreScene {
     protected abstract createTexturePlayer(): void;
     protected abstract createPlayer1(): void;
     protected abstract createPlayer2(): void;
+    protected abstract createTextureBall(): void;
+    protected abstract createBall(): void;
     protected abstract createBackground(): void;
     //#endregion
 
@@ -52,17 +58,30 @@ export abstract class AbstractPong extends PreScene {
     }
 
     private handleScoring(): void {
-        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05;
+        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05; // TODO : Handle newPong, 0.05 is too high
+
+        if (!this.ball) {
+            console.error("Ball doesn't exist");
+            return;
+        }
+        if (!this.player1) {
+            console.error("Player1 doesn't exist");
+            return;
+        }
+        if (!this.player2) {
+            console.error("Player2 doesn't exist");
+            return;
+        }
 
         if (this.ball.x < this.player1.x - worldWidthSmallPart) {
             this.scorePlayer2 += 1;
             this.scoreTextPlayer2.setText(this.scorePlayer2.toString());
-            this.resetBallPosition();
+            this.ball.resetBallPosition();
 
         } else if (this.ball.x > this.player2.x + worldWidthSmallPart) {
             this.scorePlayer1 += 1;
             this.scoreTextPlayer1.setText(this.scorePlayer1.toString());
-            this.resetBallPosition();
+            this.ball.resetBallPosition();
 
         } else if (this.scorePlayer1 >= this.SCORE_MAX || this.scorePlayer2 >= this.SCORE_MAX) {
             this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
@@ -102,14 +121,6 @@ export abstract class AbstractPong extends PreScene {
         });
     }
 
-    protected calculatePlayerHeightPosition(): number {
-        return this.HEIGHT_WORLD * this.MULTIPLIER_POSITION_HEIGHT_PLAYER;
-    }
-
-    protected calculatePlayerWidthPosition(multiplier: number): number {
-        return this.WIDTH_WORLD * multiplier;
-    }
-
 
     private createScore(widthPositionMultiplier: number): Phaser.GameObjects.Text {
         return this.add.text(
@@ -127,21 +138,5 @@ export abstract class AbstractPong extends PreScene {
             .setOrigin(0.5);
 
     }
-
-    private resetBallPosition(): void {
-        this.ball.x = this.WIDTH_WORLD * 0.5;
-        this.ball.y = this.HEIGHT_WORLD * 0.5;
-
-        // Reset random ball velocity
-        const startY: number = this.getRandomArbitrary(-250, 250);
-        // 'Math.random() < 0.5' return a random boolean
-        const startX: number = Math.random() < 0.5 ? -500 : 500;
-        this.ball.setVelocity(startX, startY);
-    }
-
-    protected getRandomArbitrary(min: number, max: number): number {
-        return Math.random() * (max - min) + min;
-    }
-
     //#endregion
 }
