@@ -7,6 +7,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     private positionStartY: number;
     public speedX: number = this.SPEED_START;
     public speedY: number = this.SPEED_START / 1.5;
+    private readonly waitTimeSendBall: number = 1500;
 
     constructor(scene: PreScene, x: number, y: number, nameTexturePlayer: string) {
         super(scene, x, y, nameTexturePlayer);
@@ -27,7 +28,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.x = this.positionStartX;
         this.y = this.positionStartY;
         this.setVelocity(0);
-        this.scene.time.delayedCall(1500, this.sendBall, [], this);
+        this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [], this);
     }
 
     protected sendBall(): void {
