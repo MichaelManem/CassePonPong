@@ -1,7 +1,7 @@
 import { PreScene } from "../scenes/preScene";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-    private readonly SPEED_START: number = 1000;
+    private readonly SPEED_START: number = 1500;
     private speed: number = this.SPEED_START;
     private cursors!: object;
     private keyCodes: { [key: string]: any} = {

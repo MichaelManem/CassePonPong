@@ -2,11 +2,11 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private readonly SPEED_START: number = 500;
+    private readonly SPEED_START: number = 1200;
     private positionStartX: number;
     private positionStartY: number;
     public speedX: number = this.SPEED_START;
-    public speedY: number = this.SPEED_START / 2;
+    public speedY: number = this.SPEED_START / 1.5;
 
     constructor(scene: PreScene, x: number, y: number, nameTexturePlayer: string) {
         super(scene, x, y, nameTexturePlayer);
@@ -20,18 +20,22 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     }
 
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
-        this.scene.physics.add.collider(object, this, callback);
+        this.scene.physics.add.overlap(object, this, callback);
     }
     
     public resetBallPosition(): void {
         this.x = this.positionStartX;
         this.y = this.positionStartY;
+        this.setVelocity(0);
+        this.scene.time.delayedCall(1500, this.sendBall, [], this);
+    }
 
-        // Reset random ball velocity
+    protected sendBall(): void {
         const startY: number = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
         // 'Math.random() < 0.5' return a random boolean
         const startX: number = Math.random() < 0.5 ? -this.speedX : this.speedX;
         this.setVelocity(startX, startY);
+        this.setBounce(1);
     }
 
     // Override method to recalibrate velocity in limit of speedY

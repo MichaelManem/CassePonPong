@@ -47,11 +47,11 @@ export class NewPong extends AbstractPong {
 		graphics.fillStyle(0xffffff);
 
 		// Draw a rectangle shape
-		graphics.fillRect(0, 0, 10, 60);
+		graphics.fillRect(0, 0, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Generate a texture from the Graphics object
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, 10, 60);
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, 10, 60);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Destroy the Graphics object
 		graphics.destroy();
@@ -69,8 +69,8 @@ export class NewPong extends AbstractPong {
     protected createTextureBall() {
         const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
         graphics.fillStyle(0xffffff);
-        graphics.fillRect(0, 0, 10, 10);
-        graphics.generateTexture(this.NAME_TEXTURE_BALL, 10, 10);
+        graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
+        graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
         graphics.destroy();
     }
 

@@ -61,11 +61,11 @@ export class OldPong extends AbstractPong {
 		graphics.fillStyle(0xffffff);
 
 		// Draw a rectangle shape
-		graphics.fillRect(0, 0, 10, 60);
+		graphics.fillRect(0, 0, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Generate a texture from the Graphics object
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, 10, 60);
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, 10, 60);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 
 		// Destroy the Graphics object
 		graphics.destroy();
@@ -82,8 +82,8 @@ export class OldPong extends AbstractPong {
     protected createTextureBall() {
         const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
         graphics.fillStyle(0xffffff);
-        graphics.fillRect(0, 0, 10, 10);
-        graphics.generateTexture(this.NAME_TEXTURE_BALL, 10, 10);
+        graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
+        graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
         graphics.destroy();
     }
 
@@ -91,18 +91,37 @@ export class OldPong extends AbstractPong {
         // Create a new instance of the Ball class
 		this.ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL); 
         
-        // Add collider with player1
+		// TODO - Il faudrait que l'addition des velocité X et y reste constante peu importe l'angle que prend la balle
         this.ball.addColliderWith(this.player1, function (player, ball) {
+			// Le y = 0 est en haut de l'écran
+			//        35° - 90° - 35°
+			//Pong => Top   milieu  bot
+			//   	  100     0    100
             if (ball instanceof Ball && ball.body) {
-                ball.setVelocity(ball.speedX, ball.body.velocity.y);
-            }
+				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+				if(ball.y < player.y) {
+					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+					ballDirection = -1;
+				}
+				ball.setVelocity(ball.speedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+			}
         });
 
-        // Add collider with player2
-        this.ball.addColliderWith(this.player2, function (player, ball) {
+		this.ball.addColliderWith(this.player2, function (player, ball) {
+			// Le y = 0 est en haut de l'écran
+			//        35° - 90° - 35°
+			//Pong => Top   milieu  bot
+			//   	  100     0    100
             if (ball instanceof Ball && ball.body) {
-                ball.setVelocity(-ball.speedX, ball.body.velocity.y);
-            }
+				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+				if(ball.y < player.y) {
+					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+					ballDirection = -1;
+				}
+				ball.setVelocity(-ball.speedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+			}
         });
 	}
 
