@@ -5,6 +5,7 @@ export class OldPong extends AbstractPong {
 	private player1Speed: number = 1000;
 	private player2Speed: number = 1000;
 	private readonly PLAYER_WIDTH_POSITION: number = 0.17;
+	private nameTextureBall = "ball";
 
 
 	constructor() {
@@ -124,16 +125,23 @@ export class OldPong extends AbstractPong {
 	}
 	//----------------------------
 	//#endregion - private method
+	
+    protected createTextureBall(textureName: string) {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0xffffff);
+        graphics.fillRect(0, 0, 10, 10);
+        graphics.generateTexture(textureName, 10, 10);
+        graphics.destroy();
+    }
 
 	protected createBall(): void {
-        // Create a new instance of the Ball class
-		const ballInstance: Ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, "whiteCube"); 
-        this.ball = ballInstance.getSprite();
+		this.createTextureBall(this.nameTextureBall);
+		this.ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.nameTextureBall);
 
         const startX: number = 500;
         
         // Add collider with player1
-        ballInstance.addColliderWith(this.player1, function (player, ball) {
+        this.ball.addColliderWith(this.player1, function (player, ball) {
             if (ball instanceof Phaser.Physics.Arcade.Sprite && ball.body) {
                 ball.setVelocity(startX, ball.body.velocity.y);
             }

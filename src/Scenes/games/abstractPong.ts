@@ -2,6 +2,7 @@ import { PreScene } from "../preScene.ts";
 export abstract class AbstractPong extends PreScene {
     protected player1!: Phaser.Physics.Arcade.Sprite;
     protected player2!: Phaser.Physics.Arcade.Sprite;
+    protected ball!: Ball;
     protected sceneName!: string;
     protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
     private scorePlayer1!: number;
@@ -12,7 +13,6 @@ export abstract class AbstractPong extends PreScene {
     private baseSpeedMovePlayer2!: number;
     private readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     private readonly SCORE_MAX: number = 7;
-    protected ball!: Phaser.Physics.Arcade.Sprite;
 
     //#region [Phaser Methods]
     create() {

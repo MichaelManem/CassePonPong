@@ -1,43 +1,84 @@
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
+    private readonly SPEED_START: number = 1000;
+    private speed: number = this.SPEED_START;
 
 
-    constructor(scene: Phaser.Scene, x: number, y: number, textureName: string) {
-        super(scene, x, y, textureName);
-        this.scene = scene;
+    constructor(scene: Phaser.Scene, x: number, y: number, nameTexturePlayer: string) {
+        super(scene, x, y, nameTexturePlayer);
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
 
-        this.addGraphicInScene(scene, textureName);
-
-        this.createBall(scene, x, y, textureName);
-    }
-
-    protected addGraphicInScene(scene: Phaser.Scene, textureName: string) {
-        const graphics: Phaser.GameObjects.Graphics = scene.add.graphics();
-        graphics.fillStyle(0xffffff);
-        graphics.fillRect(0, 0, 10, 10);
-        graphics.generateTexture(textureName, 10, 10);
-        graphics.destroy();
-    }
-
-    protected generateSprite(scene: Phaser.Scene, x: number, y: number, textureName: string): Phaser.Physics.Arcade.Sprite {
-        const sprite = scene.physics.add.sprite(x, y, textureName)
-            .setCollideWorldBounds(true);
+        super(scene, x, y, nameTexturePlayer);
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
+        this.setCollideWorldBounds(true);
 
         const startY: number = MathUtils.getRandomArbitrary(-250, 250);
         const startX: number = 500;
 
-        sprite.setVelocity(startX, startY);
-        sprite.setBounce(1);
-
-        return sprite;
+        this.setVelocity(startX, startY);
+        this.setBounce(1);
     }
 
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
         this.scene.physics.add.collider(object, this, callback);
     }
+}
 
-    public createBall(scene: Phaser.Scene, x: number, y: number, textureName: string): Phaser.Physics.Arcade.Sprite {
-        return this.generateSprite(scene, x, y, textureName);
+
+
+export class Player extends Phaser.Physics.Arcade.Sprite {
+    private readonly SPEED_START: number = 1000;
+    private speed: number = this.SPEED_START;
+    private cursors!: object;
+    private keyCodes: { [key: string]: any} = {
+        'Z': Phaser.Input.Keyboard.KeyCodes.Z,
+        'S': Phaser.Input.Keyboard.KeyCodes.S,
+        'Up': Phaser.Input.Keyboard.KeyCodes.UP,
+        'Down': Phaser.Input.Keyboard.KeyCodes.DOWN,
+    }
+
+    constructor(scene: Phaser.Scene, x: number, y: number, nameTexturePlayer: string, keyUp: string, keyDown: string) {
+      super(scene, x, y, nameTexturePlayer);
+      scene.add.existing(this);
+      scene.physics.add.existing(this);
+      this.setCollideWorldBounds(true);
+      this.setMovementKey(keyUp, keyDown);
+    }
+
+    public getSpeed(): number {
+        return this.speed;
+    }
+
+    public setSpeed(speedP1: number) {
+        this.speed = speedP1;
+    }
+
+    public setMovementKey(keyUp: string, keyDown: string) {
+        if (!this.scene.input.keyboard) {
+            return;
+        }
+
+        this.cursors = this.scene.input.keyboard.addKeys(
+            {
+                'up': this.keyCodes[keyUp],
+                'down': this.keyCodes[keyDown] 
+            }
+        );
+    }
+
+    public move(): void {
+        this.setVelocity(0);
+        
+        let multiplicatorUpDown: number = 0;
+        if (this.cursors && this.cursors.up.isDown) {
+            multiplicatorUpDown = -1;
+        } else if (this.cursors && this.cursors.down.isDown) {
+            multiplicatorUpDown = 1;
+        }
+
+        this.setVelocityY(this.speed * multiplicatorUpDown);
     }
 }
