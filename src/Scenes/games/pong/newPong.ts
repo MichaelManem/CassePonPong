@@ -3,11 +3,11 @@ import { AbstractPong } from "../abstractPong.ts";
 import { Player } from "../../../gameObjects/player.ts";
 
 export class NewPong extends AbstractPong {
-	private readonly PLAYER_WIDTH_POSITION: number = 0.02;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
+		this.PLAYER_WIDTH_POSITION = 0.02;
 	}
 
 	preload() {

@@ -16,6 +16,8 @@ export abstract class AbstractPong extends PreScene {
     private scoreTextPlayer1!: Phaser.GameObjects.Text;
     private scoreTextPlayer2!: Phaser.GameObjects.Text;
     private readonly SCORE_MAX: number = 7;
+	private readonly MULTIPLIUER_POSITION_SCORE_TO_PLAYER: number = 0.3;
+    protected PLAYER_WIDTH_POSITION!: number;
 
     //#region [Phaser Methods]
     create() {
@@ -57,8 +59,12 @@ export abstract class AbstractPong extends PreScene {
         this.sceneName = sceneName;
     }
 
+	protected getMultiplierXLimitScore() {
+		return (this.MULTIPLIUER_POSITION_SCORE_TO_PLAYER) * this.PLAYER_WIDTH_POSITION;
+	}
+
     private handleScoring(): void {
-        let worldWidthSmallPart: number = this.WIDTH_WORLD * 0.05; // TODO : Handle newPong, 0.05 is too high
+        let worldWidthSmallPart: number = this.WIDTH_WORLD * this.getMultiplierXLimitScore();
 
         if (!this.ball) {
             console.error("Ball doesn't exist");
