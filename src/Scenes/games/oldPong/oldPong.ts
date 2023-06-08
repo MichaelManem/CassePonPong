@@ -92,37 +92,43 @@ export class OldPong extends AbstractPong {
 		this.ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL); 
         
 		// TODO - Il faudrait que l'addition des velocité X et y reste constante peu importe l'angle que prend la balle
+		// TODO - A tester
         this.ball.addColliderWith(this.player1, function (player, ball) {
 			// Le y = 0 est en haut de l'écran
-			//        35° - 90° - 35°
-			//Pong => Top   milieu  bot
-			//   	  100     0    100
-            if (ball instanceof Ball && ball.body) {
+			//Pong 		  => 	 Top   		milieu   	   bot
+			//Pourcentage =>	 100     	  0     	   100
+			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+			if (ball instanceof Ball && ball.body) {
 				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
 				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if(ball.y < player.y) {
+				if (ball.y < player.y) {
 					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
 					ballDirection = -1;
 				}
-				ball.setVelocity(ball.speedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+				let signOfSpeedX = 1;
+				let ballSpeedX = signOfSpeedX * ball.speedX;
+				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
 			}
         });
 
 		this.ball.addColliderWith(this.player2, function (player, ball) {
 			// Le y = 0 est en haut de l'écran
-			//        35° - 90° - 35°
-			//Pong => Top   milieu  bot
-			//   	  100     0    100
-            if (ball instanceof Ball && ball.body) {
+			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+			//Pong 		  => 	 Top   		milieu   	   bot
+			//Pourcentage =>	 100     	  0     	   100
+			if (ball instanceof Ball && ball.body) {
 				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
 				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if(ball.y < player.y) {
+				if (ball.y < player.y) {
 					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
 					ballDirection = -1;
 				}
-				ball.setVelocity(-ball.speedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+				let signOfSpeedX = -1;
+				let ballSpeedX = signOfSpeedX * ball.speedX;
+				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
 			}
         });
+		
 	}
 
 	private createMiddleLine(): void {
