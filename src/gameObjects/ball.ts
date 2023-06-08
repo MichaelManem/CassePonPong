@@ -36,28 +36,29 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
     // Override method to recalibrate velocity in limit of speedY
     public setVelocity(speedX: number, speedY?: number | undefined): this {
-        let ball: Ball = super.setVelocity(speedX, speedY);
-        if(this.body && ball.body) {
-            //Recalibrate velocityX (not necessary)
-            let velocityX = ball.body.velocity.x;
-            if(velocityX < 0) {
-                this.body.velocity.x = velocityX <= this.speedX ? -this.speedX : velocityX;
-            } else if(velocityX > 0) {
-                this.body.velocity.x = velocityX >= this.speedX ? this.speedX : velocityX;
+        super.setVelocity(speedX, speedY);
+      
+        if (this.body && this.body.velocity) {
+            const velocityX = this.body.velocity.x;
+            const velocityY = this.body.velocity.y;
+      
+            if (velocityX < 0) {
+                this.body.velocity.x = Math.max(-this.speedX, velocityX);
+            } else if (velocityX > 0) {
+                this.body.velocity.x = Math.min(this.speedX, velocityX);
             } else {
                 this.body.velocity.x = 0;
             }
-            
-            //Recalibrate velocityY
-            let velocityY = ball.body.velocity.y;
-            if(velocityY < 0) {
-                this.body.velocity.y = velocityY <= this.speedY ? -this.speedY : velocityY;
-            } else if(velocityY > 0) {
-                this.body.velocity.y = velocityY >= this.speedY ? this.speedY : velocityY;
+      
+            if (velocityY < 0) {
+                this.body.velocity.y = Math.max(-this.speedY, velocityY);
+            } else if (velocityY > 0) {
+                this.body.velocity.y = Math.min(this.speedY, velocityY);
             } else {
                 this.body.velocity.y = 0;
             }
         }
+      
         return this;
     }
 }
