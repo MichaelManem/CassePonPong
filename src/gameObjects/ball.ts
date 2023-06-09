@@ -34,7 +34,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     protected sendBall(): void {
         const startY: number = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
         // 'Math.random() < 0.5' return a random boolean
-        const startX: number = Math.random() < 0.5 ? -this.speedX : this.speedX;
+        const startX: number = MathUtils.getRandomBoolean() ? -this.speedX : this.speedX;
         this.setVelocity(startX, startY);
         this.setBounce(1);
     }
