@@ -147,7 +147,7 @@ export abstract class AbstractPong extends PreScene {
 
     private createScore(widthPositionMultiplier: number, heightPositionMultiplier: number): Score {
         return new Score(this, this.PLAYER_WIDTH_POSITION, widthPositionMultiplier, heightPositionMultiplier, "0", {
-            font: `6rem Arial`,
+            font: `6rem Courier New`,
             color: "#fff",
             stroke: "#00000",
             strokeThickness: 30,
@@ -177,7 +177,7 @@ export abstract class AbstractPong extends PreScene {
     }
 
     protected doEndGame(): void {      
-        this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : this.getNameWinner(), displayScores: this.scorePlayer1});
+        this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2});
         this.scene.stop();
         if (this.backgroundMusic) {
             this.backgroundMusic.pause();

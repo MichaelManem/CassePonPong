@@ -20,8 +20,8 @@ export class OldPong extends AbstractPong {
 	create() {
 		super.create();
 		this.createMiddleLine();
-		this.scorePlayer1.MAX_SCORE = 1;
-		this.scorePlayer2.MAX_SCORE = 1;
+		this.scorePlayer1.MAX_SCORE = 7;
+		this.scorePlayer2.MAX_SCORE = 7;
 	}
 	// #endregion
 

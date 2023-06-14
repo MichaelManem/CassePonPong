@@ -1,3 +1,4 @@
+import { Score } from "../../gameObjects/score.ts";
 import { AbstractMenu } from "./abstractMenu.ts";
 
 export class VictoryMenu extends AbstractMenu {
@@ -7,7 +8,8 @@ export class VictoryMenu extends AbstractMenu {
     private readonly VICTORY_MUSIC: string = "VictoryMusic";
     private readonly BUTTON_NAME_MAIN_MENU: string = "Go to Main Menu";
     private winner: string;
-    private scores!: Phaser.GameObjects.Text;
+    private scorePlayer1!: Score;
+    private scorePlayer2!: Score;
 
     constructor() {
         super({ key: "VictoryMenu" });
@@ -17,7 +19,8 @@ export class VictoryMenu extends AbstractMenu {
     init(data: any) {
         this.dataScene = data;
         this.winner = this.dataScene?.winnerName;
-        this.scores = this.dataScene?.displayScores;
+        this.scorePlayer1 = this.dataScene?.displayScorePlayer1;
+        this.scorePlayer2 = this.dataScene?.displayScorePlayer2;
     }
 
     preload() {
@@ -25,18 +28,19 @@ export class VictoryMenu extends AbstractMenu {
     }
 
     create() {
+        //Todo changer font en créant variable pour stocker createmenutitle (voir todo ds abstract menu)
         this.menuTitle = `Victoire de ${this.winner}`;
         this.createBlackRectangle();
         this.sound.add(this.VICTORY_MUSIC, { loop: false, volume: 0.5 }).play();
-        this.displayScoresText();
         super.create();
+        this.displayScoresText();
     }
 
     // Implémenter les méthodes abstraites
     protected createMenuItems(): Phaser.GameObjects.Text[] {
         const menuItems: Phaser.GameObjects.Text[] = [];
-        menuItems.push(this.createButton(0, this.BUTTON_NAME_RESTART, this.buttonSizeFontMedium));
-        menuItems.push(this.createButton(1, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
+        menuItems.push(this.createButton(1, this.BUTTON_NAME_RESTART, this.buttonSizeFontMedium));
+        menuItems.push(this.createButton(2, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
         return menuItems;
     }
 
@@ -66,11 +70,11 @@ export class VictoryMenu extends AbstractMenu {
 
     private displayScoresText(): void {
         this.add.text(
-            this.WIDTH_WORLD * 0.10,
-            this.HEIGHT_WORLD * 0.15,
-            "0",
+            this.WIDTH_WORLD * 0.50,
+            this.HEIGHT_WORLD * 0.25,
+            this.scorePlayer1.text + "    -    " + this.scorePlayer2.text, 
             {
-                font: `3rem Arial`,
+                font: `5rem Courier New`,
                 color: "#fff",
                 stroke: "#00000",
                 strokeThickness: 15,

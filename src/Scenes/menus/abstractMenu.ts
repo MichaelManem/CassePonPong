@@ -21,6 +21,7 @@ export abstract class AbstractMenu extends PreScene {
 	//#region [Phaser Methods]
 	create() {
 		super.create();
+		//todo créer variable pour stocket menuTitle et ainsi changer font que pour old pong "Airial -> Courier New"
 		this.createMenuTitle(this.menuTitle);
 		this.buttons = this.createMenuItems();
 		this.selectedIndex = 0;
