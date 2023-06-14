@@ -11,6 +11,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	preload() {
+		super.preload();
 		this.load.image("player", "assets/images/Player.png");
 		this.load.image("player2", "assets/images/Player2.png");
 		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
@@ -19,7 +20,8 @@ export class NewPong extends AbstractPong {
 
 	create() {
 		super.create();
-		this.createBall();
+		this.scorePlayer1.MAX_SCORE = 2;
+		this.scorePlayer2.MAX_SCORE = 2;
 	}
 
 	//#region - method
@@ -57,13 +59,14 @@ export class NewPong extends AbstractPong {
 		graphics.destroy();
 	}
 
-	protected createPlayer1(): void {
-		this.player1 = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER1, 'Z', 'S');
-		this.player1.flipX = true;
+	protected createPlayer1(): Player {
+		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER1, 'Z', 'S');
+		player1.flipX = true;
+		return player1;
 	}
 
-	protected createPlayer2(): void {
-		this.player2 = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
+	protected createPlayer2(): Player {
+		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
 	}
 	
     protected createTextureBall() {
@@ -74,25 +77,8 @@ export class NewPong extends AbstractPong {
         graphics.destroy();
     }
 
-	protected createBall(): void {
-        // Create a new instance of the Ball class
-		this.ball = new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL); 
-        
-        // Add collider with player1
-        this.ball.addColliderWith(this.player1, function (player, ball) {
-            if (ball instanceof Ball && ball.body) {
-                ball.setVelocity(ball.speedX, ball.body.velocity.y);
-            }
-        });
-
-        // Add collider with player2
-        this.ball.addColliderWith(this.player2, function (player, ball) {
-            if (ball instanceof Ball && ball.body) {
-				let velocityY = ball.body.velocity.y;
-				velocityY = velocityY <= ball.speedY ? velocityY : ball.speedY;
-                ball.setVelocity(-ball.speedX, ball.body.velocity.y);
-            }
-        });
+	protected createBall(): Ball {
+        return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
 	}
 	//-------------------
 	//#endregion - method
