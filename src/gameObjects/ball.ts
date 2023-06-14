@@ -2,7 +2,7 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private readonly SPEED_START: number = 1200;
+    private SPEED_START: number = 1200;
     private positionStartX: number;
     private positionStartY: number;
     public speedX: number = this.SPEED_START;
@@ -42,11 +42,11 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     // Override method to recalibrate velocity in limit of speedY
     public setVelocity(speedX: number, speedY?: number | undefined): this {
         super.setVelocity(speedX, speedY);
-      
+
         if (this.body && this.body.velocity) {
             const velocityX = this.body.velocity.x;
             const velocityY = this.body.velocity.y;
-      
+
             if (velocityX < 0) {
                 this.body.velocity.x = Math.max(-this.speedX, velocityX);
             } else if (velocityX > 0) {
@@ -55,6 +55,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
                 this.body.velocity.x = 0;
             }
       
+            this.body.velocity.y = 0;
             if (velocityY < 0) {
                 this.body.velocity.y = Math.max(-this.speedY, velocityY);
             } else if (velocityY > 0) {
@@ -65,5 +66,9 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         }
       
         return this;
+    }
+
+    public setMaxSpeed(speed: number): void {
+        this.SPEED_START = speed;
     }
 }
