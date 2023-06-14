@@ -23,7 +23,7 @@ export abstract class AbstractPong extends PreScene {
 
     protected sceneName!: string;
     protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
-    
+
     protected player1!: Player;
     protected player2!: Player;
     protected ball!: Ball;
@@ -113,15 +113,17 @@ export abstract class AbstractPong extends PreScene {
 			//Pourcentage =>	 100     	  0     	   100
 			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
 			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+                const currentBallSpeedX = ball.body.velocity.x;
+				let ballDistPercentFromCenterPlayer = (ball.y - player.y) / (player.height / 2);
 				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
 				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+					ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
 					ballDirection = -1;
 				}
-				let signOfSpeedX = 1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+                ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+                let newBallSpeedX = ball.speedStartX;
+				let newBallSpeedY = ballDirection * ball.speedStartY * ballDistPercentFromCenterPlayer;
+				ball.setVelocity(newBallSpeedX, newBallSpeedY);
 			}
         });
 
@@ -131,15 +133,16 @@ export abstract class AbstractPong extends PreScene {
 			//Pong 		  => 	 Top   		milieu   	   bot
 			//Pourcentage =>	 100     	  0     	   100
 			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+				let ballDistPercentFromCenterPlayer = (ball.y - player.y) / (player.height / 2);
 				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
 				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+					ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
 					ballDirection = -1;
 				}
-				let signOfSpeedX = -1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+                ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+                let newBallSpeedX = -1 * ball.speedStartX;
+				let newBallSpeedY = ballDirection * ball.speedStartY * ballDistPercentFromCenterPlayer;
+				ball.setVelocity(newBallSpeedX, newBallSpeedY);
 			}
         });
 	}

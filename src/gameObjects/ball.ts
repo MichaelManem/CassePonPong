@@ -2,11 +2,12 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
+    private MAX_SPEED_TOTAL: number = 2500;
     private SPEED_START: number = 1200;
+    private speedStartX: number = this.SPEED_START;
+    private speedStartY: number = this.SPEED_START / 1.5;
     private positionStartX: number;
     private positionStartY: number;
-    public speedX: number = this.SPEED_START;
-    public speedY: number = this.SPEED_START / 1.5;
     private readonly waitTimeSendBall: number = 1500;
 
     constructor(scene: PreScene, x: number, y: number, nameTexturePlayer: string) {
@@ -27,48 +28,36 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     public resetBallPosition(): void {
         this.x = this.positionStartX;
         this.y = this.positionStartY;
-        this.setVelocity(0);
+        this.setVelocity(0, 0);
         this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [], this);
     }
 
     protected sendBall(): void {
-        const startY: number = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
+        const startY: number = MathUtils.getRandomArbitrary(-this.speedStartY, this.speedStartY);
         // 'Math.random() < 0.5' return a random boolean
-        const startX: number = MathUtils.getRandomBoolean() ? -this.speedX : this.speedX;
+        const startX: number = MathUtils.getRandomBoolean() ? -this.speedStartX : this.speedStartX;
         this.setVelocity(startX, startY);
         this.setBounce(1);
     }
 
     // Override method to recalibrate velocity in limit of speedY
-    public setVelocity(speedX: number, speedY?: number | undefined): this {
-        super.setVelocity(speedX, speedY);
+    public setVelocity(speedX: number, speedY: number): this {
+        if (speedX < 0) {
+            speedX = Math.max(-this.MAX_SPEED_TOTAL, speedX);
+        } else if (speedX > 0) {
+            speedX = Math.min(this.MAX_SPEED_TOTAL, speedX);
+        } else {
+            speedX = 0;
+        }
 
-        if (this.body && this.body.velocity) {
-            const velocityX = this.body.velocity.x;
-            const velocityY = this.body.velocity.y;
-
-            if (velocityX < 0) {
-                this.body.velocity.x = Math.max(-this.speedX, velocityX);
-            } else if (velocityX > 0) {
-                this.body.velocity.x = Math.min(this.speedX, velocityX);
-            } else {
-                this.body.velocity.x = 0;
-            }
-      
-            this.body.velocity.y = 0;
-            if (velocityY < 0) {
-                this.body.velocity.y = Math.max(-this.speedY, velocityY);
-            } else if (velocityY > 0) {
-                this.body.velocity.y = Math.min(this.speedY, velocityY);
-            } else {
-                this.body.velocity.y = 0;
-            }
+        if (speedY < 0) {
+            speedY = Math.max(-this.MAX_SPEED_TOTAL/1.5, speedY);
+        } else if (speedY > 0) {
+            speedY = Math.min(this.MAX_SPEED_TOTAL/1.5, speedY);
+        } else {
+            speedY = 0;
         }
       
-        return this;
-    }
-
-    public setMaxSpeed(speed: number): void {
-        this.SPEED_START = speed;
+        return super.setVelocity(speedX, speedY);;
     }
 }
