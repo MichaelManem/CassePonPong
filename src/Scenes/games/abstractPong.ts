@@ -118,7 +118,7 @@ export abstract class AbstractPong extends PreScene {
                 winner = "Joueur 2";
             }
 
-            this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : winner });
+            this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : winner, displayScores: this.scoreTextPlayer1});
             this.scene.stop();
             if (this.backgroundMusic) {
                 this.backgroundMusic.pause();
