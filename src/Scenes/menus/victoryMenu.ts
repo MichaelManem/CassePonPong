@@ -68,7 +68,7 @@ export class VictoryMenu extends AbstractMenu {
         this.add.text(
             this.WIDTH_WORLD * 0.10,
             this.HEIGHT_WORLD * 0.15,
-            "MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "0",
             {
                 font: `3rem Arial`,
                 color: "#fff",

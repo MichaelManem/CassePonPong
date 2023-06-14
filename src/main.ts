@@ -18,6 +18,9 @@ const config: Phaser.Types.Core.GameConfig = {
         parent: 'game',
         zoom: 1,  // Size of game canvas = game size * zoom
     },
+    fps:{
+        target:144
+    },
     autoRound: false,
 	physics: {
 		default: "arcade",
