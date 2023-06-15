@@ -2,10 +2,10 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private MAX_SPEED_TOTAL: number = 2500;
     private SPEED_START: number = 1200;
-    private speedStartX: number = this.SPEED_START;
-    private speedStartY: number = this.SPEED_START / 1.5;
+    public speedStartX: number = this.SPEED_START;
+    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    public speedStartY: number = this.SPEED_START * this.MULTIPLIER_SPEED_Y;
     private positionStartX: number;
     private positionStartY: number;
     private readonly waitTimeSendBall: number = 1500;
@@ -43,17 +43,17 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     // Override method to recalibrate velocity in limit of speedY
     public setVelocity(speedX: number, speedY: number): this {
         if (speedX < 0) {
-            speedX = Math.max(-this.MAX_SPEED_TOTAL, speedX);
+            speedX = Math.max(-this.speedStartX, speedX);
         } else if (speedX > 0) {
-            speedX = Math.min(this.MAX_SPEED_TOTAL, speedX);
+            speedX = Math.min(this.speedStartX, speedX);
         } else {
             speedX = 0;
         }
 
         if (speedY < 0) {
-            speedY = Math.max(-this.MAX_SPEED_TOTAL/1.5, speedY);
+            speedY = Math.max(-this.speedStartY, speedY);
         } else if (speedY > 0) {
-            speedY = Math.min(this.MAX_SPEED_TOTAL/1.5, speedY);
+            speedY = Math.min(this.speedStartY, speedY);
         } else {
             speedY = 0;
         }
