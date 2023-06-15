@@ -1,8 +1,16 @@
 import { Ball } from "../../../gameObjects/ball.ts";
 import { AbstractPong } from "../abstractPong.ts";
 import { Player } from "../../../gameObjects/player.ts";
+import { Brick } from "../../../gameObjects/brick.ts";
 
 export class NewPong extends AbstractPong {
+    protected bricks!: Brick[];
+	private readonly BRICK_WIDTH: number = 60;
+	private readonly BRICK_HEIGHT: number = 100;
+	private readonly NAME_TEXTURE_BRICK_IMMORTAL: string = "textureBrickImmortal";
+	private readonly NAME_TEXTURE_BRICK_HEALTHY: string = "textureBrickHealthy";
+	private readonly NAME_TEXTURE_BRICK_WARNING: string = "textureBrickWarning";
+	private readonly NAME_TEXTURE_BRICK_DANGER: string = "textureBrickDanger";
 
 	constructor() {
 		super({ key: "NewPong" });
@@ -14,12 +22,34 @@ export class NewPong extends AbstractPong {
 		super.preload();
 		this.load.image("player", "assets/images/Player.png");
 		this.load.image("player2", "assets/images/Player2.png");
-		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
+		this.load.image("background", "assets/images/backgrounds/bleu_rose.webp");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 	}
 
 	create() {
 		super.create();
+		this.createTextureBrickImmortal();
+		this.createTextureBrickHealthy();
+		this.createTextureBrickWarning();
+		this.createTextureBrickDanger();
+		this.bricks = this.createBricks();
+		this.bricks.forEach(brick => {
+			brick.addColliderWith(this.ball);
+		});
+	}
+
+	update() {
+		super.update();
+		this.bricks.forEach(brick => {
+			if(brick.health === 0 && !brick.isImmortal) {
+				brick.destroy();
+				this.bricks.splice(this.bricks.indexOf(brick), 1);
+			} else if (brick.health === 2) {
+				brick.setTexture(this.NAME_TEXTURE_BRICK_WARNING);
+			} else if (brick.health === 1) {
+				brick.setTexture(this.NAME_TEXTURE_BRICK_DANGER);
+			}
+		});
 	}
 
 	//#region - method
@@ -77,6 +107,85 @@ export class NewPong extends AbstractPong {
 
 	protected createBall(): Ball {
         return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+	}
+
+    private createTextureBrickImmortal() {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0x727A7A);
+        graphics.fillRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.lineStyle(15, 0x000000);
+        graphics.strokeRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.generateTexture(this.NAME_TEXTURE_BRICK_IMMORTAL, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.destroy();
+    }
+	
+    private createTextureBrickHealthy() {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0x41D700);
+        graphics.fillRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.lineStyle(15, 0x000000);
+        graphics.strokeRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.generateTexture(this.NAME_TEXTURE_BRICK_HEALTHY, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.destroy();
+    }
+    private createTextureBrickWarning() {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0xFF9700);
+        graphics.fillRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.lineStyle(15, 0x000000);
+        graphics.strokeRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.generateTexture(this.NAME_TEXTURE_BRICK_WARNING, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.destroy();
+    }
+    private createTextureBrickDanger() {
+        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+        graphics.fillStyle(0xD70000);
+        graphics.fillRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.lineStyle(15, 0x000000);
+        graphics.strokeRect(0, 0, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.generateTexture(this.NAME_TEXTURE_BRICK_DANGER, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+        graphics.destroy();
+    }
+
+	private createBricks(): Brick[] {
+		let bricks = [];
+		
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.20, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.20, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.20, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.20, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.20, this.NAME_TEXTURE_BRICK_HEALTHY));
+
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.30, this.NAME_TEXTURE_BRICK_IMMORTAL, 0, true));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.30, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.30, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.30, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.30, this.NAME_TEXTURE_BRICK_HEALTHY));
+		
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.40, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.40, this.NAME_TEXTURE_BRICK_IMMORTAL, 0, true));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.40, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.40, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.40, this.NAME_TEXTURE_BRICK_HEALTHY));
+		
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.60, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.60, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.60, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.60, this.NAME_TEXTURE_BRICK_IMMORTAL, 0, true));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.60, this.NAME_TEXTURE_BRICK_HEALTHY));
+		
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.70, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.70, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.70, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.70, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.70, this.NAME_TEXTURE_BRICK_IMMORTAL, 0, true));
+		
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.30, this.HEIGHT_WORLD * 0.80, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.40, this.HEIGHT_WORLD * 0.80, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.50, this.HEIGHT_WORLD * 0.80, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.60, this.HEIGHT_WORLD * 0.80, this.NAME_TEXTURE_BRICK_HEALTHY));
+		bricks.push(new Brick(this, this.WIDTH_WORLD * 0.70, this.HEIGHT_WORLD * 0.80, this.NAME_TEXTURE_BRICK_HEALTHY));
+		return bricks;
 	}
 	//-------------------
 	//#endregion - method

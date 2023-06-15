@@ -2,6 +2,7 @@ import { Ball } from "../../gameObjects/ball.ts";
 import { Score } from "../../gameObjects/score.ts";
 import { Player } from "../../gameObjects/player.ts";
 import { PreScene } from "../preScene.ts";
+import { Brick } from "../../gameObjects/brick.ts";
 
 export abstract class AbstractPong extends PreScene {
 	protected readonly NAME_TEXTURE_PLAYER1: string = "texturePlayer1";

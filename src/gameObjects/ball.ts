@@ -9,8 +9,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     public speedY: number = this.SPEED_START / 1.5;
     private readonly waitTimeSendBall: number = 1500;
 
-    constructor(scene: PreScene, x: number, y: number, nameTexturePlayer: string) {
-        super(scene, x, y, nameTexturePlayer);
+    constructor(scene: PreScene, x: number, y: number, nameTexture: string) {
+        super(scene, x, y, nameTexture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.positionStartX = scene.WIDTH_WORLD * 0.5;

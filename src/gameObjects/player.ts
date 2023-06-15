@@ -11,8 +11,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         'Down': Phaser.Input.Keyboard.KeyCodes.DOWN,
     }
 
-    constructor(scene: PreScene, multiplierPositionX: number, multiplierPositionY: number, nameTexturePlayer: string, keyUp: string, keyDown: string) {
-      super(scene, 0, 0, nameTexturePlayer);
+    constructor(scene: PreScene, multiplierPositionX: number, multiplierPositionY: number, nameTexture: string, keyUp: string, keyDown: string) {
+      super(scene, 0, 0, nameTexture);
       this.setPositionXWithMultiplier(multiplierPositionX);
       this.setPositionYWithMultiplier(multiplierPositionY);
       scene.add.existing(this);
