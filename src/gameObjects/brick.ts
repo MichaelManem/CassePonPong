@@ -25,8 +25,6 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.overlap(ball, this, function (ball, brick) {
             if(brick.isNormal() && brick.health > 0) {
                 brick.health--;
-                console.log(brick.health);
-                console.log(brick.health <= brick.maxHealth * 0.667);
                 if(brick.health <= brick.maxHealth * 0.334) {
                     brick.setTexture(brick.NAME_TEXTURE_BRICK_DANGER);
                 } else if(brick.health <= brick.maxHealth * 0.667) {
