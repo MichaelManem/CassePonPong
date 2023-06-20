@@ -1,20 +1,16 @@
 import { Score } from "../../gameObjects/score.ts";
 import { AbstractMenu } from "./abstractMenu.ts";
 
-export class VictoryMenu extends AbstractMenu {
+export class AbstractVictoryMenu extends AbstractMenu {
 
     private dataScene: any;
     private readonly BUTTON_NAME_RESTART: string = "Restart";
-    private readonly VICTORY_MUSIC: string = "VictoryMusic";
     private readonly BUTTON_NAME_MAIN_MENU: string = "Go to Main Menu";
-    private winner: string;
+    protected readonly VICTORY_MUSIC: string = "VictoryMusic";
+    protected scoreSizeFont: number = 5;
+    private winner: string = "";
     private scorePlayer1!: Score;
     private scorePlayer2!: Score;
-
-    constructor() {
-        super({ key: "VictoryMenu" });
-        this.winner = "";
-    }
 
     init(data: any) {
         this.dataScene = data;
@@ -23,12 +19,7 @@ export class VictoryMenu extends AbstractMenu {
         this.scorePlayer2 = this.dataScene?.displayScorePlayer2;
     }
 
-    preload() {
-        this.load.audio(this.VICTORY_MUSIC, "assets/musics/Victory Music Old Pong.mp3");
-    }
-
     create() {
-        //Todo changer font en créant variable pour stocker createmenutitle (voir todo ds abstract menu)
         this.menuTitle = `Victoire de ${this.winner}`;
         this.createBlackRectangle();
         this.sound.add(this.VICTORY_MUSIC, { loop: false, volume: 0.5 }).play();
@@ -74,10 +65,10 @@ export class VictoryMenu extends AbstractMenu {
             this.HEIGHT_WORLD * 0.25,
             this.scorePlayer1.text + "    -    " + this.scorePlayer2.text, 
             {
-                font: `5rem Courier New`,
-                color: "#fff",
-                stroke: "#00000",
-                strokeThickness: 15,
+                font: `${this.fontProperty} ${this.scoreSizeFont}rem ${this.titleFont}`,
+                color: this.color,
+                stroke: this.stroke,
+                strokeThickness: this.strokeThickness,
             })
             .setOrigin(0.5);
 

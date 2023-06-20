@@ -69,6 +69,7 @@ export abstract class AbstractPong extends PreScene {
     protected abstract createTextureBall(): void;
     protected abstract createBall(): Ball;
     protected abstract createBackground(): void;
+    protected abstract doEndGame(): void;
     //#endregion
 
     //#region [Protected Methods]
@@ -166,7 +167,7 @@ export abstract class AbstractPong extends PreScene {
         return isEndGameByPlayer1 || isEndGameByPlayer2;
     }
 
-    private getNameWinner() {
+    protected getNameWinner() {
         if (this.scorePlayer1.scoreValue >= this.scorePlayer1.MAX_SCORE) {
             return "Joueur 1";
         } else if (this.scorePlayer2.scoreValue >= this.scorePlayer2.MAX_SCORE) {
@@ -176,12 +177,5 @@ export abstract class AbstractPong extends PreScene {
         }
     }
 
-    protected doEndGame(): void {      
-        this.scene.launch("VictoryMenu", { sceneToRestart: this.sceneName, winnerName : this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2});
-        this.scene.stop();
-        if (this.backgroundMusic) {
-            this.backgroundMusic.pause();
-        }
-    }
     //#endregion
 }
