@@ -90,7 +90,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	private createBricks(): void {
-		this.brickManager.setupBricksVerySmallMapButTough();
+		this.brickManager.setupBricksRandom(160);
 		this.brickManager.addOverlapWith(this.ball);
 	}
 	//-------------------

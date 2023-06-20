@@ -1,4 +1,5 @@
 import { NewPong } from "../scenes/games/pong/newPong";
+import { MathUtils } from "../utils/mathUtils";
 import { Ball } from "./ball";
 import { Brick } from "./brick";
 import { BrickImmortal } from "./brickImmortal";
@@ -141,28 +142,28 @@ export class BrickManager {
     }
 
     public setupBricksMap1AllImmune(): void {
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.35, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.20, this.BRICK_WIDTH, this.BRICK_HEIGHT));
 
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.35, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.30, this.BRICK_WIDTH, this.BRICK_HEIGHT));
 
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.35, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.40, this.BRICK_WIDTH, this.BRICK_HEIGHT));
 
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.30, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.35, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
-        this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+        this.bricks.push(new BrickImmortal(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.50, this.BRICK_WIDTH, this.BRICK_HEIGHT));
 
         this.copyBricksUpToBottom();
 
@@ -171,6 +172,44 @@ export class BrickManager {
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.40, this.scene.HEIGHT_WORLD * 0.90, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.45, this.scene.HEIGHT_WORLD * 0.90, this.BRICK_WIDTH, this.BRICK_HEIGHT));
         this.bricks.push(new Brick(this.scene, this.scene.WIDTH_WORLD * 0.50, this.scene.HEIGHT_WORLD * 0.90, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+
+        this.copyBricksLeftToRight();
+    }
+
+    public setupBricksRandom(nbBricks: number): void {
+        let nbBricksInTopLeft: number = Math.round(nbBricks / 2);
+        console.log("nbBricksInTopLeft", nbBricksInTopLeft);
+        let brickXs: number[] = [];
+        let brickYs: number[] = [];
+        for (let index = 0; index < nbBricksInTopLeft; index++) {
+            let hasIntersection: boolean = true;
+            let newBrickX = MathUtils.getRandomArbitrary(this.scene.WIDTH_WORLD * 0.15, this.scene.WIDTH_WORLD * 0.45);
+            let newBrickY = MathUtils.getRandomArbitrary(this.scene.HEIGHT_WORLD * 0.20, this.scene.HEIGHT_WORLD * 0.95);
+            while(hasIntersection) {
+                hasIntersection = false;
+                for (let iBrickXs = 0; iBrickXs < brickXs.length; iBrickXs++) {
+                    let rectA = new Phaser.Geom.Rectangle(brickXs[iBrickXs], brickYs[iBrickXs], this.BRICK_WIDTH, this.BRICK_HEIGHT);
+                    let rectB = new Phaser.Geom.Rectangle(newBrickX, newBrickY, this.BRICK_WIDTH, this.BRICK_HEIGHT);
+                    hasIntersection = Phaser.Geom.Intersects.RectangleToRectangle(rectA, rectB);
+                    if(hasIntersection) {
+                        break;
+                    }
+                }
+                if(!hasIntersection) {
+                    brickXs.push(newBrickX);
+                    brickYs.push(newBrickY);
+                } else {
+                    newBrickX = MathUtils.getRandomArbitrary(this.scene.WIDTH_WORLD * 0.15, this.scene.WIDTH_WORLD * 0.45);
+                    newBrickY = MathUtils.getRandomArbitrary(this.scene.HEIGHT_WORLD * 0.20, this.scene.HEIGHT_WORLD * 0.95);
+                }
+            }
+            let isBrickImmortal = MathUtils.getRandomBoolean(0.2);
+            if(isBrickImmortal) {
+                this.bricks.push(new BrickImmortal(this.scene, newBrickX, newBrickY, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+            } else {
+                this.bricks.push(new Brick(this.scene, newBrickX, newBrickY, this.BRICK_WIDTH, this.BRICK_HEIGHT));
+            }
+        }
 
         this.copyBricksLeftToRight();
     }
