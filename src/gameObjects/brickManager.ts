@@ -178,7 +178,6 @@ export class BrickManager {
 
     public setupBricksRandom(nbBricks: number): void {
         let nbBricksInTopLeft: number = Math.round(nbBricks / 2);
-        console.log("nbBricksInTopLeft", nbBricksInTopLeft);
         let brickXs: number[] = [];
         let brickYs: number[] = [];
         for (let index = 0; index < nbBricksInTopLeft; index++) {
