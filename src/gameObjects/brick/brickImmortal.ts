@@ -1,5 +1,5 @@
-import { NewPong } from "../scenes/games/pong/newPong";
-import { Ball } from "./ball";
+import { NewPong } from "../../scenes/games/pong/newPong";
+import { Ball } from "../ball";
 import { Brick } from "./brick";
 
 export class BrickImmortal extends Brick {

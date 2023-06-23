@@ -1,16 +1,18 @@
-import { NewPong } from "../scenes/games/pong/newPong";
-import { Ball } from "./ball";
+import { NewPong } from "../../scenes/games/pong/newPong";
+import { Ball } from "../ball";
 
 export class Brick extends Phaser.Physics.Arcade.Sprite {
     public readonly NAME_TEXTURE_BRICK_HEALTHY: string = "textureBrickHealthy";
     public readonly NAME_TEXTURE_BRICK_WARNING: string = "textureBrickWarning";
     public readonly NAME_TEXTURE_BRICK_DANGER: string = "textureBrickDanger";
-    public maxHealth: number = 3;
-    public health: number = 3;
+    public maxHealth: number;
+    public health: number;
     public type: string = "normal";
 
-    constructor(scene: NewPong, x: number, y: number, width: number, height: number) {
+    constructor(scene: NewPong, x: number, y: number, width: number, height: number, maxHealth: number = 3) {
         super(scene, x, y, "normal");
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
         this.createTextureBrickHealthy(width, height);
         this.createTextureBrickWarning(width, height);
         this.createTextureBrickDanger(width, height);

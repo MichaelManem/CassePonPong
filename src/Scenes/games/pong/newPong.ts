@@ -1,8 +1,7 @@
-import { Ball } from "../../../gameObjects/ball.ts";
-import { AbstractPong } from "../abstractPong.ts";
-import { Player } from "../../../gameObjects/player.ts";
-import { Brick } from "../../../gameObjects/brick.ts";
-import { BrickManager } from "../../../gameObjects/brickManager.ts";
+import { Ball } from "../../../gameObjects/ball";
+import { BrickManager } from "../../../gameObjects/brick/brickManager";
+import { Player } from "../../../gameObjects/player";
+import { AbstractPong } from "../abstractPong";
 
 export class NewPong extends AbstractPong {
 	protected brickManager!: BrickManager;
@@ -90,7 +89,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	private createBricks(): void {
-		this.brickManager.setupBricksRandom(160);
+		this.brickManager.setupBrickMapRandom(160);
 		this.brickManager.addOverlapWith(this.ball);
 	}
 	//-------------------
