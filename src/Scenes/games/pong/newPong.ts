@@ -1,15 +1,21 @@
 import { Ball } from "../../../gameObjects/ball";
 import { BrickManager } from "../../../gameObjects/brick/brickManager";
+import { BrickMaps } from "../../../gameObjects/brick/brickMaps";
 import { Player } from "../../../gameObjects/player";
 import { AbstractPong } from "../abstractPong";
 
 export class NewPong extends AbstractPong {
+	private dataScene: any;
 	protected brickManager!: BrickManager;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
 		this.PLAYER_WIDTH_POSITION = 0.02;
+	}
+
+	init(data: any) {
+		this.dataScene = data;
 	}
 
 	preload() {
@@ -89,7 +95,26 @@ export class NewPong extends AbstractPong {
 	}
 
 	private createBricks(): void {
-		this.brickManager.setupBrickMapRandom(160);
+		switch (this.dataScene.buttonMap.name) {
+			case BrickMaps.names['MAP_1']:
+				this.brickManager.setupBrickMap1();
+				break;
+			case BrickMaps.names['MAP_2']:
+				this.brickManager.setupBrickMap2();
+				break;
+			case BrickMaps.names['MAP_3']:
+				this.brickManager.setupBrickMap3();
+				break;
+			case BrickMaps.names['MAP_4']:
+				this.brickManager.setupBrickMap4();
+				break;		
+			case BrickMaps.names['MAP_RANDOM']:
+				this.brickManager.setupBrickMapRandom(this.dataScene.nbBrickToMapRandom);
+				break;
+			default:
+				this.brickManager.setupBrickMapRandom(10);
+				break;
+		}
 		this.brickManager.addOverlapWith(this.ball);
 	}
 	//-------------------

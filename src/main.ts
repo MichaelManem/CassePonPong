@@ -4,7 +4,7 @@ import { OldPong } from "./scenes/games/oldPong/oldPong.ts";
 import { MainMenu } from "./scenes/menus/mainMenu.ts";
 import { GameMenu } from "./scenes/menus/gameMenu.ts";
 import { PauseMenu } from "./scenes/menus/pauseMenu.ts";
-import { SettingsMenu } from "./scenes/menus/settingsMenu.ts";
+import { SettingsNewPong } from "./scenes/menus/settingsNewPong.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -30,7 +30,7 @@ const config: Phaser.Types.Core.GameConfig = {
         MainMenu, 
         GameMenu, 
         PauseMenu,
-        SettingsMenu, 
+        SettingsNewPong, 
         NewPong, 
         OldPong, 
     ]

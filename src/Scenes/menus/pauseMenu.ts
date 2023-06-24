@@ -30,8 +30,8 @@ export class PauseMenu extends AbstractMenu {
 	protected createMenuItems(): Phaser.GameObjects.Text[] {
 		const menuItems: Phaser.GameObjects.Text[] = [];
 
-		menuItems.push(this.createButton(0, this.BUTTON_NAME_RESUME, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(1, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 0, this.BUTTON_NAME_RESUME, this.BUTTON_NAME_RESUME, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 1, this.BUTTON_NAME_MAIN_MENU, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
 
 		return menuItems;
 	}

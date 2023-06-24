@@ -58,12 +58,16 @@ export class BrickManager {
 
     private factoryBricks(dataBricks: any[], needToCopyUpToBottom: boolean, needToCopyLeftToRight: boolean): void {
         dataBricks.forEach(dataBrick => {
+            let posX = this.scene.WIDTH_WORLD * dataBrick.x;
+            let posY = this.scene.HEIGHT_WORLD * dataBrick.y;
+            let width = this.BRICK_WIDTH * dataBrick.width;
+            let height = this.BRICK_HEIGHT * dataBrick.height;
             switch (dataBrick.type) {
                 case "normal":
-                    this.bricks.push(new Brick(this.scene, dataBrick.x, dataBrick.y, this.BRICK_WIDTH * dataBrick.width, this.BRICK_HEIGHT * dataBrick.height, dataBrick.maxHealth));
+                    this.bricks.push(new Brick(this.scene, posX, posY, width, height, dataBrick.maxHealth));
                     break;
                 case "immortal":
-                    this.bricks.push(new BrickImmortal(this.scene, dataBrick.x, dataBrick.y, this.BRICK_WIDTH * dataBrick.width, this.BRICK_HEIGHT * dataBrick.height));
+                    this.bricks.push(new BrickImmortal(this.scene, posX, posY, width, height));
                     break;
                 default:
                     break;

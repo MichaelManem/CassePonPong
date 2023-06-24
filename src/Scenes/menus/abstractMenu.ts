@@ -2,6 +2,7 @@ import { PreScene } from "../preScene.ts";
 
 export abstract class AbstractMenu extends PreScene {
 	protected buttons!: Phaser.GameObjects.Text[];
+	protected currentButton!: Phaser.GameObjects.Text;
 	protected selectedIndex!: number;
 	protected menuTitle!: string;
 
@@ -48,16 +49,17 @@ export abstract class AbstractMenu extends PreScene {
 	//#endregion
 
 	//#region [Buttons Management]
-	protected createButton(index: number, nameButton: string, fontSize: number): Phaser.GameObjects.Text {
-		let heightButton = this.getHeightButton(index);
+	protected createButton(indexX: number, indexY: number, nameButton: string, textButton: string, fontSize: number): Phaser.GameObjects.Text {
+		let heightButton = this.getHeightButton(indexY);
+		let widthButton = this.getWidthButton(indexX);
 		let button: Phaser.GameObjects.Text = this.add
-			.text(this.WIDTH_WORLD * 0.5, heightButton, nameButton, {
+			.text(widthButton, heightButton, textButton, {
 				font: `bold ${fontSize}rem ${this.buttonFont}`,
 				color: this.buttonColor,
 				stroke: this.buttonStroke,
 				strokeThickness: this.buttonStrokeThickness,
 			})
-			.setData({ index: index })
+			.setData({ index: indexY })
 			.setName(nameButton)
 			.setOrigin(0.5)
 			.setInteractive({ cursor: "pointer", cursorDelay: 50 })
@@ -70,6 +72,20 @@ export abstract class AbstractMenu extends PreScene {
 			.setAlpha(this.alphaNotSelected);
 
 		return button;
+	}
+
+	protected getWidthButton(order: number) {
+		let widthButton = this.WIDTH_WORLD * 0.5;
+
+		if (order === 0) {
+			widthButton = this.WIDTH_WORLD * 0.2;
+		} else if (order === 1) {
+			widthButton = this.WIDTH_WORLD * 0.5;
+		} else if (order == 2) {
+			widthButton = this.WIDTH_WORLD * 0.8;
+		}
+
+		return widthButton;
 	}
 
 	protected getHeightButton(order: number) {
@@ -95,6 +111,7 @@ export abstract class AbstractMenu extends PreScene {
 
 	protected highlightMenuItem(buttonToHighlight: Phaser.GameObjects.Text) {
 		if (buttonToHighlight) {
+			this.currentButton = buttonToHighlight;
 			this.selectedIndex = buttonToHighlight.getData("index");
 			buttonToHighlight.setAlpha(1).setColor(this.colorSelected);
 			const otherButtons: Phaser.GameObjects.Text[] = this.buttons.filter((button) => button !== buttonToHighlight);
@@ -115,6 +132,12 @@ export abstract class AbstractMenu extends PreScene {
 			case "ArrowDown":
 				this.moveSelectionDown();
 				break;
+			case "ArrowLeft":
+				this.decreaseSelection();
+				break;
+			case "ArrowRight":
+				this.increaseSelection();
+				break;
 			case "Enter":
 				this.selectCurrentButton();
 				break;
@@ -128,6 +151,10 @@ export abstract class AbstractMenu extends PreScene {
 	private moveSelectionDown() {
 		this.selectButton(this.selectedIndex + 1);
 	}
+
+	protected decreaseSelection() {}
+
+	protected increaseSelection() {}
 
 	private selectButton(index: number) {
 		// Vérifiez les limites de l'index pour la navigation circulaire
