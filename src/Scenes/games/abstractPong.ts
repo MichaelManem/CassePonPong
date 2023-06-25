@@ -56,7 +56,6 @@ export abstract class AbstractPong extends PreScene {
         this.scorePlayer1 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE1, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.scorePlayer2 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE2, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.events.on("resume", (scene: this, data: any) => {
-            console.log(data);
             if (data !== undefined && data.resetBall) {
                 this.ball.resetBallPosition();
             }
