@@ -2,22 +2,24 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private SPEED_START: number = 1200;
+    private SPEED_START: number;
     private positionStartX: number;
     private positionStartY: number;
-    public speedX: number = this.SPEED_START;
-    public speedY: number = this.SPEED_START / 1.5;
+    public speedX: number;
+    public speedY: number;
     private readonly waitTimeSendBall: number = 1500;
 
-    constructor(scene: PreScene, x: number, y: number, nameTexture: string) {
+    constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
         super(scene, x, y, nameTexture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.positionStartX = scene.WIDTH_WORLD * 0.5;
         this.positionStartY = scene.HEIGHT_WORLD * 0.5;
         this.setCollideWorldBounds(true);
-        this.resetBallPosition();
         this.setBounce(1);
+        this.SPEED_START = speedBall;
+        this.speedX = this.SPEED_START;
+        this.speedY = this.SPEED_START / 1.5;
     }
 
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {

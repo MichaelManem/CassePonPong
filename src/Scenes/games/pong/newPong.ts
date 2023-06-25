@@ -5,17 +5,12 @@ import { Player } from "../../../gameObjects/player";
 import { AbstractPong } from "../abstractPong";
 
 export class NewPong extends AbstractPong {
-	private dataScene: any;
 	protected brickManager!: BrickManager;
 
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
 		this.PLAYER_WIDTH_POSITION = 0.02;
-	}
-
-	init(data: any) {
-		this.dataScene = data;
 	}
 
 	preload() {
@@ -30,6 +25,7 @@ export class NewPong extends AbstractPong {
 		super.create();
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
+		this.ball.setDisplaySize(this.dataScene.sizeBall, this.dataScene.sizeBall);
 	}
 
 	update() {
@@ -91,7 +87,7 @@ export class NewPong extends AbstractPong {
     }
 
 	protected createBall(): Ball {
-        return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+        return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.dataScene.speedBall);
 	}
 
 	private createBricks(): void {

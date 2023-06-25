@@ -22,6 +22,7 @@ export abstract class AbstractPong extends PreScene {
     protected PLAYER_WIDTH_POSITION!: number;
 
     protected sceneName!: string;
+    protected dataScene!: any;
     protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
     
     protected player1!: Player;
@@ -29,6 +30,10 @@ export abstract class AbstractPong extends PreScene {
     protected ball!: Ball;
     private scorePlayer1!: Score;
     private scorePlayer2!: Score;
+
+	init(data: any) {
+		this.dataScene = data;
+	}
 
     preload(): void {
         super.preload();
@@ -44,11 +49,18 @@ export abstract class AbstractPong extends PreScene {
         this.player1 = this.createPlayer1();
         this.player2 = this.createPlayer2();
         this.ball = this.createBall();
+        this.ball.resetBallPosition();
         this.addCollideBall();
         this.createWorldBounds();
         this.createPauseKey();
         this.scorePlayer1 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE1, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.scorePlayer2 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE2, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
+        this.events.on("resume", (scene: this, data: any) => {
+            console.log(data);
+            if (data !== undefined && data.resetBall) {
+                this.ball.resetBallPosition();
+            }
+        });
     }
 
     update() {

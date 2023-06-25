@@ -65,6 +65,7 @@ export abstract class AbstractMenu extends PreScene {
 			.setInteractive({ cursor: "pointer", cursorDelay: 50 })
 			.on("pointerover", () => {
 				this.highlightMenuItem(button);
+				this.currentButton = button;
 			})
 			.on("pointerdown", () => {
 				this.onMenuItemSelect(button);
@@ -100,6 +101,9 @@ export abstract class AbstractMenu extends PreScene {
 		if (order == 2) {
 			heightButton = this.HEIGHT_WORLD * 0.66;
 		}
+		if (order == 3) {
+			heightButton = this.HEIGHT_WORLD * 0.82;
+		}
 
 		// * This is the back button
 		if (order == 999) {
@@ -111,7 +115,6 @@ export abstract class AbstractMenu extends PreScene {
 
 	protected highlightMenuItem(buttonToHighlight: Phaser.GameObjects.Text) {
 		if (buttonToHighlight) {
-			this.currentButton = buttonToHighlight;
 			this.selectedIndex = buttonToHighlight.getData("index");
 			buttonToHighlight.setAlpha(1).setColor(this.colorSelected);
 			const otherButtons: Phaser.GameObjects.Text[] = this.buttons.filter((button) => button !== buttonToHighlight);
@@ -169,14 +172,14 @@ export abstract class AbstractMenu extends PreScene {
 
 		// Sélectionnez le nouveau bouton
 		this.buttons[index].setAlpha(1).setColor(this.colorSelected);
+		this.currentButton = this.buttons[index];
 
 		this.selectedIndex = index;
 	}
 
 	private selectCurrentButton() {
 		// Exécutez l'action liée au bouton sélectionné (par exemple, démarrer un niveau, ouvrir une option, etc.)
-		let currentButton = this.buttons[this.selectedIndex];
-		this.onMenuItemSelect(currentButton);
+		this.onMenuItemSelect(this.buttons[this.selectedIndex]);
 	}
 	//#endregion
 
