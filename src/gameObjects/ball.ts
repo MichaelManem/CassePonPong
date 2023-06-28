@@ -2,6 +2,7 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
+    public id;
     private SPEED_START: number;
     private positionStartX: number;
     private positionStartY: number;
@@ -26,9 +27,9 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.overlap(object, this, callback);
     }
     
-    public resetBallPosition(): void {
-        this.x = this.positionStartX;
-        this.y = this.positionStartY;
+    public resetBallPosition(positionStartX: number = this.positionStartX, positionStartY: number = this.positionStartY): void {
+        this.x = positionStartX;
+        this.y = positionStartY;
         this.setVelocity(0);
         this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [], this);
     }
