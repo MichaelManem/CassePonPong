@@ -14,14 +14,18 @@ export class OldPong extends AbstractPong {
 	preload() {
 		super.preload();
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
+		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
+		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
+		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
+		
 		this.createMiddleLinePart();
 	}
 
 	create() {
 		super.create();
 		this.createMiddleLine();
-		this.scorePlayer1.MAX_SCORE = 1;
-		this.scorePlayer2.MAX_SCORE = 1;
+		this.scorePlayer1.MAX_SCORE = 7;
+		this.scorePlayer2.MAX_SCORE = 7;
 	}
 	// #endregion
 

@@ -58,6 +58,7 @@ export class Score extends Phaser.GameObjects.Text {
       : ball.x > scoreZoneLimit;
 
     if (hasScored && this.scoreValue < this.MAX_SCORE) {
+      this.scene.sound.add("scorePoint", { loop: false, volume: 1 }).play();
       this.scoreValue += 1;
       this.setText(this.scoreValue.toString());
       ball.resetBallPosition();

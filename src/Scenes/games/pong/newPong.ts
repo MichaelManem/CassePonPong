@@ -16,6 +16,9 @@ export class NewPong extends AbstractPong {
 		this.load.image("player2", "assets/images/Player2.png");
 		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
+		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
+		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
+		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
 	}
 
 	create() {
