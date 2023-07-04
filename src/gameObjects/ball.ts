@@ -1,48 +1,22 @@
 import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
+import { Player } from "./player";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    public id;
+    public id!: number;
     private SPEED_START: number;
-    private positionStartX: number;
-    private positionStartY: number;
     public speedX: number;
     public speedY: number;
-    private readonly waitTimeSendBall: number = 1500;
 
     constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
         super(scene, x, y, nameTexture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.positionStartX = scene.WIDTH_WORLD * 0.5;
-        this.positionStartY = scene.HEIGHT_WORLD * 0.5;
         this.setCollideWorldBounds(true);
         this.setBounce(1);
         this.SPEED_START = speedBall;
         this.speedX = this.SPEED_START;
         this.speedY = this.SPEED_START / 1.5;
-    }
-
-    public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
-        this.scene.physics.add.overlap(object, this, callback);
-    }
-    
-    public resetBallPosition(positionStartX: number = this.positionStartX, positionStartY: number = this.positionStartY): void {
-        this.x = positionStartX;
-        this.y = positionStartY;
-        this.setVelocity(0);
-        this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [], this);
-    }
-
-    protected sendBall(): void {
-        let startY: number = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
-        while(startY < this.speedY * 0.20 && startY > -this.speedY * 0.20) {
-            startY = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
-        }
-        // 'Math.random() < 0.5' return a random boolean
-        const startX: number = MathUtils.getRandomBoolean() ? -this.speedX : this.speedX;
-        this.setVelocity(startX, startY);
-        this.setBounce(1);
     }
 
     // Override method to recalibrate velocity in limit of speedY
@@ -76,5 +50,41 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
     public setMaxSpeed(speed: number): void {
         this.SPEED_START = speed;
+    }
+
+    public addColliderWithPlayerLeft(player: Player) {
+		this.scene.physics.add.overlap(player, this, (player, ball) => {
+            // Le y = 0 est en haut de l'écran
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+            let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+            if (ball.y < player.y) {
+                ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDirection = -1;
+            }
+            let signOfSpeedX = 1;
+            let ballSpeedX = signOfSpeedX * ball.speedX;
+            ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+        });
+    }
+
+    public addColliderWithPlayerRight(player: Player) {
+        this.scene.physics.add.overlap(player, this, (player, ball) => {
+            // Le y = 0 est en haut de l'écran
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+            let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+            if (ball.y < player.y) {
+                ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDirection = -1;
+            }
+            let signOfSpeedX = -1;
+            let ballSpeedX = signOfSpeedX * ball.speedX;
+            ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+        });
     }
 }

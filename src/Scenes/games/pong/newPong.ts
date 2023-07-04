@@ -1,8 +1,10 @@
 import { Ball } from "../../../gameObjects/ball";
+import { BallManager } from "../../../gameObjects/ballManager";
 import { BrickManager } from "../../../gameObjects/brick/brickManager";
 import { BrickMaps } from "../../../gameObjects/brick/brickMaps";
 import { Player } from "../../../gameObjects/player";
 import { AbstractPong } from "../abstractPong";
+type AllBalls = Ball;
 
 export class NewPong extends AbstractPong {
 	protected brickManager!: BrickManager;
@@ -23,9 +25,11 @@ export class NewPong extends AbstractPong {
 
 	create() {
 		super.create();
+		let typeBalls = ["ball", "ball", "ball", "ball"];
+		this.createBalls(typeBalls);
+
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
-		this.ball.setDisplaySize(this.dataScene.sizeBall, this.dataScene.sizeBall);
 	}
 
 	update() {
@@ -77,18 +81,16 @@ export class NewPong extends AbstractPong {
 	protected createPlayer2(): Player {
 		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
 	}
-	
-    protected createTextureBall() {
-        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff);
-        graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
-        graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
-        graphics.destroy();
-    }
 
-	protected createBall(): Ball {
-        return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.dataScene.speedBall);
-	}
+	protected createBalls(typeBalls: string[]): void {
+		this.ballManager = new BallManager(this);
+		this.ballManager.createTextureBallNewPong();
+		this.ballManager.setDiameter(this.dataScene.sizeBall);
+		this.ballManager.setSpeedStart(this.dataScene.speedBall);
+        this.ballManager.createBalls(typeBalls);
+        this.ballManager.resetBallsPosition();
+        this.ballManager.addOverlapWith(this.player1, this.player2);
+    }
 
 	private createBricks(): void {
 		switch (this.dataScene.buttonMap.name) {
@@ -111,7 +113,9 @@ export class NewPong extends AbstractPong {
 				this.brickManager.setupBrickMapRandom(10);
 				break;
 		}
-		this.brickManager.addOverlapWith(this.ball);
+		this.ballManager.balls.forEach(ball => {
+			this.brickManager.addOverlapWith(ball);
+		});
 	}
 	//-------------------
 	//#endregion - method

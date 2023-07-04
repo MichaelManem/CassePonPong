@@ -1,7 +1,9 @@
 import { Ball } from "../../gameObjects/ball";
+import { BallManager } from "../../gameObjects/ballManager";
 import { Player } from "../../gameObjects/player";
 import { Score } from "../../gameObjects/score";
 import { PreScene } from "../preScene";
+type AllBalls = Ball;
 
 export abstract class AbstractPong extends PreScene {
 	protected readonly NAME_TEXTURE_PLAYER1: string = "texturePlayer1";
@@ -27,7 +29,7 @@ export abstract class AbstractPong extends PreScene {
     
     protected player1!: Player;
     protected player2!: Player;
-    protected ball!: Ball;
+    protected ballManager!: BallManager;
     private scorePlayer1!: Score;
     private scorePlayer2!: Score;
 
@@ -38,7 +40,6 @@ export abstract class AbstractPong extends PreScene {
     preload(): void {
         super.preload();
         this.createTexturePlayer();
-        this.createTextureBall();
     }
 
     //#region [Phaser Methods]
@@ -48,16 +49,13 @@ export abstract class AbstractPong extends PreScene {
         this.createBackground();
         this.player1 = this.createPlayer1();
         this.player2 = this.createPlayer2();
-        this.ball = this.createBall();
-        this.ball.resetBallPosition();
-        this.addCollideBall();
         this.createWorldBounds();
         this.createPauseKey();
         this.scorePlayer1 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE1, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.scorePlayer2 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE2, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.events.on("resume", (scene: this, data: any) => {
             if (data !== undefined && data.resetBall) {
-                this.ball.resetBallPosition();
+                this.ballManager.resetBallsPosition();
             }
         });
     }
@@ -65,8 +63,17 @@ export abstract class AbstractPong extends PreScene {
     update() {
         this.player1.move();
         this.player2.move();
-        this.scorePlayer1.handleScoring(this.ball, this.player2);
-        this.scorePlayer2.handleScoring(this.ball, this.player1);
+        this.handleScores();
+    }
+
+    private handleScores() {
+        this.ballManager.balls.forEach(ball => {
+            if (this.scorePlayer1.handleScoring(ball, this.player2)) {
+                this.ballManager.resetBallPosition(ball);
+            } else if (this.scorePlayer2.handleScoring(ball, this.player1)) {
+                this.ballManager.resetBallPosition(ball);
+            }
+        });
     }
 
     //#endregion
@@ -76,8 +83,7 @@ export abstract class AbstractPong extends PreScene {
     protected abstract createTexturePlayer(): void;
     protected abstract createPlayer1(): Player;
     protected abstract createPlayer2(): Player;
-    protected abstract createTextureBall(): void;
-    protected abstract createBall(): Ball;
+    protected abstract createBalls(typeBalls: string[]): void;
     protected abstract createBackground(): void;
     //#endregion
 
@@ -114,46 +120,6 @@ export abstract class AbstractPong extends PreScene {
             }
         });
     }
-    
-	// TODO - Il faudrait que l'addition des velocité X et y reste constante peu importe l'angle que prend la balle
-	// TODO - A tester
-	protected addCollideBall(): void {
-        this.ball.addColliderWith(this.player1, function (player, ball) {
-			// Le y = 0 est en haut de l'écran
-			//Pong 		  => 	 Top   		milieu   	   bot
-			//Pourcentage =>	 100     	  0     	   100
-			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
-				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
-					ballDirection = -1;
-				}
-				let signOfSpeedX = 1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
-			}
-        });
-
-		this.ball.addColliderWith(this.player2, function (player, ball) {
-			// Le y = 0 est en haut de l'écran
-			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-			//Pong 		  => 	 Top   		milieu   	   bot
-			//Pourcentage =>	 100     	  0     	   100
-			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
-				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
-					ballDirection = -1;
-				}
-				let signOfSpeedX = -1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
-			}
-        });
-	}
 
     private createScore(widthPositionMultiplier: number, heightPositionMultiplier: number): Score {
         return new Score(this, this.PLAYER_WIDTH_POSITION, widthPositionMultiplier, heightPositionMultiplier, "0", {

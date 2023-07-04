@@ -1,6 +1,7 @@
 import { Ball } from './Ball';
 import { Player } from './Player';
 import { PreScene } from './PreScene';
+import { BallManager } from './ballManager';
 
 export interface ScoreStyle extends Phaser.Types.GameObjects.Text.TextStyle {
   [key: string]: any;
@@ -38,15 +39,15 @@ export class Score extends Phaser.GameObjects.Text {
     return this.SCORE_ZONE_MULTIPLIER * this.playerWidthPosition;
   }
 
-  public handleScoring(ball: Ball, player: Player): void {
+  public handleScoring(ball: Ball, player: Player): boolean {
     if (!ball) {
       console.error('Ball does not exist');
-      return;
+      return false;
     }
 
     if (!player) {
       console.error('Player does not exist');
-      return;
+      return false;
     }
 
     const isInLeftHalfWorld = player.x < this.scene.WIDTH_WORLD / 2;
@@ -60,12 +61,12 @@ export class Score extends Phaser.GameObjects.Text {
     if (hasScored) {
       if (this.scoreValue >= this.MAX_SCORE) {
         console.log('Game over');
-        return;
+        return true;
       }
 
       this.scoreValue += 1;
       this.setText(this.scoreValue.toString());
-      ball.resetBallPosition();
     }
+    return hasScored;
   }
 }
