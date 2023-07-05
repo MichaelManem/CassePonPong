@@ -1,8 +1,13 @@
-import { Ball } from "../../../gameObjects/ball.ts";
-import { AbstractPong } from "../abstractPong.ts";
-import { Player } from "../../../gameObjects/player.ts";
+import { Ball } from "../../../gameObjects/ball";
+import { BallManager } from "../../../gameObjects/ballManager";
+import { BrickManager } from "../../../gameObjects/brick/brickManager";
+import { BrickMaps } from "../../../gameObjects/brick/brickMaps";
+import { Player } from "../../../gameObjects/player";
+import { AbstractPong } from "../abstractPong";
+type AllBalls = Ball;
 
 export class NewPong extends AbstractPong {
+	protected brickManager!: BrickManager;
 
 	constructor() {
 		super({ key: "NewPong" });
@@ -14,7 +19,7 @@ export class NewPong extends AbstractPong {
 		super.preload();
 		this.load.image("player", "assets/images/Player.png");
 		this.load.image("player2", "assets/images/Player2.png");
-		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
+		this.load.image("background", "assets/images/backgrounds/bleu_rose.webp");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
 		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
@@ -23,8 +28,16 @@ export class NewPong extends AbstractPong {
 
 	create() {
 		super.create();
-		this.scorePlayer1.MAX_SCORE = 1;
-		this.scorePlayer2.MAX_SCORE = 1;
+		let typeBalls = ["ball", "ball", "ball", "ball"];
+		this.createBalls(typeBalls);
+
+		this.brickManager = new BrickManager(this);
+		this.createBricks();
+	}
+
+	update() {
+		super.update();
+		this.brickManager.handleBricks();
 	}
 
 	//#region - method
@@ -72,18 +85,42 @@ export class NewPong extends AbstractPong {
 		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
 	}
 
-	protected createTextureBall() {
-		const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff);
-		graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
-		graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
-		graphics.destroy();
-	}
+	protected createBalls(typeBalls: string[]): void {
+		this.ballManager = new BallManager(this);
+		this.ballManager.createTextureBallNewPong();
+		this.ballManager.setDiameter(this.dataScene.sizeBall);
+		this.ballManager.setSpeedStart(this.dataScene.speedBall);
+        this.ballManager.createBalls(typeBalls);
+        this.ballManager.resetBallsPosition();
+        this.ballManager.addOverlapWith(this.player1, this.player2);
+    }
 
-	protected createBall(): Ball {
-		return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+	private createBricks(): void {
+		switch (this.dataScene.buttonMap.name) {
+			case BrickMaps.names['MAP_1']:
+				this.brickManager.setupBrickMap1();
+				break;
+			case BrickMaps.names['MAP_2']:
+				this.brickManager.setupBrickMap2();
+				break;
+			case BrickMaps.names['MAP_3']:
+				this.brickManager.setupBrickMap3();
+				break;
+			case BrickMaps.names['MAP_4']:
+				this.brickManager.setupBrickMap4();
+				break;		
+			case BrickMaps.names['MAP_RANDOM']:
+				this.brickManager.setupBrickMapRandom(this.dataScene.nbBrickToMapRandom);
+				break;
+			default:
+				this.brickManager.setupBrickMapRandom(10);
+				break;
+		}
+		this.ballManager.balls.forEach(ball => {
+			this.brickManager.addOverlapWith(ball);
+		});
 	}
-
+		
 	protected doEndGame(): void {
 		this.scene.launch("NewVictoryMenu", { sceneToRestart: this.sceneName, winnerName: this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2 });
 		this.scene.stop();

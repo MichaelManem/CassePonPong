@@ -3,7 +3,7 @@ import { AbstractMenu } from "./abstractMenu.ts";
 export class MainMenu extends AbstractMenu {
 
     private readonly BUTTON_NAME_PLAY: string = "Play";
-    private readonly BUTTON_NAME_OPTION: string = "Options";
+    //private readonly BUTTON_NAME_OPTION: string = "Options";
 	
 	// ! Commented because exit button isn't used
     // private readonly BUTTON_NAME_EXIT: string = "Exit";
@@ -29,11 +29,11 @@ export class MainMenu extends AbstractMenu {
 	protected createMenuItems(): Phaser.GameObjects.Text[] {
 		const menuItems: Phaser.GameObjects.Text[] = [];
 
-		menuItems.push(this.createButton(0, this.BUTTON_NAME_PLAY, this.buttonSizeFontBig));
-		menuItems.push(this.createButton(1, this.BUTTON_NAME_OPTION, this.buttonSizeFontLittle));
+		menuItems.push(this.createButton(1, 0, this.BUTTON_NAME_PLAY, this.BUTTON_NAME_PLAY, this.buttonSizeFontBig));
+		//menuItems.push(this.createButton(1, 1, this.BUTTON_NAME_OPTION, this.BUTTON_NAME_OPTION, this.buttonSizeFontLittle));
 
 		// ! I think this button shouldn't exist until the game is not packaged for local usage
-		// menuItems.push(this.createButton(2, this.BUTTON_NAME_EXIT, this.buttonSizeFontMedium));
+		// menuItems.push(this.createButton(1, 2, this.BUTTON_NAME_EXIT, this.BUTTON_NAME_EXIT, this.buttonSizeFontMedium));
 		
 		return menuItems;
 	}
@@ -42,9 +42,6 @@ export class MainMenu extends AbstractMenu {
 		switch (button.name) {
 			case this.BUTTON_NAME_PLAY:
 				this.scene.start("GameMenu");
-				break;
-			case this.BUTTON_NAME_OPTION:
-				this.scene.start("SettingsMenu");
 				break;
 			// ! Commented because exit button isn't used
 			// case this.BUTTON_NAME_EXIT:

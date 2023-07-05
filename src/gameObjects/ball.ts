@@ -1,77 +1,92 @@
 import { PreScene } from "../scenes/preScene";
-import { MathUtils } from "../utils/mathUtils";
+import { Player } from "./player";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private SPEED_START: number = 800;
-    private positionStartX: number;
-    private positionStartY: number;
-    public speedX: number = this.SPEED_START;
-    public speedY: number = this.SPEED_START / 1.5;
-    private readonly waitTimeSendBall: number = 1500;
+    public id!: number;
+    private SPEED_START: number;
+    public speedX: number;
+    public speedY: number;
+    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    public speedAdded: number = 50;
 
-    constructor(scene: PreScene, x: number, y: number, nameTexturePlayer: string) {
-        super(scene, x, y, nameTexturePlayer);
+    constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
+        super(scene, x, y, nameTexture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.positionStartX = scene.WIDTH_WORLD * 0.5;
-        this.positionStartY = scene.HEIGHT_WORLD * 0.5;
         this.setCollideWorldBounds(true);
-        this.resetBallPosition();
         this.setBounce(1);
-    }
-
-    public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
-        this.scene.physics.add.overlap(object, this, callback);
-    }
-
-    public resetBallPosition(): void {
-        this.x = this.positionStartX;
-        this.y = this.positionStartY;
-        this.setVelocity(0);
-        this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [], this);
-    }
-
-    protected sendBall(): void {
-        const startY: number = MathUtils.getRandomArbitrary(-this.speedY, this.speedY);
-        // 'Math.random() < 0.5' return a random boolean
-        const startX: number = MathUtils.getRandomBoolean() ? -this.speedX : this.speedX;
-        this.setVelocity(startX, startY);
-        this.setBounce(1);
+        this.SPEED_START = speedBall;
+        this.speedX = this.SPEED_START;
+        this.speedY = this.SPEED_START * this.MULTIPLIER_SPEED_Y;
     }
 
     // Override method to recalibrate velocity in limit of speedY
     public setVelocity(speedX: number, speedY?: number | undefined): this {
-        super.setVelocity(speedX, speedY);
-
-        if (this.body && this.body.velocity) {
-            const velocityX = this.body.velocity.x;
-            const velocityY = this.body.velocity.y;
-
-            if (velocityX < 0) {
-                this.body.velocity.x = Math.max(-this.speedX, velocityX);
-            } else if (velocityX > 0) {
-                this.body.velocity.x = Math.min(this.speedX, velocityX);
-            } else {
-                this.body.velocity.x = 0;
-            }
-
-            this.body.velocity.y = 0;
-            if (velocityY < 0) {
-                this.body.velocity.y = Math.max(-this.speedY, velocityY);
-            } else if (velocityY > 0) {
-                this.body.velocity.y = Math.min(this.speedY, velocityY);
-            } else {
-                this.body.velocity.y = 0;
-            }
+        if (speedX < 0) {
+            speedX = Math.max(-this.speedX, speedX);
+        } else if (speedX > 0) {
+            speedX = Math.min(this.speedX, speedX);
+        } else {
+            speedX = 0;
+        }
+        
+        if(speedY === undefined) {
+            speedY = speedY;
+        } else if (speedY < 0) {
+            speedY = Math.max(-this.speedY, speedY);
+        } else if (speedY > 0) {
+            speedY = Math.min(this.speedY, speedY);
+        } else {
+            speedY = 0;
         }
 
-        return this;
+        return super.setVelocity(speedX, speedY);
     }
 
     public setMaxSpeed(speed: number): void {
         this.SPEED_START = speed;
     }
 
+    public addColliderWithPlayerLeft(player: Player) {
+		this.scene.physics.add.overlap(player, this, (player, ball) => {
+            // Le y = 0 est en haut de l'écran
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            const currentBallSpeedX = ball.body.velocity.x;
+			let ballDistPercentFromCenterPlayer = (ball.y - player.y) / (player.height / 2);
+            let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+            if (ball.y < player.y) {
+                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDirection = -1;
+            }
+            ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
+			ball.setVelocity(ball.speedX, newBallSpeedY);
+            this.playCollideSound();
+        });
+    }
+
+    public addColliderWithPlayerRight(player: Player) {
+        this.scene.physics.add.overlap(player, this, (player, ball) => {
+            // Le y = 0 est en haut de l'écran
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            const currentBallSpeedX = ball.body.velocity.x;
+            let ballDistPercentFromCenterPlayer  = (ball.y - player.y) / (player.height / 2);
+            let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+            if (ball.y < player.y) {
+                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDirection = -1;
+            }
+            ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+            let newBallSpeedX = -1 * ball.speedX;
+            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
+			ball.setVelocity(newBallSpeedX, newBallSpeedY);
+            this.playCollideSound();
+        });
+    }
 
     public playCollideSound(): void {
         this.scene.sound.add("hitPaddle", { loop: false, volume: 1 }).play();

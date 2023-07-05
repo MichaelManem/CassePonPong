@@ -1,6 +1,6 @@
-import { Ball } from "../../../gameObjects/ball.ts";
 import { AbstractPong } from "../abstractPong.ts";
 import { Player } from "../../../gameObjects/player.ts";
+import { BallManager } from "../../../gameObjects/ballManager.ts";
 
 export class OldPong extends AbstractPong {
 
@@ -23,6 +23,7 @@ export class OldPong extends AbstractPong {
 
 	create() {
 		super.create();
+		this.createBalls(["ball"]);
 		this.createMiddleLine();
 		this.scorePlayer1.MAX_SCORE = 7;
 		this.scorePlayer2.MAX_SCORE = 7;
@@ -81,16 +82,12 @@ export class OldPong extends AbstractPong {
 		);
 	}
 
-	protected createTextureBall() {
-		const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff);
-		graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
-		graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
-		graphics.destroy();
-	}
-
-	protected createBall(): Ball {
-		return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+	protected createBalls(typeBalls: string[]): void {
+		this.ballManager = new BallManager(this);
+		this.ballManager.createTextureBallOldPong();
+        this.ballManager.createBalls(typeBalls);
+        this.ballManager.resetBallsPosition();
+        this.ballManager.addOverlapWith(this.player1, this.player2);
 	}
 
 	private createMiddleLine(): void {

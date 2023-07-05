@@ -4,9 +4,9 @@ import { OldPong } from "./scenes/games/oldPong/oldPong.ts";
 import { MainMenu } from "./scenes/menus/mainMenu.ts";
 import { GameMenu } from "./scenes/menus/gameMenu.ts";
 import { PauseMenu } from "./scenes/menus/pauseMenu.ts";
+import { SettingsNewPong } from "./scenes/menus/settingsNewPong.ts";
 import { OldVictoryMenu } from "./scenes/menus/oldVictoryMenu.ts";
 import { NewVictoryMenu } from "./scenes/menus/newVictoryMenu.ts";
-import { SettingsMenu } from "./scenes/menus/settingsMenu.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
@@ -35,9 +35,9 @@ const config: Phaser.Types.Core.GameConfig = {
         MainMenu, 
         GameMenu, 
         PauseMenu,
+        SettingsNewPong, 
         OldVictoryMenu,
         NewVictoryMenu,
-        SettingsMenu, 
         NewPong, 
         OldPong, 
     ]

@@ -30,8 +30,8 @@ export class AbstractVictoryMenu extends AbstractMenu {
     // Implémenter les méthodes abstraites
     protected createMenuItems(): Phaser.GameObjects.Text[] {
         const menuItems: Phaser.GameObjects.Text[] = [];
-        menuItems.push(this.createButton(1, this.BUTTON_NAME_RESTART, this.buttonSizeFontMedium));
-        menuItems.push(this.createButton(2, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
+        menuItems.push(this.createButton(1, 1, this.BUTTON_NAME_RESTART, this.BUTTON_NAME_RESTART, this.buttonSizeFontMedium));
+        menuItems.push(this.createButton(1, 2, this.BUTTON_NAME_MAIN_MENU, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
         return menuItems;
     }
 
