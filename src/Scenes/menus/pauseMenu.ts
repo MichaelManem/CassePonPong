@@ -3,6 +3,8 @@ import { AbstractMenu } from "./abstractMenu.ts";
 export class PauseMenu extends AbstractMenu {
 	private dataScene: any;
 	private readonly BUTTON_NAME_RESUME: string = "Resume";
+	private readonly BUTTON_NAME_RESTART: string = "Restart";
+	private readonly BUTTON_NAME_RESET_BALL: string = "Unstuck Ball";
 	private readonly BUTTON_NAME_MAIN_MENU: string = "Go to Main Menu";
 
 	constructor() {
@@ -30,8 +32,10 @@ export class PauseMenu extends AbstractMenu {
 	protected createMenuItems(): Phaser.GameObjects.Text[] {
 		const menuItems: Phaser.GameObjects.Text[] = [];
 
-		menuItems.push(this.createButton(0, this.BUTTON_NAME_RESUME, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(1, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 0, this.BUTTON_NAME_RESUME, this.BUTTON_NAME_RESUME, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 1, this.BUTTON_NAME_RESTART, this.BUTTON_NAME_RESTART, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 2, this.BUTTON_NAME_RESET_BALL, this.BUTTON_NAME_RESET_BALL, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 3, this.BUTTON_NAME_MAIN_MENU, this.BUTTON_NAME_MAIN_MENU, this.buttonSizeFontMedium));
 
 		return menuItems;
 	}
@@ -40,6 +44,17 @@ export class PauseMenu extends AbstractMenu {
 		switch (button.name) {
 			case this.BUTTON_NAME_RESUME:
 				this.scene.resume(this.dataScene?.sceneBeforePause);
+				this.scene.stop();
+				break;
+			case this.BUTTON_NAME_RESTART:
+				this.scene.stop(this.dataScene?.sceneBeforePause);
+				this.scene.launch(this.dataScene?.sceneBeforePause);
+				this.scene.stop();
+				break;
+			case this.BUTTON_NAME_RESET_BALL:
+				this.scene.resume(this.dataScene?.sceneBeforePause, {
+					resetBall: true
+				});
 				this.scene.stop();
 				break;
 			case this.BUTTON_NAME_MAIN_MENU:

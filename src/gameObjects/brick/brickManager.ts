@@ -58,12 +58,16 @@ export class BrickManager {
 
     private factoryBricks(dataBricks: any[], needToCopyUpToBottom: boolean, needToCopyLeftToRight: boolean): void {
         dataBricks.forEach(dataBrick => {
+            let posX = this.scene.WIDTH_WORLD * dataBrick.x;
+            let posY = this.scene.HEIGHT_WORLD * dataBrick.y;
+            let width = this.BRICK_WIDTH * dataBrick.width;
+            let height = this.BRICK_HEIGHT * dataBrick.height;
             switch (dataBrick.type) {
                 case "normal":
-                    this.bricks.push(new Brick(this.scene, dataBrick.x, dataBrick.y, this.BRICK_WIDTH * dataBrick.width, this.BRICK_HEIGHT * dataBrick.height, dataBrick.maxHealth));
+                    this.bricks.push(new Brick(this.scene, posX, posY, width, height, dataBrick.maxHealth));
                     break;
                 case "immortal":
-                    this.bricks.push(new BrickImmortal(this.scene, dataBrick.x, dataBrick.y, this.BRICK_WIDTH * dataBrick.width, this.BRICK_HEIGHT * dataBrick.height));
+                    this.bricks.push(new BrickImmortal(this.scene, posX, posY, width, height));
                     break;
                 default:
                     break;
@@ -108,7 +112,8 @@ export class BrickManager {
             while (hasIntersection || isOnSpwanBall) {
                 hasIntersection = false;
                 isOnSpwanBall = newBrickX > (this.scene.WIDTH_WORLD * 0.50 - this.BRICK_WIDTH) && 
-                                newBrickY > (this.scene.HEIGHT_WORLD * 0.50 - this.BRICK_HEIGHT);
+                                (newBrickY > (this.scene.HEIGHT_WORLD * 0.50 - this.BRICK_HEIGHT) && 
+                                newBrickY < (this.scene.HEIGHT_WORLD * 0.50 + this.BRICK_HEIGHT));
                 for (let iBrickXs = 0; iBrickXs < brickXs.length; iBrickXs++) {
                     let rectA = new Phaser.Geom.Rectangle(brickXs[iBrickXs], brickYs[iBrickXs], this.BRICK_WIDTH, this.BRICK_HEIGHT);
                     let rectB = new Phaser.Geom.Rectangle(newBrickX, newBrickY, this.BRICK_WIDTH, this.BRICK_HEIGHT);

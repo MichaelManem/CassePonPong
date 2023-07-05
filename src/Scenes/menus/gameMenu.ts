@@ -26,9 +26,9 @@ export class GameMenu extends AbstractMenu {
 	protected createMenuItems(): Phaser.GameObjects.Text[] {
 		const menuItems: Phaser.GameObjects.Text[] = [];
 
-		menuItems.push(this.createButton(0, this.BUTTON_NAME_NEW_PONG, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(1, this.BUTTON_NAME_OLD_PONG, this.buttonSizeFontMedium));
-		menuItems.push(this.createButton(999, this.BUTTON_NAME_BACK, this.buttonSizeFontLittle));
+		menuItems.push(this.createButton(1, 0, this.BUTTON_NAME_NEW_PONG, this.BUTTON_NAME_NEW_PONG, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 1, this.BUTTON_NAME_OLD_PONG, this.BUTTON_NAME_OLD_PONG, this.buttonSizeFontMedium));
+		menuItems.push(this.createButton(1, 999, this.BUTTON_NAME_BACK, this.BUTTON_NAME_BACK, this.buttonSizeFontLittle));
 
 		return menuItems;
 	}
@@ -36,7 +36,7 @@ export class GameMenu extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_NEW_PONG:
-				this.scene.start("NewPong");
+				this.scene.start("SettingsNewPong");
 				break;
 			case this.BUTTON_NAME_OLD_PONG:
 				this.scene.start("OldPong");
