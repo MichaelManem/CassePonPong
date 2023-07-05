@@ -1,4 +1,3 @@
-import { Ball } from "../../../gameObjects/ball.ts";
 import { AbstractPong } from "../abstractPong.ts";
 import { Player } from "../../../gameObjects/player.ts";
 import { BallManager } from "../../../gameObjects/ballManager.ts";
@@ -15,13 +14,19 @@ export class OldPong extends AbstractPong {
 	preload() {
 		super.preload();
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
-        this.createMiddleLinePart();
+		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
+		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
+		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
+		
+		this.createMiddleLinePart();
 	}
 
 	create() {
 		super.create();
 		this.createBalls(["ball"]);
 		this.createMiddleLine();
+		this.scorePlayer1.MAX_SCORE = 7;
+		this.scorePlayer2.MAX_SCORE = 7;
 	}
 	// #endregion
 
@@ -45,7 +50,7 @@ export class OldPong extends AbstractPong {
 		// Créer un evenement qui va etre appelé lors du 'resume' de cette scene
 		this.resumeMusicWhenSceneResume();
 	}
-	
+
 	protected createTexturePlayer(): void {
 		const graphics = this.add.graphics();
 		graphics.fillStyle(0xffffff);
@@ -57,22 +62,22 @@ export class OldPong extends AbstractPong {
 
 	protected createPlayer1(): Player {
 		return new Player(
-			this, 
-			this.PLAYER_WIDTH_POSITION, 
-			this.MULTIPLIER_POSITION_HEIGHT_PLAYER, 
-			this.NAME_TEXTURE_PLAYER1, 
-			'Z', 
+			this,
+			this.PLAYER_WIDTH_POSITION,
+			this.MULTIPLIER_POSITION_HEIGHT_PLAYER,
+			this.NAME_TEXTURE_PLAYER1,
+			'Z',
 			'S'
 		);
 	}
 
 	protected createPlayer2(): Player {
 		return new Player(
-			this, 
-			(1 - this.PLAYER_WIDTH_POSITION), 
-			this.MULTIPLIER_POSITION_HEIGHT_PLAYER, 
-			this.NAME_TEXTURE_PLAYER2, 
-			'Up', 
+			this,
+			(1 - this.PLAYER_WIDTH_POSITION),
+			this.MULTIPLIER_POSITION_HEIGHT_PLAYER,
+			this.NAME_TEXTURE_PLAYER2,
+			'Up',
 			'Down'
 		);
 	}
@@ -95,10 +100,19 @@ export class OldPong extends AbstractPong {
 
 	private createMiddleLinePart(): void {
 		const graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff);
+		graphics.fillStyle(0xffffff, 0.25);
 		graphics.fillRect(0, 0, 5, 25);
 		graphics.generateTexture("middleLinePart", 5, 25);
 		graphics.destroy();
+	}
+
+	protected doEndGame(): void {
+		this.scene.launch("OldVictoryMenu", { sceneToRestart: this.sceneName, winnerName: this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2 });
+		this.scene.stop();
+
+		if (this.backgroundMusic) {
+			this.backgroundMusic.pause();
+		}
 	}
 	//----------------------------
 	//#endregion - private method

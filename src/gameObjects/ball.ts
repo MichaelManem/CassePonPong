@@ -1,5 +1,4 @@
 import { PreScene } from "../scenes/preScene";
-import { MathUtils } from "../utils/mathUtils";
 import { Player } from "./player";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
@@ -7,6 +6,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     private SPEED_START: number;
     public speedX: number;
     public speedY: number;
+    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    public speedAdded: number = 50;
 
     constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
         super(scene, x, y, nameTexture);
@@ -16,36 +17,30 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.setBounce(1);
         this.SPEED_START = speedBall;
         this.speedX = this.SPEED_START;
-        this.speedY = this.SPEED_START / 1.5;
+        this.speedY = this.SPEED_START * this.MULTIPLIER_SPEED_Y;
     }
 
     // Override method to recalibrate velocity in limit of speedY
     public setVelocity(speedX: number, speedY?: number | undefined): this {
-        super.setVelocity(speedX, speedY);
-
-        if (this.body && this.body.velocity) {
-            const velocityX = this.body.velocity.x;
-            const velocityY = this.body.velocity.y;
-
-            if (velocityX < 0) {
-                this.body.velocity.x = Math.max(-this.speedX, velocityX);
-            } else if (velocityX > 0) {
-                this.body.velocity.x = Math.min(this.speedX, velocityX);
-            } else {
-                this.body.velocity.x = 0;
-            }
-      
-            this.body.velocity.y = 0;
-            if (velocityY < 0) {
-                this.body.velocity.y = Math.max(-this.speedY, velocityY);
-            } else if (velocityY > 0) {
-                this.body.velocity.y = Math.min(this.speedY, velocityY);
-            } else {
-                this.body.velocity.y = 0;
-            }
+        if (speedX < 0) {
+            speedX = Math.max(-this.speedX, speedX);
+        } else if (speedX > 0) {
+            speedX = Math.min(this.speedX, speedX);
+        } else {
+            speedX = 0;
         }
-      
-        return this;
+        
+        if(speedY === undefined) {
+            speedY = speedY;
+        } else if (speedY < 0) {
+            speedY = Math.max(-this.speedY, speedY);
+        } else if (speedY > 0) {
+            speedY = Math.min(this.speedY, speedY);
+        } else {
+            speedY = 0;
+        }
+
+        return super.setVelocity(speedX, speedY);
     }
 
     public setMaxSpeed(speed: number): void {
@@ -58,15 +53,17 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
             //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-            let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+            const currentBallSpeedX = ball.body.velocity.x;
+			let ballDistPercentFromCenterPlayer = (ball.y - player.y) / (player.height / 2);
             let ballDirection = 1; // 1 vers le bas et -1 vers le haut
             if (ball.y < player.y) {
-                ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
                 ballDirection = -1;
             }
-            let signOfSpeedX = 1;
-            let ballSpeedX = signOfSpeedX * ball.speedX;
-            ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+            ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
+			ball.setVelocity(ball.speedX, newBallSpeedY);
+            this.playCollideSound();
         });
     }
 
@@ -76,15 +73,27 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
             //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-            let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+            const currentBallSpeedX = ball.body.velocity.x;
+            let ballDistPercentFromCenterPlayer  = (ball.y - player.y) / (player.height / 2);
             let ballDirection = 1; // 1 vers le bas et -1 vers le haut
             if (ball.y < player.y) {
-                ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
                 ballDirection = -1;
             }
-            let signOfSpeedX = -1;
-            let ballSpeedX = signOfSpeedX * ball.speedX;
-            ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+            ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
+            let newBallSpeedX = -1 * ball.speedX;
+            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
+			ball.setVelocity(newBallSpeedX, newBallSpeedY);
+            this.playCollideSound();
         });
     }
+
+    public playCollideSound(): void {
+        this.scene.sound.add("hitPaddle", { loop: false, volume: 1 }).play();
+    };
+
+    public playCollideSoundWall(): void {
+        this.scene.sound.add("hitWall", { loop: false, volume: 1 }).play();
+    };
+
 }

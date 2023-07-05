@@ -17,6 +17,7 @@ export class BallManager {
     public NAME_TEXTURE_BALL: string = "ball";
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
+    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
 
     constructor(scene: AllPongs, speedStart: number = 800, sizeBall: number = 10) {
         this.scene = scene;
@@ -86,13 +87,15 @@ export class BallManager {
         if(ballFinded !== undefined) {
             ballFinded.x = positionStartX;
             ballFinded.y = positionStartY;
-            ballFinded.setVelocity(0);
+            ballFinded.setVelocity(0, 0);
             this.scene.time.delayedCall(this.waitTimeSendBall, this.sendBall, [ballFinded], this);
         }
         return ball;
     }
 
     protected sendBall(ball: AllBalls): void {
+        ball.speedY = this.SPEED_START * this.MULTIPLIER_SPEED_Y;
+        ball.speedX = this.SPEED_START;
         let startY: number = MathUtils.getRandomArbitrary(-ball.speedY, ball.speedY);
         while(startY < ball.speedY * 0.20 && startY > -ball.speedY * 0.20) {
             startY = MathUtils.getRandomArbitrary(-ball.speedY, ball.speedY);

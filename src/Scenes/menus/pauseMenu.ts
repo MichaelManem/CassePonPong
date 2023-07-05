@@ -14,7 +14,7 @@ export class PauseMenu extends AbstractMenu {
 	init(data: any) {
 		this.dataScene = data;
 	}
-	
+
 	create() {
 		this.menuTitle = "Pause";
 
@@ -43,16 +43,16 @@ export class PauseMenu extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_RESUME:
-				this.scene.resume(this.dataScene?.sceneBeforePause);
+				this.scene.resume(this.dataScene?.sceneToResume);
 				this.scene.stop();
 				break;
 			case this.BUTTON_NAME_RESTART:
-				this.scene.stop(this.dataScene?.sceneBeforePause);
-				this.scene.launch(this.dataScene?.sceneBeforePause);
+				this.scene.stop(this.dataScene?.sceneToResume);
+				this.scene.launch(this.dataScene?.sceneToResume);
 				this.scene.stop();
 				break;
 			case this.BUTTON_NAME_RESET_BALL:
-				this.scene.resume(this.dataScene?.sceneBeforePause, {
+				this.scene.resume(this.dataScene?.sceneToResume, {
 					resetBall: true
 				});
 				this.scene.stop();
