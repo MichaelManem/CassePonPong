@@ -7,10 +7,10 @@ export interface ScoreStyle extends Phaser.Types.GameObjects.Text.TextStyle {
 }
 
 export class Score extends Phaser.GameObjects.Text {
-  public readonly MAX_SCORE: number = 7;
+  public MAX_SCORE: number = 7;
   public readonly SCORE_ZONE_MULTIPLIER: number = 0.3;
 
-  private scoreValue: number = 0;
+  public scoreValue: number = 0;
   private scoreZoneWidth: number;
   private playerWidthPosition: number;
 
@@ -57,12 +57,8 @@ export class Score extends Phaser.GameObjects.Text {
       ? ball.x < scoreZoneLimit
       : ball.x > scoreZoneLimit;
 
-    if (hasScored) {
-      if (this.scoreValue >= this.MAX_SCORE) {
-        console.log('Game over');
-        return;
-      }
-
+    if (hasScored && this.scoreValue < this.MAX_SCORE) {
+      this.scene.sound.add("scorePoint", { loop: false, volume: 1 }).play();
       this.scoreValue += 1;
       this.setText(this.scoreValue.toString());
       ball.resetBallPosition();

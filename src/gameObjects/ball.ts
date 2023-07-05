@@ -2,7 +2,7 @@ import { PreScene } from "../scenes/preScene";
 import { MathUtils } from "../utils/mathUtils";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
-    private SPEED_START: number = 1200;
+    private SPEED_START: number = 800;
     private positionStartX: number;
     private positionStartY: number;
     public speedX: number = this.SPEED_START;
@@ -23,7 +23,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     public addColliderWith(object: Phaser.GameObjects.GameObject, callback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback) {
         this.scene.physics.add.overlap(object, this, callback);
     }
-    
+
     public resetBallPosition(): void {
         this.x = this.positionStartX;
         this.y = this.positionStartY;
@@ -54,7 +54,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
             } else {
                 this.body.velocity.x = 0;
             }
-      
+
             this.body.velocity.y = 0;
             if (velocityY < 0) {
                 this.body.velocity.y = Math.max(-this.speedY, velocityY);
@@ -64,11 +64,21 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
                 this.body.velocity.y = 0;
             }
         }
-      
+
         return this;
     }
 
     public setMaxSpeed(speed: number): void {
         this.SPEED_START = speed;
     }
+
+
+    public playCollideSound(): void {
+        this.scene.sound.add("hitPaddle", { loop: false, volume: 1 }).play();
+    };
+
+    public playCollideSoundWall(): void {
+        this.scene.sound.add("hitWall", { loop: false, volume: 1 }).play();
+    };
+
 }

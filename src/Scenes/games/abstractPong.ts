@@ -4,31 +4,32 @@ import { Player } from "../../gameObjects/player.ts";
 import { PreScene } from "../preScene.ts";
 
 export abstract class AbstractPong extends PreScene {
-	protected readonly NAME_TEXTURE_PLAYER1: string = "texturePlayer1";
-	protected readonly NAME_TEXTURE_PLAYER2: string = "texturePlayer2";
-	protected readonly NAME_TEXTURE_BALL: string = "textureBall";
+    protected readonly NAME_TEXTURE_PLAYER1: string = "texturePlayer1";
+    protected readonly NAME_TEXTURE_PLAYER2: string = "texturePlayer2";
+    protected readonly NAME_TEXTURE_BALL: string = "textureBall";
 
     protected readonly MULTIPLIER_POSITION_HEIGHT_PLAYER: number = 0.5;
     private readonly MULTIPLIER_POSITION_WIDTH_SCORE1: number = 0.35;
     private readonly MULTIPLIER_POSITION_WIDTH_SCORE2: number = 0.65;
     private readonly MULTIPLIER_POSITION_HEIGHT_SCORE: number = 0.125;
 
-	protected PLAYER_WIDTH: number = 20;
-	protected PLAYER_HEIGHT: number = 120;
-	protected COLOR_PLAYER1: number = 0xffffff;
-	protected COLOR_PLAYER2: number = 0xffffff;
-	protected BALL_DIAMETER: number = 20;
-	protected COLOR_BALL: number = 0xffffff;
+    protected PLAYER_WIDTH: number = 10;
+    protected PLAYER_HEIGHT: number = 80;
+    protected COLOR_PLAYER1: number = 0xffffff;
+    protected COLOR_PLAYER2: number = 0xffffff;
+    protected BALL_DIAMETER: number = 10;
+    protected COLOR_BALL: number = 0xffffff;
     protected PLAYER_WIDTH_POSITION!: number;
 
     protected sceneName!: string;
     protected backgroundMusic!: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
-    
+
     protected player1!: Player;
     protected player2!: Player;
     protected ball!: Ball;
-    private scorePlayer1!: Score;
-    private scorePlayer2!: Score;
+    public isBallColliding!: boolean;
+    protected scorePlayer1!: Score;
+    protected scorePlayer2!: Score;
 
     preload(): void {
         super.preload();
@@ -49,6 +50,7 @@ export abstract class AbstractPong extends PreScene {
         this.createPauseKey();
         this.scorePlayer1 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE1, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
         this.scorePlayer2 = this.createScore(this.MULTIPLIER_POSITION_WIDTH_SCORE2, this.MULTIPLIER_POSITION_HEIGHT_SCORE);
+        this.isBallColliding = false;
     }
 
     update() {
@@ -56,6 +58,17 @@ export abstract class AbstractPong extends PreScene {
         this.player2.move();
         this.scorePlayer1.handleScoring(this.ball, this.player2);
         this.scorePlayer2.handleScoring(this.ball, this.player1);
+        this.handleEndGame();
+
+
+        if (this.ball.body) {
+            if ((this.ball.body.blocked.up || this.ball.body.blocked.down || this.ball.body.blocked.left || this.ball.body.blocked.right) && !this.isBallColliding) {
+                this.ball.playCollideSoundWall();
+                this.isBallColliding = true;
+            } else if (!(this.ball.body.blocked.up || this.ball.body.blocked.down || this.ball.body.blocked.left || this.ball.body.blocked.right)) {
+                this.isBallColliding = false;
+            }
+        }
     }
 
     //#endregion
@@ -68,6 +81,7 @@ export abstract class AbstractPong extends PreScene {
     protected abstract createTextureBall(): void;
     protected abstract createBall(): Ball;
     protected abstract createBackground(): void;
+    protected abstract doEndGame(): void;
     //#endregion
 
     //#region [Protected Methods]
@@ -95,7 +109,7 @@ export abstract class AbstractPong extends PreScene {
         const escapeKey = this.input.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         escapeKey?.on("down", () => {
             if (!this.scene.isPaused()) {
-                this.scene.launch("PauseMenu", { sceneBeforePause: this.sceneName });
+                this.scene.launch("PauseMenu", { sceneToResume: this.sceneName });
                 this.scene.pause();
                 if (this.backgroundMusic) {
                     this.backgroundMusic.pause();
@@ -103,54 +117,80 @@ export abstract class AbstractPong extends PreScene {
             }
         });
     }
-    
-	// TODO - Il faudrait que l'addition des velocité X et y reste constante peu importe l'angle que prend la balle
-	// TODO - A tester
-	protected addCollideBall(): void {
+
+    // TODO - Il faudrait que l'addition des velocité X et y reste constante peu importe l'angle que prend la balle
+    // TODO - A tester
+    protected addCollideBall(): void {
+        this.ball.setCollideWorldBounds(true, undefined, undefined, undefined);
         this.ball.addColliderWith(this.player1, function (player, ball) {
-			// Le y = 0 est en haut de l'écran
-			//Pong 		  => 	 Top   		milieu   	   bot
-			//Pourcentage =>	 100     	  0     	   100
-			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
-				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
-					ballDirection = -1;
-				}
-				let signOfSpeedX = 1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
-			}
+            // Le y = 0 est en haut de l'écran
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            if (ball instanceof Ball && ball.body) {
+                let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+                let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+                if (ball.y < player.y) {
+                    ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                    ballDirection = -1;
+                }
+                let signOfSpeedX = 1;
+                let ballSpeedX = signOfSpeedX * ball.speedX;
+                ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+                ball.playCollideSound();
+            }
         });
 
-		this.ball.addColliderWith(this.player2, function (player, ball) {
-			// Le y = 0 est en haut de l'écran
-			//SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-			//Pong 		  => 	 Top   		milieu   	   bot
-			//Pourcentage =>	 100     	  0     	   100
-			if (ball instanceof Ball && ball.body) {
-				let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
-				let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-				if (ball.y < player.y) {
-					ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
-					ballDirection = -1;
-				}
-				let signOfSpeedX = -1;
-				let ballSpeedX = signOfSpeedX * ball.speedX;
-				ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
-			}
+        this.ball.addColliderWith(this.player2, function (player, ball) {
+            // Le y = 0 est en haut de l'écran
+            //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
+            //Pong 		  => 	 Top   		milieu   	   bot
+            //Pourcentage =>	 100     	  0     	   100
+            if (ball instanceof Ball && ball.body) {
+                let ballPosPercentPlayer = (ball.y - player.y) / (player.height / 2);
+                let ballDirection = 1; // 1 vers le bas et -1 vers le haut
+                if (ball.y < player.y) {
+                    ballPosPercentPlayer = (player.y - ball.y) / (player.height / 2);
+                    ballDirection = -1;
+                }
+                let signOfSpeedX = -1;
+                let ballSpeedX = signOfSpeedX * ball.speedX;
+                ball.setVelocity(ballSpeedX, ballDirection * ball.speedY * ballPosPercentPlayer);
+                ball.playCollideSound();
+            }
         });
-	}
+    }
 
     private createScore(widthPositionMultiplier: number, heightPositionMultiplier: number): Score {
         return new Score(this, this.PLAYER_WIDTH_POSITION, widthPositionMultiplier, heightPositionMultiplier, "0", {
-            font: `6rem Arial`,
+            font: `6rem Courier New`,
             color: "#fff",
             stroke: "#00000",
             strokeThickness: 30,
         });
     }
+
+    private handleEndGame(): void {
+        if (this.isEndGame()) {
+            this.doEndGame();
+        }
+    }
+
+    protected isEndGame() {
+        const isEndGameByPlayer1: boolean = this.scorePlayer1.scoreValue >= this.scorePlayer1.MAX_SCORE;
+        const isEndGameByPlayer2: boolean = this.scorePlayer2.scoreValue >= this.scorePlayer2.MAX_SCORE;
+        return isEndGameByPlayer1 || isEndGameByPlayer2;
+    }
+
+    protected getNameWinner() {
+        if (this.scorePlayer1.scoreValue >= this.scorePlayer1.MAX_SCORE) {
+            return "Joueur 1";
+        } else if (this.scorePlayer2.scoreValue >= this.scorePlayer2.MAX_SCORE) {
+            return "Joueur 2";
+        } else {
+            return "";
+        }
+    }
+
     //#endregion
 }

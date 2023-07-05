@@ -4,17 +4,17 @@ export abstract class AbstractMenu extends PreScene {
 	protected buttons!: Phaser.GameObjects.Text[];
 	protected selectedIndex!: number;
 	protected menuTitle!: string;
+	protected titleFont: string = "Arial";
+	protected titleSizeFont: number = 8;
+	protected buttonFont: string = "Arial";
+	protected fontProperty: string = "";
 
-	protected readonly titleFont: string = "Arial";
-	protected readonly titleSizeFont: number = 8;
-
-	protected readonly buttonFont: string = "Arial";
 	protected readonly buttonSizeFontBig: number = 6;
 	protected readonly buttonSizeFontMedium: number = 4;
 	protected readonly buttonSizeFontLittle: number = 3;
-	protected readonly buttonColor: string = "#fff";
-	protected readonly buttonStroke: string = "#00000";
-	protected readonly buttonStrokeThickness: number = 30;
+	protected readonly color: string = "#fff";
+	protected readonly stroke: string = "#00000";
+	protected readonly strokeThickness: number = 30;
 	protected readonly alphaNotSelected = 0.8;
 	protected readonly colorSelected = "gold";
 
@@ -30,13 +30,17 @@ export abstract class AbstractMenu extends PreScene {
 	//#endregion
 
 	protected createMenuTitle(title: string): void {
-		this.add
-			.text(this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.125, title, {
-				font: `bold ${this.titleSizeFont}rem ${this.titleFont}`,
-				color: this.buttonColor,
-				stroke: this.buttonStroke,
-				strokeThickness: this.buttonStrokeThickness,
-			})
+		this.add.text(
+			this.WIDTH_WORLD * 0.5,
+			this.HEIGHT_WORLD * 0.125,
+			title,
+			{
+				font: `${this.fontProperty} ${this.titleSizeFont}rem ${this.titleFont}`,
+				color: this.color,
+				stroke: this.stroke,
+				strokeThickness: this.strokeThickness,
+			}
+		)
 			// setOrigin c'est pour définir dans quel partie de l'objet tu admet qu'il commence.
 			// O.5 il est au milieux de l'objet, 0 tout à gauche et 1 toute à droite
 			.setOrigin(0.5);
@@ -53,9 +57,9 @@ export abstract class AbstractMenu extends PreScene {
 		let button: Phaser.GameObjects.Text = this.add
 			.text(this.WIDTH_WORLD * 0.5, heightButton, nameButton, {
 				font: `bold ${fontSize}rem ${this.buttonFont}`,
-				color: this.buttonColor,
-				stroke: this.buttonStroke,
-				strokeThickness: this.buttonStrokeThickness,
+				color: this.color,
+				stroke: this.stroke,
+				strokeThickness: this.strokeThickness,
 			})
 			.setData({ index: index })
 			.setName(nameButton)
@@ -99,7 +103,7 @@ export abstract class AbstractMenu extends PreScene {
 			buttonToHighlight.setAlpha(1).setColor(this.colorSelected);
 			const otherButtons: Phaser.GameObjects.Text[] = this.buttons.filter((button) => button !== buttonToHighlight);
 			otherButtons.forEach((otherButton) => {
-				otherButton.setAlpha(this.alphaNotSelected).setColor(this.buttonColor);
+				otherButton.setAlpha(this.alphaNotSelected).setColor(this.color);
 			});
 		}
 	}
@@ -138,7 +142,7 @@ export abstract class AbstractMenu extends PreScene {
 		}
 
 		// Désélectionnez le bouton précédent
-		this.buttons[this.selectedIndex].setAlpha(this.alphaNotSelected).setColor(this.buttonColor);
+		this.buttons[this.selectedIndex].setAlpha(this.alphaNotSelected).setColor(this.color);
 
 		// Sélectionnez le nouveau bouton
 		this.buttons[index].setAlpha(1).setColor(this.colorSelected);
@@ -170,9 +174,9 @@ export abstract class AbstractMenu extends PreScene {
 	// 		  this.doExit();
 	// 	  })
 	// 	  .setAlpha(this.alphaNotSelected);
-	
+
 	// 	return exitButton;
 	//   }
-	
+
 	//#endregion
 }

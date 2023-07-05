@@ -4,6 +4,8 @@ import { OldPong } from "./scenes/games/oldPong/oldPong.ts";
 import { MainMenu } from "./scenes/menus/mainMenu.ts";
 import { GameMenu } from "./scenes/menus/gameMenu.ts";
 import { PauseMenu } from "./scenes/menus/pauseMenu.ts";
+import { OldVictoryMenu } from "./scenes/menus/oldVictoryMenu.ts";
+import { NewVictoryMenu } from "./scenes/menus/newVictoryMenu.ts";
 import { SettingsMenu } from "./scenes/menus/settingsMenu.ts";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -16,6 +18,9 @@ const config: Phaser.Types.Core.GameConfig = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'game',
         zoom: 1,  // Size of game canvas = game size * zoom
+    },
+    fps:{
+        target:144
     },
     autoRound: false,
 	physics: {
@@ -30,6 +35,8 @@ const config: Phaser.Types.Core.GameConfig = {
         MainMenu, 
         GameMenu, 
         PauseMenu,
+        OldVictoryMenu,
+        NewVictoryMenu,
         SettingsMenu, 
         NewPong, 
         OldPong, 

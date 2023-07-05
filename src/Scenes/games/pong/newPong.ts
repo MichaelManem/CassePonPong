@@ -16,10 +16,15 @@ export class NewPong extends AbstractPong {
 		this.load.image("player2", "assets/images/Player2.png");
 		this.load.image("background", "assets/images/backgrounds/rock_lunar.avif");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
+		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
+		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
+		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
 	}
 
 	create() {
 		super.create();
+		this.scorePlayer1.MAX_SCORE = 1;
+		this.scorePlayer2.MAX_SCORE = 1;
 	}
 
 	//#region - method
@@ -38,7 +43,7 @@ export class NewPong extends AbstractPong {
 		// Créer un evenement qui va etre appelé lors du 'resume' de cette scene
 		this.resumeMusicWhenSceneResume();
 	}
-	
+
 	protected createTexturePlayer(): void {
 		// Create a Graphics object
 		const graphics = this.add.graphics();
@@ -66,17 +71,26 @@ export class NewPong extends AbstractPong {
 	protected createPlayer2(): Player {
 		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
 	}
-	
-    protected createTextureBall() {
-        const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff);
-        graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
-        graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
-        graphics.destroy();
-    }
+
+	protected createTextureBall() {
+		const graphics: Phaser.GameObjects.Graphics = this.add.graphics();
+		graphics.fillStyle(0xffffff);
+		graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
+		graphics.generateTexture(this.NAME_TEXTURE_BALL, this.BALL_DIAMETER, this.BALL_DIAMETER);
+		graphics.destroy();
+	}
 
 	protected createBall(): Ball {
-        return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+		return new Ball(this, this.WIDTH_WORLD * 0.5, this.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL);
+	}
+
+	protected doEndGame(): void {
+		this.scene.launch("NewVictoryMenu", { sceneToRestart: this.sceneName, winnerName: this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2 });
+		this.scene.stop();
+
+		if (this.backgroundMusic) {
+			this.backgroundMusic.pause();
+		}
 	}
 	//-------------------
 	//#endregion - method
