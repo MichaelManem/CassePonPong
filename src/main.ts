@@ -20,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
         zoom: 1,  // Size of game canvas = game size * zoom
     },
     fps:{
-        target:144
+        target:60
     },
     autoRound: false,
 	physics: {
