@@ -25,7 +25,7 @@ export class NewPong extends AbstractPong {
 		super.preload();
 		this.load.image("player", "assets/images/Player.png");
 		this.load.image("player2", "assets/images/Player2.png");
-		this.load.image("background", "assets/images/backgrounds/bleu_rose.webp");
+		this.load.image("background", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
 		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");

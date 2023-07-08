@@ -61,7 +61,6 @@ export class SettingsNewPong extends AbstractMenu {
 	}
 
 	create() {
-		this.createRandomBackground("SettingsNewPong");
 		this.menuTitle = "Pre-Setttings";
 		super.create();
 	}

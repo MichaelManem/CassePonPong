@@ -20,8 +20,17 @@ export abstract class AbstractMenu extends PreScene {
 	protected readonly colorSelected = "gold";
 
 	//#region [Phaser Methods]
+	preload() {
+		this.load.image("background", "assets/images/backgrounds/BackgroundCar.png");
+	}
+
 	create() {
+		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
+		background.displayWidth = this.game.canvas.width;
+		background.displayHeight = this.game.canvas.height;
+
 		super.create();
+		
 		this.createMenuTitle(this.menuTitle);
 		this.buttons = this.createMenuItems();
 		this.selectedIndex = 0;
