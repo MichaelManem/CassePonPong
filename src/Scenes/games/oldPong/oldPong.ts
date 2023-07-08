@@ -9,6 +9,11 @@ export class OldPong extends AbstractPong {
 		this.setSceneName("OldPong");
 		this.PLAYER_WIDTH_POSITION = 0.17;
 	}
+	init(data: any) {
+		super.init(data);
+        this.PLAYER_HEIGHT = 80;
+        this.PLAYER_WIDTH = 10;
+	}
 
 	// #region preload
 	preload() {
