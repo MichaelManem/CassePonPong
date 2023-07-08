@@ -18,6 +18,7 @@ export class BallManager {
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
     private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    private addSpeed: number = 200;
 
     constructor(scene: AllPongs, speedStart: number = 800, sizeBall: number = 10) {
         this.scene = scene;
@@ -66,6 +67,7 @@ export class BallManager {
             }
             ball.id = this.indexBall;
             ball.setDisplaySize(this.BALL_DIAMETER, this.BALL_DIAMETER);
+            ball.setAddSpeed(this.addSpeed);
             this.indexBall++;
             this.balls.push(ball);
         });
@@ -119,6 +121,10 @@ export class BallManager {
 
     public setSpeedStart(speed: number): void {
         this.SPEED_START = speed;
+    }
+
+    public setAddSpeed(addSpeed: number): void {
+        this.addSpeed = addSpeed;
     }
 
     public setDiameter(diameter: number): void {

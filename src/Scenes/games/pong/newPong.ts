@@ -90,6 +90,7 @@ export class NewPong extends AbstractPong {
 		this.ballManager.createTextureBallNewPong();
 		this.ballManager.setDiameter(this.dataScene.sizeBall);
 		this.ballManager.setSpeedStart(this.dataScene.speedBall);
+		this.ballManager.setAddSpeed(this.dataScene.addSpeedBall);
         this.ballManager.createBalls(typeBalls);
         this.ballManager.resetBallsPosition();
         this.ballManager.addOverlapWith(this.player1, this.player2);

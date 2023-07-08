@@ -7,7 +7,9 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     public speedX: number;
     public speedY: number;
     private readonly MULTIPLIER_SPEED_Y: number = 0.667;
-    public speedAdded: number = 50;
+    private addSpeed: number = 0;
+    private addSpeedX: number = 0;
+    private addSpeedY: number = 0;
 
     constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
         super(scene, x, y, nameTexture);
@@ -49,6 +51,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
     public addColliderWithPlayerLeft(player: Player) {
 		this.scene.physics.add.overlap(player, this, (player, ball) => {
+            ball.speedX += ball.addSpeedX;
+            ball.speedY += ball.addSpeedY;
             // Le y = 0 est en haut de l'écran
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
@@ -69,6 +73,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
     public addColliderWithPlayerRight(player: Player) {
         this.scene.physics.add.overlap(player, this, (player, ball) => {
+            ball.speedX += ball.addSpeedX;
+            ball.speedY += ball.addSpeedY;
             // Le y = 0 est en haut de l'écran
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
@@ -96,4 +102,9 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.scene.sound.add("hitWall", { loop: false, volume: 1 }).play();
     };
 
+    public setAddSpeed(addSpeed: number): void {
+        this.addSpeed = addSpeed;
+        this.addSpeedX = this.addSpeed;
+        this.addSpeedY = this.addSpeed * this.MULTIPLIER_SPEED_Y;
+    }
 }
