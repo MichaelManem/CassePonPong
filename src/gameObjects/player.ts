@@ -11,7 +11,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         'Down': Phaser.Input.Keyboard.KeyCodes.DOWN,
     }
 
-    constructor(scene: PreScene, multiplierPositionX: number, multiplierPositionY: number, nameTexture: string, keyUp: string, keyDown: string) {
+    constructor(scene: PreScene, multiplierPositionX: number, multiplierPositionY: number, nameTexture: string, keyUp: string = "", keyDown: string = "") {
       super(scene, 0, 0, nameTexture);
       this.setPositionXWithMultiplier(multiplierPositionX);
       this.setPositionYWithMultiplier(multiplierPositionY);
@@ -19,7 +19,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       scene.physics.add.existing(this);
       this.setCollideWorldBounds(true);
       this.setImmovable(true);
-      this.setMovementKey(keyUp, keyDown);
+      if(keyUp !== "" && keyDown !== "") {
+          this.setMovementKey(keyUp, keyDown);
+      }
     }
 
     protected setPositionXWithMultiplier(multiplierX: number): void {
@@ -54,5 +56,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.setVelocityY(this.speed * multiplicatorUpDown);
+    }
+
+    public setSpeed(speed: number): void {
+        this.speed = speed;
     }
 }

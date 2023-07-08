@@ -65,7 +65,7 @@ export abstract class AbstractPong extends PreScene {
     update() {
         this.player1.move();
         this.player2.move();
-        this.handleScores();        
+        this.handleScores();
         this.handleEndGame();
 
         this.ballManager.balls.forEach(ball => {

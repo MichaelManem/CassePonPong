@@ -12,7 +12,13 @@ export class NewPong extends AbstractPong {
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
-		this.PLAYER_WIDTH_POSITION = 0.02;
+		this.PLAYER_WIDTH_POSITION = 0.05;
+	}
+
+	init(data: any) {
+		super.init(data);
+        this.PLAYER_HEIGHT = this.dataScene.heightPong;
+        this.PLAYER_WIDTH = this.dataScene.widthPong;
 	}
 
 	preload() {
@@ -28,8 +34,14 @@ export class NewPong extends AbstractPong {
 
 	create() {
 		super.create();
-		let typeBalls = ["ball", "ball", "ball", "ball"];
-		this.createBalls(typeBalls);
+
+		this.player1.setSpeed(this.dataScene.speedPong);
+		this.player2.setSpeed(this.dataScene.speedPong);
+
+		this.scorePlayer1.MAX_SCORE = this.dataScene.scoreToWin;
+		this.scorePlayer2.MAX_SCORE = this.dataScene.scoreToWin;
+
+		this.createBalls(this.getTypeBalls());
 
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
@@ -42,6 +54,15 @@ export class NewPong extends AbstractPong {
 
 	//#region - method
 	//----------------
+
+	private getTypeBalls(): string[] {
+		let typeBalls: string[] = [];
+		for (let i = 0; i < this.dataScene.nbBall; i++) {
+			typeBalls.push("ball");
+		}
+		console.log(typeBalls);
+		return typeBalls;
+	}
 
 	protected createBackground(): void {
 		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
@@ -109,7 +130,7 @@ export class NewPong extends AbstractPong {
 				break;
 			case BrickMaps.names['MAP_4']:
 				this.brickManager.setupBrickMap4();
-				break;		
+				break;
 			case BrickMaps.names['MAP_RANDOM']:
 				this.brickManager.setupBrickMapRandom(this.dataScene.nbBrickToMapRandom);
 				break;
@@ -121,7 +142,7 @@ export class NewPong extends AbstractPong {
 			this.brickManager.addOverlapWith(ball);
 		});
 	}
-		
+
 	protected doEndGame(): void {
 		this.scene.launch("NewVictoryMenu", { sceneToRestart: this.sceneName, winnerName: this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2 });
 		this.scene.stop();
