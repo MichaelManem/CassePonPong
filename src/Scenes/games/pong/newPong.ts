@@ -90,10 +90,10 @@ export class NewPong extends AbstractPong {
 		this.ballManager.createTextureBallNewPong();
 		this.ballManager.setDiameter(this.dataScene.sizeBall);
 		this.ballManager.setSpeedStart(this.dataScene.speedBall);
-        this.ballManager.createBalls(typeBalls);
-        this.ballManager.resetBallsPosition();
-        this.ballManager.addOverlapWith(this.player1, this.player2);
-    }
+		this.ballManager.createBalls(typeBalls);
+		this.ballManager.resetBallsPosition();
+		this.ballManager.addOverlapWith(this.player1, this.player2);
+	}
 
 	private createBricks(): void {
 		switch (this.dataScene.buttonMap.name) {
@@ -108,7 +108,7 @@ export class NewPong extends AbstractPong {
 				break;
 			case BrickMaps.names['MAP_4']:
 				this.brickManager.setupBrickMap4();
-				break;		
+				break;
 			case BrickMaps.names['MAP_RANDOM']:
 				this.brickManager.setupBrickMapRandom(this.dataScene.nbBrickToMapRandom);
 				break;
@@ -120,7 +120,7 @@ export class NewPong extends AbstractPong {
 			this.brickManager.addOverlapWith(ball);
 		});
 	}
-		
+
 	protected doEndGame(): void {
 		this.scene.launch("NewVictoryMenu", { sceneToRestart: this.sceneName, winnerName: this.getNameWinner(), displayScorePlayer1: this.scorePlayer1, displayScorePlayer2: this.scorePlayer2 });
 		this.scene.stop();
