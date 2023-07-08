@@ -18,7 +18,7 @@ export class BallManager {
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
     private readonly MULTIPLIER_SPEED_Y: number = 0.667;
-    private addSpeed: number = 200;
+    private addSpeed: number = 100;
 
     constructor(scene: AllPongs, speedStart: number = 800, sizeBall: number = 10) {
         this.scene = scene;

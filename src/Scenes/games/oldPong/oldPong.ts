@@ -9,14 +9,11 @@ export class OldPong extends AbstractPong {
 		this.setSceneName("OldPong");
 		this.PLAYER_WIDTH_POSITION = 0.17;
 	}
-	init(data: any) {
-		super.init(data);
-        this.PLAYER_HEIGHT = 80;
-        this.PLAYER_WIDTH = 10;
-	}
 
 	// #region preload
 	preload() {
+		this.PLAYER_HEIGHT = 80;
+		this.PLAYER_WIDTH = 10;
 		super.preload();
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");

@@ -99,11 +99,14 @@ export class NewPong extends AbstractPong {
 	protected createPlayer1(): Player {
 		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER1, 'Z', 'S');
 		player1.flipX = true;
+		player1.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 		return player1;
 	}
 
 	protected createPlayer2(): Player {
-		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
+		let player2 = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
+		player2.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+		return player2;
 	}
 
 	protected createBalls(typeBalls: string[]): void {

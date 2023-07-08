@@ -15,8 +15,8 @@ export abstract class AbstractPong extends PreScene {
     private readonly MULTIPLIER_POSITION_WIDTH_SCORE2: number = 0.65;
     private readonly MULTIPLIER_POSITION_HEIGHT_SCORE: number = 0.125;
 
-    protected PLAYER_WIDTH: number = 10;
-    protected PLAYER_HEIGHT: number = 80;
+	public PLAYER_HEIGHT: number = 80;
+	public PLAYER_WIDTH: number = 10;
     protected COLOR_PLAYER1: number = 0xffffff;
     protected COLOR_PLAYER2: number = 0xffffff;
     protected BALL_DIAMETER: number = 10;

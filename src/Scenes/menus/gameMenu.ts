@@ -42,6 +42,7 @@ export class GameMenu extends AbstractMenu {
 				this.scene.start("OldPong");
 				break;
 			case this.BUTTON_NAME_BACK:
+				this.scene.stop();
 				this.scene.start("MainMenuScene");
 				break;
 		}
