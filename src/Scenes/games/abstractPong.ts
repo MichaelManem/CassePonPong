@@ -36,6 +36,8 @@ export abstract class AbstractPong extends PreScene {
 
 	init(data: any) {
 		this.dataScene = data;
+        this.PLAYER_HEIGHT = this.dataScene.heightPong;
+        this.PLAYER_WIDTH = this.dataScene.widthPong;
 	}
 
     preload(): void {

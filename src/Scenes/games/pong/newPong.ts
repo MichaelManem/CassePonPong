@@ -15,6 +15,12 @@ export class NewPong extends AbstractPong {
 		this.PLAYER_WIDTH_POSITION = 0.05;
 	}
 
+	init(data: any) {
+		super.init(data);
+        this.PLAYER_HEIGHT = this.dataScene.heightPong;
+        this.PLAYER_WIDTH = this.dataScene.widthPong;
+	}
+
 	preload() {
 		super.preload();
 		this.load.image("player", "assets/images/Player.png");
@@ -28,8 +34,14 @@ export class NewPong extends AbstractPong {
 
 	create() {
 		super.create();
-		let typeBalls = ["ball", "ball", "ball", "ball"];
-		this.createBalls(typeBalls);
+
+		this.player1.setSpeed(this.dataScene.speedPong);
+		this.player2.setSpeed(this.dataScene.speedPong);
+
+		this.scorePlayer1.MAX_SCORE = this.dataScene.scoreToWin;
+		this.scorePlayer2.MAX_SCORE = this.dataScene.scoreToWin;
+
+		this.createBalls(this.getTypeBalls());
 
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
@@ -42,6 +54,15 @@ export class NewPong extends AbstractPong {
 
 	//#region - method
 	//----------------
+
+	private getTypeBalls(): string[] {
+		let typeBalls: string[] = [];
+		for (let i = 0; i < this.dataScene.nbBall; i++) {
+			typeBalls.push("ball");
+		}
+		console.log(typeBalls);
+		return typeBalls;
+	}
 
 	protected createBackground(): void {
 		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
