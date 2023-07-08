@@ -12,7 +12,7 @@ export class NewPong extends AbstractPong {
 	constructor() {
 		super({ key: "NewPong" });
 		this.setSceneName("NewPong");
-		this.PLAYER_WIDTH_POSITION = 0.02;
+		this.PLAYER_WIDTH_POSITION = 0.05;
 	}
 
 	preload() {
@@ -90,10 +90,11 @@ export class NewPong extends AbstractPong {
 		this.ballManager.createTextureBallNewPong();
 		this.ballManager.setDiameter(this.dataScene.sizeBall);
 		this.ballManager.setSpeedStart(this.dataScene.speedBall);
-		this.ballManager.createBalls(typeBalls);
-		this.ballManager.resetBallsPosition();
-		this.ballManager.addOverlapWith(this.player1, this.player2);
-	}
+		this.ballManager.setAddSpeed(this.dataScene.addSpeedBall);
+        this.ballManager.createBalls(typeBalls);
+        this.ballManager.resetBallsPosition();
+        this.ballManager.addOverlapWith(this.player1, this.player2);
+    }
 
 	private createBricks(): void {
 		switch (this.dataScene.buttonMap.name) {
