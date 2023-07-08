@@ -9,15 +9,7 @@ export class GameMenu extends AbstractMenu {
 		super({ key: "GameMenu" });
 	}
 
-	preload() {
-		this.load.image("background1", "assets/images/backgrounds/menu.jpg");
-		this.load.image("background2", "assets/images/backgrounds/bleu_rose.webp");
-		this.load.image("background3", "assets/images/backgrounds/background_vicity.png");
-		this.load.image("background4", "assets/images/backgrounds/rock_lunar.avif");
-	}
-
 	create() {
-		this.createRandomBackground("GameMenu");
 		this.menuTitle = "Choose a game :";
 		super.create();
 	}
