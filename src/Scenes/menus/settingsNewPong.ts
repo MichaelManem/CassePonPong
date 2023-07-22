@@ -104,35 +104,30 @@ export class SettingsNewPong extends AbstractMenu {
 					if (xhr.readyState === 4 && xhr.status === 200) {
 						// Handle the response from the server
 						console.log("FINI");
-						console.log(xhr.response);
 					}
 				};
 				var data = new FormData();
-				data.append("playerName1", playerName1);
-				data.append("playerName2", playerName2);
 
 				// Send the AJAX request with the player name data
 				xhr.send(data);
+				
+				// this.scene.start("NewPong",
+				// 	{
+				// 		buttonMap: this.buttonChooseMap,
+				// 		nbBrickToMapRandom: this.nbBrickToMapRandom,
+				// 		speedBall: this.speedBall,
+				// 		sizeBall: this.sizeBall,
+				// 		addSpeedBall: this.addSpeedBall,
+				// 		nbBall: this.nbBall,
+				// 		heightPong: this.heightPong,
+				// 		widthPong: this.widthPong,
+				// 		speedPong: this.speedPong,
+				// 		scoreToWin: this.scoreToWin
+				// 	}
+				// );
 			}
 		});
 
-	}
-
-	private startNewPong() {
-		this.scene.start("NewPong",
-			{
-				buttonMap: this.buttonChooseMap,
-				nbBrickToMapRandom: this.nbBrickToMapRandom,
-				speedBall: this.speedBall,
-				sizeBall: this.sizeBall,
-				addSpeedBall: this.addSpeedBall,
-				nbBall: this.nbBall,
-				heightPong: this.heightPong,
-				widthPong: this.widthPong,
-				speedPong: this.speedPong,
-				scoreToWin: this.scoreToWin
-			}
-		);
 	}
 
 	// Implémenter les méthodes abstraites
