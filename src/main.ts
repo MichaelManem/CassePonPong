@@ -30,6 +30,9 @@ const config: Phaser.Types.Core.GameConfig = {
 			gravity: { y: 0 },
 		},
 	},
+    dom: {
+        createContainer: true
+    },
 	// When game is launch, he play the first scene of this array
 	scene: [
         MainMenu, 
