@@ -63,6 +63,76 @@ export class SettingsNewPong extends AbstractMenu {
 	create() {
 		this.menuTitle = "Pre-Setttings";
 		super.create();
+		this.createInputNames();
+	}
+
+	public createInputNames() {
+		const inputNamePlayer1 = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+			<input type="text" id="playerName1" name="playerName1">
+	  	`);
+		
+		const inputNamePlayer2 = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.815).createFromHTML(`
+			<input type="text" id="playerName2" name="playerName2">
+	  	`);
+		
+		const saveButton = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.825).createFromHTML(`
+			<button type="button" id="saveButton">Save</button>
+	  	`);
+
+		// Add a click event listener to the save button
+		saveButton.addListener('click');
+
+		saveButton.on('click', (event: any) => {
+			if (event.target.id === 'saveButton') {
+				console.log("SAVE NAME");
+				const playerName1 = document.getElementById('playerName1').value;
+				const playerName2 = document.getElementById('playerName2').value;
+				console.log("playerName1:", playerName1);
+				console.log("playerName2:", playerName2);
+				this.scene.stop();
+				// // Create a new XMLHttpRequest object
+				const xhr = new XMLHttpRequest();
+				xhr.onerror = function () {
+					console.error("Une erreur s'est produite lors de l'envoi de la requête AJAX.");
+				};
+				// Configure the AJAX request
+				xhr.open('POST', 'src/ajax/save_players.php', true);
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+				// Set up the callback function for the AJAX request
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						// Handle the response from the server
+						console.log("FINI");
+						console.log(xhr.response);
+					}
+				};
+				var data = new FormData();
+				data.append("playerName1", playerName1);
+				data.append("playerName2", playerName2);
+
+				// Send the AJAX request with the player name data
+				xhr.send(data);
+			}
+		});
+
+	}
+
+	private startNewPong() {
+		this.scene.start("NewPong",
+			{
+				buttonMap: this.buttonChooseMap,
+				nbBrickToMapRandom: this.nbBrickToMapRandom,
+				speedBall: this.speedBall,
+				sizeBall: this.sizeBall,
+				addSpeedBall: this.addSpeedBall,
+				nbBall: this.nbBall,
+				heightPong: this.heightPong,
+				widthPong: this.widthPong,
+				speedPong: this.speedPong,
+				scoreToWin: this.scoreToWin
+			}
+		);
 	}
 
 	// Implémenter les méthodes abstraites
