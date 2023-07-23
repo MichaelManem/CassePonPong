@@ -1,13 +1,17 @@
+
 import { Ball } from "../../../gameObjects/ball";
 import { BallManager } from "../../../gameObjects/ballManager";
 import { BrickManager } from "../../../gameObjects/brick/brickManager";
 import { BrickMaps } from "../../../gameObjects/brick/brickMaps";
 import { Player } from "../../../gameObjects/player";
 import { AbstractPong } from "../abstractPong";
+import { Meteo } from "../../../gameObjects/meteo";
 type AllBalls = Ball;
 
 export class NewPong extends AbstractPong {
 	protected brickManager!: BrickManager;
+	private meteo!: Meteo;
+	private isMeteoActive: boolean = false;
 
 	constructor() {
 		super({ key: "NewPong" });
@@ -19,6 +23,9 @@ export class NewPong extends AbstractPong {
 		super.init(data);
         this.PLAYER_HEIGHT = this.dataScene.heightPong;
         this.PLAYER_WIDTH = this.dataScene.widthPong;
+		if(this.dataScene.meteo.isActive) {
+			this.isMeteoActive = true;
+		}
 	}
 
 	preload() {
@@ -45,15 +52,45 @@ export class NewPong extends AbstractPong {
 
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
+
+		this.meteo = new Meteo(this, this.isMeteoActive);
+		this.meteo.startEvent();
 	}
 
 	update() {
 		super.update();
 		this.brickManager.handleBricks();
-	}
+		this.meteo.handleText();
+    }
 
 	//#region - method
 	//----------------
+
+	// private meteoBeginEvent() {
+	// 	this.meteoBallBegin();
+	// }
+
+	// private meteoBallBegin() {
+	// 	if(this.dataScene.meteo.ball) {
+	// 		this.ballManager.balls.forEach(ball => {
+	// 			ball.setDisplaySize(100, 100);
+	// 		});
+	// 	}
+	// 	this.willEndMeteo = true;
+	// 	this.willStartMeteo = false;
+	// 	this.timedEndEvent = this.time.delayedCall(this.TIME_METEO_TO_STOP, this.meteoBallEnd, [], this);
+	// }
+
+	// private meteoBallEnd() {
+	// 	if(this.dataScene.meteo.ball){
+	// 		this.ballManager.balls.forEach(ball => {
+	// 			ball.setDisplaySize(this.ballManager.BALL_DIAMETER, this.ballManager.BALL_DIAMETER);
+	// 		});
+	// 	}
+	// 	this.willEndMeteo = false;
+	// 	this.willStartMeteo = true;
+	// 	this.timedBeginEvent = this.time.delayedCall(this.TIME_METEO_TO_BEGIN, this.meteoBeginEvent, [], this);
+	// }
 
 	private getTypeBalls(): string[] {
 		let typeBalls: string[] = [];

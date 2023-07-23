@@ -7,7 +7,7 @@ type AllBalls = Ball;
 type AllPongs = OldPong | NewPong;
 
 export class BallManager {
-    private BALL_DIAMETER: number = 10;
+    public BALL_DIAMETER: number = 10;
     public balls: AllBalls[] = [];
     private scene: AllPongs;
     private SPEED_START: number = 800;

@@ -56,6 +56,10 @@ export class SettingsNewPong extends AbstractMenu {
 	private readonly STEP_SCORE_TO_WIN: number = 1;
 	private scoreToWin: number = 7;
 
+	private meteoBall: boolean = false;
+	private meteoPong: boolean = false;
+	private meteoBrick: boolean = false;
+
 	constructor() {
 		super({ key: "SettingsNewPong" });
 	}
@@ -63,6 +67,49 @@ export class SettingsNewPong extends AbstractMenu {
 	create() {
 		this.menuTitle = "Pre-Setttings";
 		super.create();
+		this.createCheckBoxMeteo();
+	}
+
+	public createCheckBoxMeteo() {
+		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+			<fieldset>
+				<legend>Choose your random modification in game:</legend>
+
+				<div>
+					<input type="checkbox" id="meteo_ball" name="meteo_ball">
+					<label for="meteo_ball">ball</label>
+				</div>
+
+				<div>
+					<input type="checkbox" id="meteo_pong" name="meteo_pong">
+					<label for="meteo_pong">pong</label>
+				</div>
+
+				<div>
+					<input type="checkbox" id="meteo_brick" name="meteo_brick">
+					<label for="meteo_brick">brick</label>
+				</div>
+				
+				<div>
+					<button type="button" id="saveButton">Save</button>
+				</div>
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		checkBoxMeteo.addListener('click');
+
+		checkBoxMeteo.on('click', (event: any) => {
+			if (event.target.id === 'meteo_ball') {
+				this.meteoBall = event.target.checked;
+			}
+			if (event.target.id === 'meteo_pong') {
+				this.meteoPong = event.target.checked;
+			}
+			if (event.target.id === 'meteo_brick') {
+				this.meteoBrick = event.target.checked;
+			}
+		});
 	}
 
 	// Implémenter les méthodes abstraites
@@ -122,6 +169,10 @@ export class SettingsNewPong extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_PLAY:
+				let isMeteoActive = false;
+				if(this.meteoBall || this.meteoPong || this.meteoBrick) {
+					isMeteoActive = true;
+				}
 				this.scene.start("NewPong",
 					{
 						buttonMap: this.buttonChooseMap,
@@ -133,7 +184,13 @@ export class SettingsNewPong extends AbstractMenu {
 						heightPong: this.heightPong,
 						widthPong: this.widthPong,
 						speedPong: this.speedPong,
-						scoreToWin: this.scoreToWin
+						scoreToWin: this.scoreToWin,
+						meteo: {
+							isActive: isMeteoActive,
+							ball: this.meteoBall,
+							pong: this.meteoPong,
+							brick: this.meteoBrick
+						}
 					}
 				);
 				break;
