@@ -3,10 +3,10 @@ import { Player } from "./player";
 
 export class Ball extends Phaser.Physics.Arcade.Sprite {
     public id!: number;
-    private SPEED_START: number;
+    public SPEED_START: number;
     public speedX: number;
     public speedY: number;
-    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    public readonly MULTIPLIER_SPEED_Y: number = 0.667;
     private addSpeed: number = 0;
     private addSpeedX: number = 0;
     private addSpeedY: number = 0;

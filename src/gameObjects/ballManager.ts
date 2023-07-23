@@ -119,6 +119,10 @@ export class BallManager {
         });
     }
 
+    public getSpeedStart(): number {
+        return this.SPEED_START;
+    }
+
     public setSpeedStart(speed: number): void {
         this.SPEED_START = speed;
     }

@@ -1,9 +1,9 @@
 import { PreScene } from "../scenes/preScene";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-    private readonly MAX_SPEED: number = 1750;
-    private readonly ACCELERATION: number = this.MAX_SPEED * 0.05;
-    private readonly DECELERATION: number = this.MAX_SPEED * 0.5;
+    private MAX_SPEED: number = 1750;
+    private ACCELERATION: number = this.MAX_SPEED * 0.05;
+    private DECELERATION: number = this.MAX_SPEED * 0.5;
 
     private speed: number = this.MAX_SPEED;
     private cursors!: object;
@@ -92,6 +92,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     public setSpeed(speed: number): void {
-        this.speed = speed;
+        this.MAX_SPEED = speed;
+        this.ACCELERATION = this.MAX_SPEED * 0.05;
+        this.DECELERATION = this.MAX_SPEED * 0.5;
+    }
+
+    public getMaxSpeed(): number {
+        return this.MAX_SPEED;
+    }
+
+    public setMaxSpeed(speed: number): void {
+        this.MAX_SPEED = speed;
     }
 }

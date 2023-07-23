@@ -97,7 +97,6 @@ export class NewPong extends AbstractPong {
 		for (let i = 0; i < this.dataScene.nbBall; i++) {
 			typeBalls.push("ball");
 		}
-		console.log(typeBalls);
 		return typeBalls;
 	}
 
