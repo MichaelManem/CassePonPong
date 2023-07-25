@@ -88,6 +88,9 @@ export class NewPong extends AbstractPong {
 		player1.flipX = true;
 
 		player1.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+		player1.height = this.PLAYER_HEIGHT;
+		player1.width = this.PLAYER_WIDTH;
+		
 		return player1;
 	}
 
@@ -95,6 +98,8 @@ export class NewPong extends AbstractPong {
 		let player2: Player = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "paddle", 'Up', 'Down');
 
 		player2.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+		player2.height = this.PLAYER_HEIGHT;
+		player2.width = this.PLAYER_WIDTH;
 
 		return player2;
 	}
