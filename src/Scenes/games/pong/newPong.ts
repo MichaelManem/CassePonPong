@@ -29,8 +29,7 @@ export class NewPong extends AbstractPong {
 	preload() {
 		super.preload();
 		this.load.image("paddle", "assets/images/Paddle.png");
-		this.load.image("player", "assets/images/Player.png");
-		this.load.image("player2", "assets/images/Player2.png");
+		this.load.image("greenBall", "assets/images/GreenBall.png");
 		this.load.image("gameBackground", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
@@ -130,7 +129,7 @@ export class NewPong extends AbstractPong {
 		player1.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 		player1.height = this.PLAYER_HEIGHT;
 		player1.width = this.PLAYER_WIDTH;
-		
+
 		return player1;
 	}
 
