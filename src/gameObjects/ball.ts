@@ -11,7 +11,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     private addSpeedX: number = 0;
     private addSpeedY: number = 0;
 
-    constructor(scene: PreScene, x: number, y: number, nameTexture: string, speedBall: number = 800) {
+    constructor(scene: PreScene, id: number, x: number, y: number, nameTexture: string, speedBall: number = 800) {
         super(scene, x, y, nameTexture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -20,6 +20,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.SPEED_START = speedBall;
         this.speedX = this.SPEED_START;
         this.speedY = this.SPEED_START * this.MULTIPLIER_SPEED_Y;
+        this.id = id;
     }
 
     // Override method to recalibrate velocity in limit of speedY

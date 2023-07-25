@@ -15,6 +15,7 @@ export class Meteo extends Phaser.GameObjects.Text {
     private textMeteo: string = "";
     private ballSpeedBeforeEvent: number = 800;
     private pongSpeedBeforeEvent: number = 1750;
+    private nbBallsBeforeMeteo: number = 1;
 
     public scoreValue: number = 0;
 
@@ -55,16 +56,18 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
-        let randomNumer: number = MathUtils.randomInteger(1, 3);
-        console.log(randomNumer);
+        let randomNumer: number = MathUtils.randomInteger(1, 4);
         switch (randomNumer) {
             case 1:
-                this.pongSpeedEventStart();
+                this.addBallEventStart();
                 break;
             case 2:
-                this.ballSizeEventStart();
+                this.addBallEventStart();
                 break;
             case 3:
+                this.addBallEventStart();
+                break;
+            case 4:
                 this.addBallEventStart();
                 break;
         }
@@ -99,21 +102,18 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
+        this.textMeteo = "SPEED BALL end in : ";
         let newSpeed = 1600;
         this.ballSpeedBeforeEvent = this.scene.ballManager.getSpeedStart();
         this.scene.ballManager.setSpeedStart(newSpeed);
-        let accelaration = 0;
-        if(newSpeed >= this.ballSpeedBeforeEvent) {
-            accelaration = newSpeed - this.ballSpeedBeforeEvent;
-        } else {
-            accelaration = this.ballSpeedBeforeEvent - newSpeed;
-        }
         this.scene.ballManager.balls.forEach(ball => {
-            ball.SPEED_START = newSpeed;
-            ball.speedX = ball.SPEED_START;
-            ball.speedY = ball.SPEED_START * ball.MULTIPLIER_SPEED_Y;
-            ball.setAcceleration(accelaration, accelaration * ball.MULTIPLIER_SPEED_Y);
+            let signVelocityX = Math.sign(ball.body.velocity.x);
+            let velocityX = signVelocityX * newSpeed;
+            let signVelocityY = Math.sign(ball.body.velocity.y);
+            let velocityY = signVelocityY * (newSpeed * this.scene.ballManager.MULTIPLIER_SPEED_Y);
+            ball.setVelocity(velocityX, velocityY);
         });
+        this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
         this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.ballSpeedEventEnd, [], this);
     }
 
@@ -121,20 +121,15 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
-        let newSpeed = 1600;
         this.scene.ballManager.setSpeedStart(this.ballSpeedBeforeEvent);
-        let accelaration = 0;
-        if(newSpeed >= this.ballSpeedBeforeEvent) {
-            accelaration = newSpeed - this.ballSpeedBeforeEvent;
-        } else {
-            accelaration = this.ballSpeedBeforeEvent - newSpeed;
-        }
         this.scene.ballManager.balls.forEach(ball => {
-            ball.SPEED_START = this.scene.ballManager.getSpeedStart();
-            ball.speedX = ball.SPEED_START;
-            ball.speedY = ball.SPEED_START * ball.MULTIPLIER_SPEED_Y;
-            ball.setAcceleration(-accelaration, -accelaration * ball.MULTIPLIER_SPEED_Y);
+            let signVelocityX = Math.sign(ball.body.velocity.x);
+            let velocityX = signVelocityX * this.ballSpeedBeforeEvent;
+            let signVelocityY = Math.sign(ball.body.velocity.y);
+            let velocityY = signVelocityY * (this.ballSpeedBeforeEvent * this.scene.ballManager.MULTIPLIER_SPEED_Y);
+            ball.setVelocity(velocityX, velocityY);
         });
+        this.scene.getScene("NewPong").ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
         this.startEvent();
     }
     
@@ -173,6 +168,7 @@ export class Meteo extends Phaser.GameObjects.Text {
         for (let index = 0; index < nbBallsToAdd; index++) {
             balls.push("ball");
         }
+        this.nbBallsBeforeMeteo = this.scene.ballManager.balls.length;
         this.scene.ballManager.createBalls(balls);
         this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
         this.scene.ballManager.balls.forEach(ball => {
@@ -185,8 +181,40 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
+        console.log("nbBallsBeforeMeteo", this.nbBallsBeforeMeteo);
+        this.scene.ballManager.balls.forEach(ball => {
+            console.log(ball.id);
+            if(ball.id > this.nbBallsBeforeMeteo - 1) {
+                this.scene.ballManager.balls.splice(this.scene.ballManager.balls.indexOf(ball), 1);
+                ball.destroy();
+                this.scene.ballManager.idBall--;
+            }
+        });
+        console.log(this.scene.ballManager.balls);
         this.startEvent();
     }
     
     // -------------------------------------------------------------------------------------------
+    
+    private pongSizeEventStart() {
+        if(!this.isActive) {
+            return;
+        }
+        this.textMeteo = "SIZE PONG end in : ";
+        this.pongSpeedBeforeEvent = this.scene.player1.get();
+        let pongSpeedMeteo = 7000;
+        this.scene.player1.setDisplaySize(100, 100);
+        this.scene.player1.setSpeed(pongSpeedMeteo);
+        this.scene.player2.setSpeed(pongSpeedMeteo);
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.pongSizeEventEnd, [], this);
+    }
+
+    private pongSizeEventEnd() {
+        if(!this.isActive) {
+            return;
+        }
+        this.scene.player1.setSpeed(this.pongSpeedBeforeEvent);
+        this.scene.player2.setSpeed(this.pongSpeedBeforeEvent);
+        this.startEvent();
+    }
 }

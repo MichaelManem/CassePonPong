@@ -126,7 +126,7 @@ export class SettingsNewPong extends AbstractMenu {
 		let textButtonScoreToWin = this.BUTTON_NAME_SCORE_TO_WIN + " :	" + this.scoreToWin;
 
 		this.createTextureBall();
-		this.ballForShow = new Ball(this, this.WIDTH_WORLD * 0.335, this.HEIGHT_WORLD * 0.66, this.NAME_TEXTURE_BALL, 0);
+		this.ballForShow = new Ball(this, 0, this.WIDTH_WORLD * 0.335, this.HEIGHT_WORLD * 0.66, this.NAME_TEXTURE_BALL, 0);
 		this.ballForShow.setDisplaySize(this.sizeBall, this.sizeBall);
 
 		menuItems.push(this.buttonChooseMap);
