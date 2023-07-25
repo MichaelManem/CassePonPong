@@ -17,15 +17,16 @@ export class NewPong extends AbstractPong {
 
 	init(data: any) {
 		super.init(data);
-        this.PLAYER_HEIGHT = this.dataScene.heightPong;
-        this.PLAYER_WIDTH = this.dataScene.widthPong;
+		this.PLAYER_HEIGHT = this.dataScene.heightPong;
+		this.PLAYER_WIDTH = this.dataScene.widthPong;
 	}
 
 	preload() {
 		super.preload();
+		this.load.image("paddle", "assets/images/Paddle.png");
 		this.load.image("player", "assets/images/Player.png");
 		this.load.image("player2", "assets/images/Player2.png");
-		this.load.image("background", "assets/images/backgrounds/BackgroundInGameNeon.png");
+		this.load.image("gameBackground", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
 		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
@@ -65,7 +66,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createBackground(): void {
-		const background = this.add.image(0, 0, "background").setOrigin(0, 0);
+		const background = this.add.image(0, 0, "gameBackground").setOrigin(0, 0);
 		background.displayWidth = this.game.canvas.width;
 		background.displayHeight = this.game.canvas.height;
 	}
@@ -79,31 +80,23 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createTexturePlayer(): void {
-		// Create a Graphics object
-		const graphics = this.add.graphics();
-
-		// Set the fill style to white
-		graphics.fillStyle(0xffffff);
-
-		// Draw a rectangle shape
-		graphics.fillRect(0, 0, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
-
-		// Generate a texture from the Graphics object
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER1, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
-		graphics.generateTexture(this.NAME_TEXTURE_PLAYER2, this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
-
-		// Destroy the Graphics object
-		graphics.destroy();
+		return;
 	}
 
 	protected createPlayer1(): Player {
-		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER1, 'Z', 'S');
+		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "paddle", 'Z', 'S');
 		player1.flipX = true;
+
+		player1.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 		return player1;
 	}
 
 	protected createPlayer2(): Player {
-		return new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, this.NAME_TEXTURE_PLAYER2, 'Up', 'Down');
+		let player2: Player = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "paddle", 'Up', 'Down');
+
+		player2.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
+
+		return player2;
 	}
 
 	protected createBalls(typeBalls: string[]): void {
@@ -112,10 +105,10 @@ export class NewPong extends AbstractPong {
 		this.ballManager.setDiameter(this.dataScene.sizeBall);
 		this.ballManager.setSpeedStart(this.dataScene.speedBall);
 		this.ballManager.setAddSpeed(this.dataScene.addSpeedBall);
-        this.ballManager.createBalls(typeBalls);
-        this.ballManager.resetBallsPosition();
-        this.ballManager.addOverlapWith(this.player1, this.player2);
-    }
+		this.ballManager.createBalls(typeBalls);
+		this.ballManager.resetBallsPosition();
+		this.ballManager.addOverlapWith(this.player1, this.player2);
+	}
 
 	private createBricks(): void {
 		switch (this.dataScene.buttonMap.name) {
