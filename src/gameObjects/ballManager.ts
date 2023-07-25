@@ -14,7 +14,7 @@ export class BallManager {
     private positionStartX: number;
     private positionStartY: number;
     private readonly waitTimeSendBall: number = 1500;
-    public NAME_TEXTURE_BALL: string = "ball";
+    public NAME_TEXTURE_BALL: string = "greenBall";
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
     private readonly MULTIPLIER_SPEED_Y: number = 0.667;
@@ -38,7 +38,6 @@ export class BallManager {
 
     public createTextureBallNewPong(): void {
         // TODO - Implémenter la texture de la balle spécifique à New Pong
-        this.createTextureBallOldPong();
     }
 
     public createTextureBallGhost(): void {
