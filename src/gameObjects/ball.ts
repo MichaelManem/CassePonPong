@@ -52,45 +52,55 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
     public addColliderWithPlayerLeft(player: Player) {
 		this.scene.physics.add.overlap(player, this, (player, ball) => {
-            ball.speedX += ball.addSpeedX;
-            ball.speedY += ball.addSpeedY;
+
+            // Assuming that object are correctly initialized
+            let ballVar: Ball = ball as Ball;
+            let playerVar: Player = player as Player;
+
+            ballVar.speedX += ballVar.addSpeedX;
+            ballVar.speedY += ballVar.addSpeedY;
             // Le y = 0 est en haut de l'écran
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
             //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-            const currentBallSpeedX = ball.body.velocity.x;
-			let ballDistPercentFromCenterPlayer = (ball.y - player.y) / (player.height / 2);
+			let ballDistPercentFromCenterPlayer = (ballVar.y - playerVar.y) / (playerVar.height / 2);
+            
             let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-            if (ball.y < player.y) {
-                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
+            if (ballVar.y < playerVar.y) {
+                ballDistPercentFromCenterPlayer = (playerVar.y - ballVar.y) / (playerVar.height / 2);
                 ballDirection = -1;
             }
             ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
-            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
-			ball.setVelocity(ball.speedX, newBallSpeedY);
+            let newBallSpeedY = ballDirection * ballVar.speedY * ballDistPercentFromCenterPlayer;
+			ballVar.setVelocity(ballVar.speedX, newBallSpeedY);
             this.playCollideSound();
         });
     }
 
     public addColliderWithPlayerRight(player: Player) {
         this.scene.physics.add.overlap(player, this, (player, ball) => {
-            ball.speedX += ball.addSpeedX;
-            ball.speedY += ball.addSpeedY;
+
+            // Assuming that object are correctly initialized
+            let ballVar: Ball = ball as Ball;
+            let playerVar: Player = player as Player;
+
+            ballVar.speedX += ballVar.addSpeedX;
+            ballVar.speedY += ballVar.addSpeedY;
             // Le y = 0 est en haut de l'écran
             //Pong 		  => 	 Top   		milieu   	   bot
             //Pourcentage =>	 100     	  0     	   100
             //SpeedAxeY   => -MaxSpeedY       0         MaxSpeedY
-            const currentBallSpeedX = ball.body.velocity.x;
-            let ballDistPercentFromCenterPlayer  = (ball.y - player.y) / (player.height / 2);
+            let ballDistPercentFromCenterPlayer  = (ballVar.y - playerVar.y) / (playerVar.height / 2);
+
             let ballDirection = 1; // 1 vers le bas et -1 vers le haut
-            if (ball.y < player.y) {
-                ballDistPercentFromCenterPlayer = (player.y - ball.y) / (player.height / 2);
+            if (ballVar.y < playerVar.y) {
+                ballDistPercentFromCenterPlayer = (playerVar.y - ballVar.y) / (playerVar.height / 2);
                 ballDirection = -1;
             }
             ballDistPercentFromCenterPlayer = ballDistPercentFromCenterPlayer > 1 ? 1 : ballDistPercentFromCenterPlayer < 0 ? 0 : ballDistPercentFromCenterPlayer;
-            let newBallSpeedX = -1 * ball.speedX;
-            let newBallSpeedY = ballDirection * ball.speedY * ballDistPercentFromCenterPlayer;
-			ball.setVelocity(newBallSpeedX, newBallSpeedY);
+            let newBallSpeedX = -1 * ballVar.speedX;
+            let newBallSpeedY = ballDirection * ballVar.speedY * ballDistPercentFromCenterPlayer;
+			ballVar.setVelocity(newBallSpeedX, newBallSpeedY);
             this.playCollideSound();
         });
     }
