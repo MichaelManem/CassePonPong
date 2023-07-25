@@ -37,12 +37,12 @@ export class SettingsNewPong extends AbstractMenu {
 	private readonly MAX_HEIGHT_PONG: number = 500;
 	private readonly MIN_HEIGHT_PONG: number = 10;
 	private readonly STEP_HEIGHT_PONG: number = 5;
-	private heightPong: number = 80;
+	private heightPong: number = 150;
 	private readonly BUTTON_NAME_WIDTH_PONG: string = "Pong width";
 	private readonly MAX_WIDTH_PONG: number = 200;
 	private readonly MIN_WIDTH_PONG: number = 10;
 	private readonly STEP_WIDTH_PONG: number = 5;
-	private widthPong: number = 10;
+	private widthPong: number = 25;
 	private readonly NAME_TEXTURE_PONG: string = "pongForShow";
 	private pongForShow!: Player;
 	private readonly BUTTON_NAME_SPEED_PONG: string = "Pong -> I am fast AF boy";
