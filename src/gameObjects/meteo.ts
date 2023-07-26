@@ -1,21 +1,16 @@
 import { NewPong } from "../scenes/games/pong/newPong";
 import { MathUtils } from "../utils/mathUtils";
-import { Ball } from "./ball";
-import { Player } from "./player";
-import { timeStamp } from "console";
 
 export class Meteo extends Phaser.GameObjects.Text {
     public MAX_SCORE: number = 7;
     public readonly SCORE_ZONE_MULTIPLIER: number = 0.3;
     private timedEvent!: Phaser.Time.TimerEvent;
     private readonly TIME_METEO_TO_BEGIN: number = 5000;
-    private readonly TIME_METEO_TO_STOP: number = 15000;
-    private readonly TIME_BALL_SPEED_TO_STOP: number = 10000;
+    private readonly TIME_METEO_SLOW_TO_STOP: number = 15000;
+    private readonly TIME_METEO_FAST_TO_STOP: number = 10000;
     private isActive: boolean = false;
     private textMeteo: string = "";
-    private ballSpeedBeforeEvent: number = 800;
     private pongSpeedBeforeEvent: number = 1750;
-    private nbBallsBeforeMeteo: number = 1;
 
     public scoreValue: number = 0;
 
@@ -56,26 +51,29 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
-        let randomNumer: number = MathUtils.randomInteger(1, 4);
+        let randomNumer: number = MathUtils.randomInteger(1, 5);
         switch (randomNumer) {
             case 1:
-                this.addBallEventStart();
+                this.ballSizeUpEventStart();
                 break;
             case 2:
-                this.addBallEventStart();
+                this.pongSpeedEventStart();
                 break;
             case 3:
-                this.addBallEventStart();
+                this.pongSizeUpEventStart();
                 break;
             case 4:
-                this.addBallEventStart();
+                this.pongSizeDownEventStart();
+                break;
+            case 5:
+                this.ballSizeDownEventStart();
                 break;
         }
     }
 
     // -------------------------------------------------------------------------------------------
 
-    private ballSizeEventStart() {
+    private ballSizeUpEventStart() {
         if(!this.isActive) {
             return;
         }
@@ -83,10 +81,10 @@ export class Meteo extends Phaser.GameObjects.Text {
             ball.setDisplaySize(100, 100);
         });
         this.textMeteo = "Size ball end in : ";
-        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_TO_STOP, this.ballSizeEventEnd, [], this);
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_SLOW_TO_STOP, this.ballSizeUpEventEnd, [], this);
     }
 
-    private ballSizeEventEnd() {
+    private ballSizeUpEventEnd() {
         if(!this.isActive) {
             return;
         }
@@ -98,40 +96,64 @@ export class Meteo extends Phaser.GameObjects.Text {
 
     // -------------------------------------------------------------------------------------------
 
-    private ballSpeedEventStart() {
+    private ballSizeDownEventStart() {
         if(!this.isActive) {
             return;
         }
-        this.textMeteo = "SPEED BALL end in : ";
-        let newSpeed = 1600;
-        this.ballSpeedBeforeEvent = this.scene.ballManager.getSpeedStart();
-        this.scene.ballManager.setSpeedStart(newSpeed);
         this.scene.ballManager.balls.forEach(ball => {
-            let signVelocityX = Math.sign(ball.body.velocity.x);
-            let velocityX = signVelocityX * newSpeed;
-            let signVelocityY = Math.sign(ball.body.velocity.y);
-            let velocityY = signVelocityY * (newSpeed * this.scene.ballManager.MULTIPLIER_SPEED_Y);
-            ball.setVelocity(velocityX, velocityY);
+            ball.setDisplaySize(2, 2);
         });
-        this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
-        this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.ballSpeedEventEnd, [], this);
+        this.textMeteo = "Size ball end in : ";
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_SLOW_TO_STOP, this.ballSizeDownEventEnd, [], this);
     }
 
-    private ballSpeedEventEnd() {
+    private ballSizeDownEventEnd() {
         if(!this.isActive) {
             return;
         }
-        this.scene.ballManager.setSpeedStart(this.ballSpeedBeforeEvent);
         this.scene.ballManager.balls.forEach(ball => {
-            let signVelocityX = Math.sign(ball.body.velocity.x);
-            let velocityX = signVelocityX * this.ballSpeedBeforeEvent;
-            let signVelocityY = Math.sign(ball.body.velocity.y);
-            let velocityY = signVelocityY * (this.ballSpeedBeforeEvent * this.scene.ballManager.MULTIPLIER_SPEED_Y);
-            ball.setVelocity(velocityX, velocityY);
+            ball.setDisplaySize(this.scene.ballManager.BALL_DIAMETER, this.scene.ballManager.BALL_DIAMETER);
         });
-        this.scene.getScene("NewPong").ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
         this.startEvent();
     }
+
+    // -------------------------------------------------------------------------------------------
+
+    // TODO - bien appliquer le speed sur la BALL sans altérer la direction
+    // private ballSpeedEventStart() {
+    //     if(!this.isActive) {
+    //         return;
+    //     }
+    //     this.textMeteo = "SPEED BALL end in : ";
+    //     let newSpeed = 1600;
+    //     this.ballSpeedBeforeEvent = this.scene.ballManager.getSpeedStart();
+    //     this.scene.ballManager.setSpeedStart(newSpeed);
+    //     this.scene.ballManager.balls.forEach(ball => {
+    //         let signVelocityX = Math.sign(ball.body.velocity.x);
+    //         let velocityX = signVelocityX * newSpeed;
+    //         let signVelocityY = Math.sign(ball.body.velocity.y);
+    //         let velocityY = signVelocityY * (newSpeed * this.scene.ballManager.MULTIPLIER_SPEED_Y);
+    //         ball.setVelocity(velocityX, velocityY);
+    //     });
+    //     this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
+    //     this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.ballSpeedEventEnd, [], this);
+    // }
+
+    // private ballSpeedEventEnd() {
+    //     if(!this.isActive) {
+    //         return;
+    //     }
+    //     this.scene.ballManager.setSpeedStart(this.ballSpeedBeforeEvent);
+    //     this.scene.ballManager.balls.forEach(ball => {
+    //         let signVelocityX = Math.sign(ball.body.velocity.x);
+    //         let velocityX = signVelocityX * this.ballSpeedBeforeEvent;
+    //         let signVelocityY = Math.sign(ball.body.velocity.y);
+    //         let velocityY = signVelocityY * (this.ballSpeedBeforeEvent * this.scene.ballManager.MULTIPLIER_SPEED_Y);
+    //         ball.setVelocity(velocityX, velocityY);
+    //     });
+    //     this.scene.getScene("NewPong").ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
+    //     this.startEvent();
+    // }
     
     // -------------------------------------------------------------------------------------------
 
@@ -144,7 +166,7 @@ export class Meteo extends Phaser.GameObjects.Text {
         let pongSpeedMeteo = 7000;
         this.scene.player1.setSpeed(pongSpeedMeteo);
         this.scene.player2.setSpeed(pongSpeedMeteo);
-        this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.pongSpeedEventEnd, [], this);
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_SLOW_TO_STOP, this.pongSpeedEventEnd, [], this);
     }
 
     private pongSpeedEventEnd() {
@@ -158,63 +180,82 @@ export class Meteo extends Phaser.GameObjects.Text {
     
     // -------------------------------------------------------------------------------------------
 
-    private addBallEventStart() {
+    // TODO - La suppression des balls après les avoir ajouté ne marchent pas :)
+    // private addBallEventStart() {
+    //     if(!this.isActive) {
+    //         return;
+    //     }
+    //     let nbBallsToAdd = MathUtils.randomInteger(3, 5);
+    //     this.textMeteo = `MULTI BALL +${nbBallsToAdd} : `;
+    //     let balls = [];
+    //     for (let index = 0; index < nbBallsToAdd; index++) {
+    //         balls.push("ball");
+    //     }
+    //     this.nbBallsBeforeMeteo = this.scene.ballManager.balls.length;
+    //     this.scene.ballManager.createBalls(balls);
+    //     this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
+    //     this.scene.ballManager.balls.forEach(ball => {
+	// 		this.scene.brickManager.addOverlapWith(ball);
+	// 	});
+    //     this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_FAST_TO_STOP, this.addBallEventEnd, [], this);
+    // }
+
+    // private addBallEventEnd() {
+    //     if(!this.isActive) {
+    //         return;
+    //     }
+    //     console.log("nbBallsBeforeMeteo", this.nbBallsBeforeMeteo);
+    //     this.scene.ballManager.balls.forEach(ball => {
+    //         console.log(ball.id);
+    //         if(ball.id > this.nbBallsBeforeMeteo - 1) {
+    //             this.scene.ballManager.balls.splice(this.scene.ballManager.balls.indexOf(ball), 1);
+    //             ball.destroy();
+    //             this.scene.ballManager.idBall--;
+    //         }
+    //     });
+    //     console.log(this.scene.ballManager.balls);
+    //     this.startEvent();
+    // }
+    
+    // -------------------------------------------------------------------------------------------
+    
+    private pongSizeUpEventStart() {
         if(!this.isActive) {
             return;
         }
-        let nbBallsToAdd = MathUtils.randomInteger(3, 5);
-        this.textMeteo = `MULTI BALL +${nbBallsToAdd} : `;
-        let balls = [];
-        for (let index = 0; index < nbBallsToAdd; index++) {
-            balls.push("ball");
-        }
-        this.nbBallsBeforeMeteo = this.scene.ballManager.balls.length;
-        this.scene.ballManager.createBalls(balls);
-        this.scene.ballManager.addOverlapWith(this.scene.player1, this.scene.player2);
-        this.scene.ballManager.balls.forEach(ball => {
-			this.scene.brickManager.addOverlapWith(ball);
-		});
-        this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.addBallEventEnd, [], this);
+        this.textMeteo = "SIZE UP PONG end in : ";
+        this.scene.player1.setDisplaySize(100, 500);
+        this.scene.player2.setDisplaySize(100, 500);
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_SLOW_TO_STOP, this.pongSizeUpEventEnd, [], this);
     }
 
-    private addBallEventEnd() {
+    private pongSizeUpEventEnd() {
         if(!this.isActive) {
             return;
         }
-        console.log("nbBallsBeforeMeteo", this.nbBallsBeforeMeteo);
-        this.scene.ballManager.balls.forEach(ball => {
-            console.log(ball.id);
-            if(ball.id > this.nbBallsBeforeMeteo - 1) {
-                this.scene.ballManager.balls.splice(this.scene.ballManager.balls.indexOf(ball), 1);
-                ball.destroy();
-                this.scene.ballManager.idBall--;
-            }
-        });
-        console.log(this.scene.ballManager.balls);
+        this.scene.player1.setDisplaySize(this.scene.PLAYER_WIDTH, this.scene.PLAYER_HEIGHT);
+        this.scene.player2.setDisplaySize(this.scene.PLAYER_WIDTH, this.scene.PLAYER_HEIGHT);
         this.startEvent();
     }
     
     // -------------------------------------------------------------------------------------------
     
-    private pongSizeEventStart() {
+    private pongSizeDownEventStart() {
         if(!this.isActive) {
             return;
         }
-        this.textMeteo = "SIZE PONG end in : ";
-        this.pongSpeedBeforeEvent = this.scene.player1.get();
-        let pongSpeedMeteo = 7000;
-        this.scene.player1.setDisplaySize(100, 100);
-        this.scene.player1.setSpeed(pongSpeedMeteo);
-        this.scene.player2.setSpeed(pongSpeedMeteo);
-        this.timedEvent = this.scene.time.delayedCall(this.TIME_BALL_SPEED_TO_STOP, this.pongSizeEventEnd, [], this);
+        this.textMeteo = "SIZE DOWN PONG end in : ";
+        this.scene.player1.setDisplaySize(40, 40);
+        this.scene.player2.setDisplaySize(40, 40);
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_FAST_TO_STOP, this.pongSizeDownEventEnd, [], this);
     }
 
-    private pongSizeEventEnd() {
+    private pongSizeDownEventEnd() {
         if(!this.isActive) {
             return;
         }
-        this.scene.player1.setSpeed(this.pongSpeedBeforeEvent);
-        this.scene.player2.setSpeed(this.pongSpeedBeforeEvent);
+        this.scene.player1.setDisplaySize(this.scene.PLAYER_WIDTH, this.scene.PLAYER_HEIGHT);
+        this.scene.player2.setDisplaySize(this.scene.PLAYER_WIDTH, this.scene.PLAYER_HEIGHT);
         this.startEvent();
     }
 }
