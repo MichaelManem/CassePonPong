@@ -7,7 +7,7 @@ export class NewVictoryMenu extends AbstractVictoryMenu {
     }
 
     preload() {
-        this.load.audio(this.VICTORY_MUSIC, "assets/musics/Victory Music Old Pong.mp3");
+        this.load.audio(this.VICTORY_MUSIC, "assets/musics/Victory Music New Pong.mp3");
     }
 
     create() {

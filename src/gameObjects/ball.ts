@@ -102,6 +102,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.scene.sound.add("hitWall", { loop: false, volume: 1 }).play();
     };
 
+    
+
     public setAddSpeed(addSpeed: number): void {
         this.addSpeed = addSpeed;
         this.addSpeedX = this.addSpeed;
