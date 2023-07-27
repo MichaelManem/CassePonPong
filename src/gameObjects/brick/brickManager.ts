@@ -28,9 +28,14 @@ export class BrickManager {
             if (brick.isDead()) {
                 brick.destroy();
                 this.bricks.splice(this.bricks.indexOf(brick), 1);
+                this.playDeathSound();
             }
         });
     }
+
+    private playDeathSound(): void {
+        this.scene.sound.add("brickDead", { loop: false, volume: 0.5 }).play();
+    };
 
     private copyBricksUpToBottom(): void {
         let newBricks: AllBricks[] = [];

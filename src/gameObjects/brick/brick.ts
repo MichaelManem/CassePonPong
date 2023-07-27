@@ -96,6 +96,7 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
         return this.health <= 0 && this.isNormal();
     }
 
+
     public copyBrick(scene: NewPong) {
         let copyBrick = new Brick(scene, this.x, this.y, this.width, this.height);
         copyBrick.maxHealth = this.maxHealth;

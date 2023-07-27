@@ -36,6 +36,7 @@ export class NewPong extends AbstractPong {
 		this.load.audio("hitBrick", "assets/sounds/Brick New Pong.mp3");
 		this.load.audio("hitWall", "assets/sounds/Brick New Pong.mp3");
 		this.load.audio("scorePoint", "assets/sounds/Point New Pong.mp3");
+		this.load.audio("brickDead", "assets/sounds/Brick explosion.mp3");
 	}
 
 	create() {
