@@ -56,9 +56,14 @@ export class SettingsNewPong extends AbstractMenu {
 	private readonly STEP_SCORE_TO_WIN: number = 1;
 	private scoreToWin: number = 7;
 
-	private meteoBall: boolean = false;
-	private meteoPong: boolean = false;
-	private meteoBrick: boolean = false;
+	private meteoBallSizeRandom: boolean = false;
+	private meteoBallSizeUp: boolean = false;
+	private meteoBallSizeDown: boolean = false;
+	private meteoPongSizeUp: boolean = false;
+	private meteoPongSizeDown: boolean = false;
+	private meteoPongSpeedUp: boolean = false;
+
+	private chao: boolean = false;
 
 	constructor() {
 		super({ key: "SettingsNewPong" });
@@ -68,30 +73,122 @@ export class SettingsNewPong extends AbstractMenu {
 		this.menuTitle = "Pre-Setttings";
 		super.create();
 		this.createCheckBoxMeteo();
+		this.startGame();
+		this.createCheckBoxChao();
 	}
 
-	public createCheckBoxMeteo() {
+	public startGame(): void {
+		const start = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+			<div>
+				<button type="button" id="startGame">Start Game</button>
+			</div>
+	  	`);
+
+		// Add a click event listener to the save button
+		start.addListener('click');
+
+		start.on('click', (event: any) => {
+			console.log(this.chao)
+			this.scene.start("NewPong",
+				{
+					buttonMap: this.buttonChooseMap,
+					nbBrickToMapRandom: this.nbBrickToMapRandom,
+					speedBall: this.speedBall,
+					sizeBall: this.sizeBall,
+					addSpeedBall: this.addSpeedBall,
+					nbBall: this.nbBall,
+					heightPong: this.heightPong,
+					widthPong: this.widthPong,
+					speedPong: this.speedPong,
+					scoreToWin: this.scoreToWin,
+					meteo: {
+						ballSizeUp: this.meteoBallSizeUp,
+						ballSizeDown: this.meteoBallSizeDown,
+						pongSizeUp: this.meteoPongSizeUp,
+						pongSizeDown: this.meteoPongSizeDown,
+						pongSpeedUp: this.meteoPongSpeedUp,
+						ballSizeRandom: this.meteoBallSizeRandom
+					},
+					chao: this.chao
+				}
+			);
+		});
+	}
+
+	public pongSize(): void {
+		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+			<fieldset>
+				<legend>Size of the pong:</legend>
+
+				<input type="number" step="10" min="10" max="100" id="meteo_pong_size_up">
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		checkBoxMeteo.addListener('click');
+
+		checkBoxMeteo.on('click', (event: any) => {
+			// if (event.target.id === 'meteo_pong_size_up') {
+			// 	this.meteoPongSizeUp = event.target.checked;
+			// }
+		});
+	}
+
+	public createCheckBoxChao(): void {
+		const chaos = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.88).createFromHTML(`
+			<fieldset>
+				<legend>ARE YOU READY FOR CHAOS ???</legend>
+
+				<div>
+					<input type="checkbox" id="chao" name="chao">
+					<label for="chao">Yes ??</label>
+				</div>
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		chaos.addListener('click');
+
+		chaos.on('click', (event: any) => {
+			if (event.target.id === 'chao') {
+				this.chao = event.target.checked;
+			}
+		});
+	}
+
+	public createCheckBoxMeteo(): void {
 		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
 			<fieldset>
 				<legend>Choose your random modification in game:</legend>
 
 				<div>
-					<input type="checkbox" id="meteo_ball" name="meteo_ball">
-					<label for="meteo_ball">ball</label>
+					<input type="checkbox" id="meteo_ball_size_random" name="meteo_ball_size_random">
+					<label for="meteo_ball_size_random">Ball Size Random</label>
 				</div>
 
 				<div>
-					<input type="checkbox" id="meteo_pong" name="meteo_pong">
-					<label for="meteo_pong">pong</label>
+					<input type="checkbox" id="meteo_ball_size_up" name="meteo_ball_size_up">
+					<label for="meteo_ball_size_up">Ball Size Up</label>
 				</div>
 
 				<div>
-					<input type="checkbox" id="meteo_brick" name="meteo_brick">
-					<label for="meteo_brick">brick</label>
+					<input type="checkbox" id="meteo_ball_size_down" name="meteo_ball_size_down">
+					<label for="meteo_ball_size_down">Ball Size Down</label>
 				</div>
-				
+
 				<div>
-					<button type="button" id="saveButton">Save</button>
+					<input type="checkbox" id="meteo_pong_size_up" name="meteo_pong_size_up">
+					<label for="meteo_pong_size_up">Pong Size Up</label>
+				</div>
+
+				<div>
+					<input type="checkbox" id="meteo_pong_size_down" name="meteo_pong_size_down">
+					<label for="meteo_pong_size_down">Pong Size Down</label>
+				</div>
+
+				<div>
+					<input type="checkbox" id="meteo_pong_speed_up" name="meteo_pong_speed_up">
+					<label for="meteo_pong_speed_up">Pong Speed Up</label>
 				</div>
 			</fieldset>
 	  	`);
@@ -100,14 +197,20 @@ export class SettingsNewPong extends AbstractMenu {
 		checkBoxMeteo.addListener('click');
 
 		checkBoxMeteo.on('click', (event: any) => {
-			if (event.target.id === 'meteo_ball') {
-				this.meteoBall = event.target.checked;
+			if (event.target.id === 'meteo_pong_size_up') {
+				this.meteoPongSizeUp = event.target.checked;
 			}
-			if (event.target.id === 'meteo_pong') {
-				this.meteoPong = event.target.checked;
+			if (event.target.id === 'meteo_pong_size_down') {
+				this.meteoPongSizeDown = event.target.checked;
 			}
-			if (event.target.id === 'meteo_brick') {
-				this.meteoBrick = event.target.checked;
+			if (event.target.id === 'meteo_ball_size_up') {
+				this.meteoBallSizeUp = event.target.checked;
+			}
+			if (event.target.id === 'meteo_ball_size_down') {
+				this.meteoBallSizeDown = event.target.checked;
+			}
+			if (event.target.id === 'meteo_pong_speed_up') {
+				this.meteoPongSpeedUp = event.target.checked;
 			}
 		});
 	}
@@ -169,10 +272,6 @@ export class SettingsNewPong extends AbstractMenu {
 	protected onMenuItemSelect(button: Phaser.GameObjects.Text): void {
 		switch (button.name) {
 			case this.BUTTON_NAME_PLAY:
-				let isMeteoActive = false;
-				if(this.meteoBall || this.meteoPong || this.meteoBrick) {
-					isMeteoActive = true;
-				}
 				this.scene.start("NewPong",
 					{
 						buttonMap: this.buttonChooseMap,
@@ -186,11 +285,13 @@ export class SettingsNewPong extends AbstractMenu {
 						speedPong: this.speedPong,
 						scoreToWin: this.scoreToWin,
 						meteo: {
-							isActive: isMeteoActive,
-							ball: this.meteoBall,
-							pong: this.meteoPong,
-							brick: this.meteoBrick
-						}
+							ballSizeUp: this.meteoBallSizeUp,
+							ballSizeDown: this.meteoBallSizeDown,
+							pongSizeUp: this.meteoPongSizeUp,
+							pongSizeDown: this.meteoPongSizeDown,
+							pongSpeedUp: this.meteoPongSpeedUp
+						},
+						chao: this.chao
 					}
 				);
 				break;

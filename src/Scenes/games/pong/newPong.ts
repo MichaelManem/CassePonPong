@@ -6,12 +6,13 @@ import { BrickMaps } from "../../../gameObjects/brick/brickMaps";
 import { Player } from "../../../gameObjects/player";
 import { AbstractPong } from "../abstractPong";
 import { Meteo } from "../../../gameObjects/meteo";
+import { Chao } from "../../../gameObjects/chao";
 type AllBalls = Ball;
 
 export class NewPong extends AbstractPong {
 	protected brickManager!: BrickManager;
 	private meteo!: Meteo;
-	private isMeteoActive: boolean = false;
+	private chao!: Chao;
 
 	constructor() {
 		super({ key: "NewPong" });
@@ -23,9 +24,6 @@ export class NewPong extends AbstractPong {
 		super.init(data);
         this.PLAYER_HEIGHT = this.dataScene.heightPong;
         this.PLAYER_WIDTH = this.dataScene.widthPong;
-		if(this.dataScene.meteo.isActive) {
-			this.isMeteoActive = true;
-		}
 	}
 
 	preload() {
@@ -53,7 +51,13 @@ export class NewPong extends AbstractPong {
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
 
-		this.meteo = new Meteo(this, this.isMeteoActive);
+        console.log(this.dataScene.chao)
+		this.chao = new Chao(this, this.dataScene.chao);
+		this.chao.startEvent();
+
+		this.dataScene.meteo.chao = this.dataScene.chao;
+
+		this.meteo = new Meteo(this, this.dataScene.meteo);
 		this.meteo.startEvent();
 	}
 
@@ -61,6 +65,7 @@ export class NewPong extends AbstractPong {
 		super.update();
 		this.brickManager.handleBricks();
 		this.meteo.handleText();
+		this.chao.handleText();
     }
 
 	//#region - method

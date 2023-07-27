@@ -11,12 +11,31 @@ export class Meteo extends Phaser.GameObjects.Text {
     private isActive: boolean = false;
     private textMeteo: string = "";
     private pongSpeedBeforeEvent: number = 1750;
+    private modifs: string[] = [];
 
     public scoreValue: number = 0;
 
-    constructor(scene: NewPong, isActive: boolean) {
+    constructor(scene: NewPong, modifs: any) {
         super(scene, 0, 0, '0', {});
-        this.isActive = isActive;
+        if (modifs.ballSizeUp) {
+            this.modifs.push("ballSizeUp");
+        }
+        if (modifs.ballSizeDown) {
+            this.modifs.push("ballSizeDown");
+        }
+        if (modifs.pongSizeUp) {
+            this.modifs.push("pongSizeUp");
+        }
+        if (modifs.pongSizeDown) {
+            this.modifs.push("pongSizeDown");
+        }
+        if (modifs.pongSpeedUp) {
+            this.modifs.push("pongSpeedUp");
+        }
+        if (modifs.ballSizeRandom) {
+            this.modifs.push("ballSizeRandom");
+        }
+        this.isActive = this.modifs.length > 0 && !modifs.chao;
         if(!this.isActive) {
             return;
         }
@@ -51,22 +70,26 @@ export class Meteo extends Phaser.GameObjects.Text {
         if(!this.isActive) {
             return;
         }
-        let randomNumer: number = MathUtils.randomInteger(1, 5);
-        switch (randomNumer) {
-            case 1:
+        let randomNumer: number = MathUtils.randomInteger(1, this.modifs.length);
+        let modifsToPlay = this.modifs[randomNumer-1];
+        switch (modifsToPlay) {
+            case "ballSizeUp":
                 this.ballSizeUpEventStart();
                 break;
-            case 2:
-                this.pongSpeedEventStart();
+            case "ballSizeDown":
+                this.ballSizeDownEventStart();
                 break;
-            case 3:
+            case "pongSizeUp":
                 this.pongSizeUpEventStart();
                 break;
-            case 4:
+            case "pongSizeDown":
                 this.pongSizeDownEventStart();
                 break;
-            case 5:
-                this.ballSizeDownEventStart();
+            case "pongSpeedUp":
+                this.pongSpeedUpEventStart();
+                break;
+            case "ballSizeRandom":
+                this.ballSizeRandomEventStart();
                 break;
         }
     }
@@ -85,6 +108,30 @@ export class Meteo extends Phaser.GameObjects.Text {
     }
 
     private ballSizeUpEventEnd() {
+        if(!this.isActive) {
+            return;
+        }
+        this.scene.ballManager.balls.forEach(ball => {
+            ball.setDisplaySize(this.scene.ballManager.BALL_DIAMETER, this.scene.ballManager.BALL_DIAMETER);
+        });
+        this.startEvent();
+    }
+
+    // -------------------------------------------------------------------------------------------
+
+    private ballSizeRandomEventStart() {
+        if(!this.isActive) {
+            return;
+        }
+        let randomNumer: number = MathUtils.randomInteger(2, 100);
+        this.scene.ballManager.balls.forEach(ball => {
+            ball.setDisplaySize(randomNumer, randomNumer);
+        });
+        this.textMeteo = "Random Size ball end in : ";
+        this.timedEvent = this.scene.time.delayedCall(this.TIME_METEO_SLOW_TO_STOP, this.ballSizeRandomEventEnd, [], this);
+    }
+
+    private ballSizeRandomEventEnd() {
         if(!this.isActive) {
             return;
         }
@@ -157,7 +204,7 @@ export class Meteo extends Phaser.GameObjects.Text {
     
     // -------------------------------------------------------------------------------------------
 
-    private pongSpeedEventStart() {
+    private pongSpeedUpEventStart() {
         if(!this.isActive) {
             return;
         }
