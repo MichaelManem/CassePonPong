@@ -78,7 +78,7 @@ export class SettingsNewPong extends AbstractMenu {
 	}
 
 	public startGame(): void {
-		const start = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+		const start = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.70).createFromHTML(`
 			<div>
 				<button type="button" id="startGame">Start Game</button>
 			</div>
