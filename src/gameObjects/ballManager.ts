@@ -7,7 +7,8 @@ type AllBalls = Ball;
 type AllPongs = OldPong | NewPong;
 
 export class BallManager {
-    private BALL_DIAMETER: number = 10;
+    public idBall: number = 0;
+    public BALL_DIAMETER: number = 10;
     public balls: AllBalls[] = [];
     private scene: AllPongs;
     private SPEED_START: number = 800;
@@ -18,7 +19,7 @@ export class BallManager {
     public NAME_TEXTURE_BALL_NEW_PONG: string = "greenBall";
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
-    private readonly MULTIPLIER_SPEED_Y: number = 0.667;
+    public readonly MULTIPLIER_SPEED_Y: number = 0.667;
     private addSpeed: number = 200;
 
     constructor(scene: AllPongs, speedStart: number = 800, sizeBall: number = 10) {
@@ -55,13 +56,13 @@ export class BallManager {
             let ball: AllBalls;
             switch (typeBall) {
                 case "ball":
-                    ball = new Ball(this.scene, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
+                    ball = new Ball(this.scene, this.idBall++, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
                     break;
                 case "ballGhost":
-                    ball = new Ball(this.scene, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
+                    ball = new Ball(this.scene, this.idBall++, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
                     break;
                 default:
-                    ball = new Ball(this.scene, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
+                    ball = new Ball(this.scene, this.idBall++, this.scene.WIDTH_WORLD * 0.5, this.scene.HEIGHT_WORLD * 0.5, this.NAME_TEXTURE_BALL, this.SPEED_START);
                     break;
             }
             ball.id = this.indexBall;
@@ -71,8 +72,9 @@ export class BallManager {
             ball.setAddSpeed(this.addSpeed);
             this.indexBall++;
             this.balls.push(ball);
+            this.resetBallPosition(ball);
+            this.idBall;
         });
-        this.resetBallsPosition();
     }
 
     public resetBallsPosition(): void {
@@ -105,8 +107,10 @@ export class BallManager {
         }
         // 'Math.random() < 0.5' return a random boolean
         const startX: number = MathUtils.getRandomBoolean() ? -ball.speedX : ball.speedX;
-        ball.setVelocity(startX, startY);
-        ball.setBounce(1);
+        if(ball) {
+            ball.setVelocity(startX, startY);
+            ball.setBounce(1);
+        }
     }
 
     public setMaxSpeed(speed: number): void {
@@ -118,6 +122,10 @@ export class BallManager {
             ball.addColliderWithPlayerLeft(player1);
             ball.addColliderWithPlayerRight(player2);
         });
+    }
+
+    public getSpeedStart(): number {
+        return this.SPEED_START;
     }
 
     public setSpeedStart(speed: number): void {

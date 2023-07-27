@@ -56,13 +56,107 @@ export class SettingsNewPong extends AbstractMenu {
 	private readonly STEP_SCORE_TO_WIN: number = 1;
 	private scoreToWin: number = 7;
 
+	private meteoBallSizeRandom: boolean = false;
+	private meteoBallSizeUp: boolean = false;
+	private meteoBallSizeDown: boolean = false;
+	private meteoPongSizeUp: boolean = false;
+	private meteoPongSizeDown: boolean = false;
+	private meteoPongSpeedUp: boolean = false;
+
+	private chao: boolean = false;
+
 	constructor() {
 		super({ key: "SettingsNewPong" });
 	}
 
 	create() {
-		this.menuTitle = "Pre-Setttings";
+		this.menuTitle = "Game Parameters";
 		super.create();
+		this.createCheckBoxMeteo();
+		this.createCheckBoxChao();
+	}
+
+
+
+	public createCheckBoxChao(): void {
+		const chaos = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.85).createFromHTML(`
+			<fieldset>
+				<legend>ARE YOU READY FOR CHAOS ???</legend>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="chao" name="chao">
+					<label for="chao">Yes ??</label>
+				</div>
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		chaos.addListener('click');
+
+		chaos.on('click', (event: any) => {
+			if (event.target.id === 'chao') {
+				this.chao = event.target.checked;
+			}
+		});
+	}
+
+	public createCheckBoxMeteo(): void {
+		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.68).createFromHTML(`
+			<fieldset>
+				<legend>Choose your random modification in game:</legend>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="meteo_ball_size_random" name="meteo_ball_size_random">
+					<label for="meteo_ball_size_random">Ball Size Random</label>
+				</div>
+
+				<div  class="fielsetDiv">
+					<input type="checkbox" id="meteo_ball_size_up" name="meteo_ball_size_up">
+					<label for="meteo_ball_size_up">Ball Size Up</label>
+				</div>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="meteo_ball_size_down" name="meteo_ball_size_down">
+					<label for="meteo_ball_size_down">Ball Size Down</label>
+				</div>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="meteo_pong_size_up" name="meteo_pong_size_up">
+					<label for="meteo_pong_size_up">Pong Size Up</label>
+				</div>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="meteo_pong_size_down" name="meteo_pong_size_down">
+					<label for="meteo_pong_size_down">Pong Size Down</label>
+				</div>
+
+				<div class="fielsetDiv">
+					<input type="checkbox" id="meteo_pong_speed_up" name="meteo_pong_speed_up">
+					<label for="meteo_pong_speed_up">Pong Speed Up</label>
+				</div>
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		checkBoxMeteo.addListener('click');
+
+		checkBoxMeteo.on('click', (event: any) => {
+			if (event.target.id === 'meteo_pong_size_up') {
+				this.meteoPongSizeUp = event.target.checked;
+			}
+			if (event.target.id === 'meteo_pong_size_down') {
+				this.meteoPongSizeDown = event.target.checked;
+			}
+			if (event.target.id === 'meteo_ball_size_up') {
+				this.meteoBallSizeUp = event.target.checked;
+			}
+			if (event.target.id === 'meteo_ball_size_down') {
+				this.meteoBallSizeDown = event.target.checked;
+			}
+			if (event.target.id === 'meteo_pong_speed_up') {
+				this.meteoPongSpeedUp = event.target.checked;
+			}
+		});
 	}
 
 	// Implémenter les méthodes abstraites
@@ -79,7 +173,7 @@ export class SettingsNewPong extends AbstractMenu {
 		let textButtonScoreToWin = this.BUTTON_NAME_SCORE_TO_WIN + " :	" + this.scoreToWin;
 
 		this.createTextureBall();
-		this.ballForShow = new Ball(this, this.WIDTH_WORLD * 0.335, this.HEIGHT_WORLD * 0.66, this.NAME_TEXTURE_BALL, 0);
+		this.ballForShow = new Ball(this, 0, this.WIDTH_WORLD * 0.335, this.HEIGHT_WORLD * 0.66, this.NAME_TEXTURE_BALL, 0);
 		this.ballForShow.setDisplaySize(this.sizeBall, this.sizeBall);
 
 		menuItems.push(this.buttonChooseMap);
@@ -133,7 +227,15 @@ export class SettingsNewPong extends AbstractMenu {
 						heightPong: this.heightPong,
 						widthPong: this.widthPong,
 						speedPong: this.speedPong,
-						scoreToWin: this.scoreToWin
+						scoreToWin: this.scoreToWin,
+						meteo: {
+							ballSizeUp: this.meteoBallSizeUp,
+							ballSizeDown: this.meteoBallSizeDown,
+							pongSizeUp: this.meteoPongSizeUp,
+							pongSizeDown: this.meteoPongSizeDown,
+							pongSpeedUp: this.meteoPongSpeedUp
+						},
+						chao: this.chao
 					}
 				);
 				break;
