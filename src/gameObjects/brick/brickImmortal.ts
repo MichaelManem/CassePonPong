@@ -9,7 +9,10 @@ export class BrickImmortal extends Brick {
         super(scene, x, y, width, height);
         this.type = "immortal";
         this.createTextureBrickImmortal(width, height);
-        this.setTexture(this.NAME_TEXTURE_BRICK_IMMORTAL);
+        this.setTexture("greyBrick");
+        this.setDisplaySize(width, height);
+        this.height = height;
+        this.width = width;
     }
 
     public addColliderWith(ball: Ball): void {
