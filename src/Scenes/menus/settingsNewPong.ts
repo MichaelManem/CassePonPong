@@ -70,7 +70,7 @@ export class SettingsNewPong extends AbstractMenu {
 	}
 
 	create() {
-		this.menuTitle = "Pre-Setttings";
+		this.menuTitle = "Game Parameters";
 		super.create();
 		this.createCheckBoxMeteo();
 		this.startGame();
