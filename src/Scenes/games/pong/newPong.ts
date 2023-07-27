@@ -23,8 +23,13 @@ export class NewPong extends AbstractPong {
 
 	preload() {
 		super.preload();
-		this.load.image("paddle", "assets/images/Paddle.png");
-		this.load.image("greenBall", "assets/images/GreenBall.png");
+		this.load.image("bluePaddle", "assets/images/paddles/bluePaddle.png");
+		this.load.image("orangePaddle", "assets/images/paddles/orangePaddle.png");
+		this.load.image("greenBall", "assets/images/lightGreenBall.png");
+		this.load.image("greenBrick", "assets/images/bricks/greenBrick.png");
+		this.load.image("orangeBrick", "assets/images/bricks/orangeBrick.png");
+		this.load.image("redBrick", "assets/images/bricks/redBrick.png");
+		this.load.image("greyBrick", "assets/images/bricks/greyBrick.png");
 		this.load.image("gameBackground", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
 		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
@@ -82,7 +87,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createPlayer1(): Player {
-		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "paddle", 'Z', 'S');
+		let player1: Player = new Player(this, this.PLAYER_WIDTH_POSITION, this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "bluePaddle", 'Z', 'S');
 		player1.flipX = true;
 
 		player1.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
@@ -93,7 +98,7 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createPlayer2(): Player {
-		let player2: Player = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "paddle", 'Up', 'Down');
+		let player2: Player = new Player(this, (1 - this.PLAYER_WIDTH_POSITION), this.MULTIPLIER_POSITION_HEIGHT_PLAYER, "orangePaddle", 'Up', 'Down');
 
 		player2.setDisplaySize(this.PLAYER_WIDTH, this.PLAYER_HEIGHT);
 		player2.height = this.PLAYER_HEIGHT;

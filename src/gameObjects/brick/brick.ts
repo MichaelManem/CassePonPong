@@ -13,10 +13,12 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "normal");
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.createTextureBrickHealthy(width, height);
-        this.createTextureBrickWarning(width, height);
-        this.createTextureBrickDanger(width, height);
-        this.setTexture(this.NAME_TEXTURE_BRICK_HEALTHY);
+
+        this.setTexture("greenBrick");
+
+        this.setDisplaySize(width, height);
+        this.height = height;
+        this.width = width;
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -28,9 +30,10 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
             if(brick.isNormal() && brick.health > 0) {
                 brick.health--;
                 if(brick.health <= brick.maxHealth * 0.334) {
-                    brick.setTexture(brick.NAME_TEXTURE_BRICK_DANGER);
+                    brick.setTexture("redBrick");
+
                 } else if(brick.health <= brick.maxHealth * 0.667) {
-                    brick.setTexture(brick.NAME_TEXTURE_BRICK_WARNING);
+                    brick.setTexture("orangeBrick");
                 }
             }
             let yTopBrick = brick.y - (brick.height / 2);
@@ -96,6 +99,9 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
         copyBrick.health = this.health;
         copyBrick.type = this.type;
         copyBrick.setTexture(this.texture.key);
+        copyBrick.setDisplaySize(this.width, this.height);
+        copyBrick.height = this.height;
+        copyBrick.width = this.width;
         return copyBrick;
     }
 }
