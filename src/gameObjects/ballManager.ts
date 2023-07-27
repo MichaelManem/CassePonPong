@@ -15,7 +15,8 @@ export class BallManager {
     private positionStartX: number;
     private positionStartY: number;
     private readonly waitTimeSendBall: number = 1500;
-    public NAME_TEXTURE_BALL: string = "greenBall";
+    public NAME_TEXTURE_BALL: string = "rect_ball";
+    public NAME_TEXTURE_BALL_NEW_PONG: string = "greenBall";
     public NAME_TEXTURE_BALL_GHOST: string = "ball_ghost";
     private indexBall: number = 0;
     public readonly MULTIPLIER_SPEED_Y: number = 0.667;
@@ -38,11 +39,10 @@ export class BallManager {
     }
 
     public createTextureBallNewPong(): void {
-        // TODO - Implémenter la texture de la balle spécifique à New Pong
+        this.NAME_TEXTURE_BALL = this.NAME_TEXTURE_BALL_NEW_PONG;
     }
 
     public createTextureBallGhost(): void {
-        // TODO - Implémenter la texture de la balle spécifique au balle fantome
         const graphics: Phaser.GameObjects.Graphics = this.scene.add.graphics();
         graphics.fillStyle(0xffffff);
         graphics.fillRect(0, 0, this.BALL_DIAMETER, this.BALL_DIAMETER);
@@ -67,6 +67,8 @@ export class BallManager {
             }
             ball.id = this.indexBall;
             ball.setDisplaySize(this.BALL_DIAMETER, this.BALL_DIAMETER);
+            ball.height = this.BALL_DIAMETER;
+            ball.width = this.BALL_DIAMETER;
             ball.setAddSpeed(this.addSpeed);
             this.indexBall++;
             this.balls.push(ball);
