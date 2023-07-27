@@ -88,7 +88,6 @@ export class SettingsNewPong extends AbstractMenu {
 		start.addListener('click');
 
 		start.on('click', (event: any) => {
-			console.log(this.chao)
 			this.scene.start("NewPong",
 				{
 					buttonMap: this.buttonChooseMap,

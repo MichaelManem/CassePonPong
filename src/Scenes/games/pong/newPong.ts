@@ -51,7 +51,6 @@ export class NewPong extends AbstractPong {
 		this.brickManager = new BrickManager(this);
 		this.createBricks();
 
-        console.log(this.dataScene.chao)
 		this.chao = new Chao(this, this.dataScene.chao);
 		this.chao.startEvent();
 
