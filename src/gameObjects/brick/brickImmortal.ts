@@ -8,7 +8,7 @@ export class BrickImmortal extends Brick {
     constructor(scene: NewPong, x: number, y: number, width: number, height: number) {
         super(scene, x, y, width, height);
         this.type = "immortal";
-        this.createTextureBrickImmortal(width, height);
+        //this.createTextureBrickImmortal(width, height);
         this.setTexture("greyBrick");
         this.setDisplaySize(width, height);
         this.height = height;
@@ -44,6 +44,9 @@ export class BrickImmortal extends Brick {
         copyBrick.health = this.health;
         copyBrick.type = this.type;
         copyBrick.setTexture(this.texture.key);
+        copyBrick.height = this.height;
+        copyBrick.width = this.width;
+        copyBrick.setDisplaySize(this.width, this.height);
         return copyBrick;
     }
 }

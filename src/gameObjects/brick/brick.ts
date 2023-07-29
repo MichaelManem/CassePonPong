@@ -16,9 +16,9 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
 
         this.setTexture("greenBrick");
 
-        this.setDisplaySize(width, height);
         this.height = height;
         this.width = width;
+        this.setDisplaySize(width, height);
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -99,9 +99,9 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
         copyBrick.health = this.health;
         copyBrick.type = this.type;
         copyBrick.setTexture(this.texture.key);
-        copyBrick.setDisplaySize(this.width, this.height);
         copyBrick.height = this.height;
         copyBrick.width = this.width;
+        copyBrick.setDisplaySize(this.width, this.height);
         return copyBrick;
     }
 }
