@@ -26,7 +26,7 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
     }
 
     public addColliderWith(ball: Ball): void {
-        this.scene.physics.add.overlap(ball, this, function (ball, brick) {
+        this.scene.physics.add.overlap(ball, this, (ball, brick) => {
             if(brick.isNormal() && brick.health > 0) {
                 brick.health--;
                 if(brick.health <= brick.maxHealth * 0.334) {
@@ -44,8 +44,14 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
             } else {
                 ball.setVelocity(-1 * ball.body.velocity.x, ball.body.velocity.y);
             }
+            this.playCollideSoundBrick();
         });
 	}
+    
+    public playCollideSoundBrick(): void {
+        this.scene.sound.add("hitBrick", { loop: false, volume: 1 }).play();
+    };
+    
     
     private createTextureBrickHealthy(width: number, height: number) {
         const graphics: Phaser.GameObjects.Graphics = this.scene.add.graphics();
@@ -92,6 +98,7 @@ export class Brick extends Phaser.Physics.Arcade.Sprite {
     public isDead() {
         return this.health <= 0 && this.isNormal();
     }
+
 
     public copyBrick(scene: NewPong) {
         let copyBrick = new Brick(scene, this.x, this.y, this.width, this.height);

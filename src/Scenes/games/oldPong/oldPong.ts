@@ -14,9 +14,9 @@ export class OldPong extends AbstractPong {
 	preload() {
 		super.preload();
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
-		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
-		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
-		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
+		this.load.audio("hitPaddle", "assets/sounds/Pong Old Pong.mp3");
+		this.load.audio("hitWall", "assets/sounds/Hall Old Pong.mp3");
+		this.load.audio("scorePoint", "assets/sounds/Point Old Pong.mp3");
 		
 		this.createMiddleLinePart();
 	}

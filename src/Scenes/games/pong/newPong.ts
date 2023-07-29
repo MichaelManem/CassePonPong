@@ -37,9 +37,11 @@ export class NewPong extends AbstractPong {
 		this.load.image("greyBrick", "assets/images/bricks/greyBrick.png");
 		this.load.image("gameBackground", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
-		this.load.audio("hitPaddle", "assets/musics/Pong Old Pong.mp3");
-		this.load.audio("hitWall", "assets/musics/Hall Old Pong.mp3");
-		this.load.audio("scorePoint", "assets/musics/Point Old Pong.mp3");
+		this.load.audio("hitPaddle", "assets/sounds/Pong New Pong.mp3");
+		this.load.audio("hitBrick", "assets/sounds/Brick New Pong.mp3");
+		this.load.audio("hitWall", "assets/sounds/Brick New Pong.mp3");
+		this.load.audio("scorePoint", "assets/sounds/Point New Pong.mp3");
+		this.load.audio("brickDead", "assets/sounds/Brick explosion.mp3");
 	}
 
 	create() {
