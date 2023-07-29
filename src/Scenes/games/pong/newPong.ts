@@ -37,6 +37,14 @@ export class NewPong extends AbstractPong {
 		this.load.image("greyBrick", "assets/images/bricks/greyBrick.png");
 		this.load.image("gameBackground", "assets/images/backgrounds/BackgroundInGameNeon.png");
 		this.load.audio("music", "assets/musics/Line Noise - Magenta Moon (Part II).mp3");
+		this.load.audio("musicGintama", "assets/musics/Gintama Opening 13.mp3");
+		this.load.audio("musicEon", "assets/musics/Eon Dancing With Monsters.mp3");
+		this.load.audio("musicIgnite", "assets/musics/K-391 & Alan Walker - Ignite (feat. Julie Bergan & Seungri).mp3");
+		this.load.audio("musicOshinoko", "assets/musics/Oshinoko.mp3");
+		this.load.audio("musicNightOfFire", "assets/musics/Initial D - Night of Fire.mp3");
+		this.load.audio("musicGasGasGas", "assets/musics/Gas Gas Gas.mp3");
+		this.load.audio("musicSpiderverse", "assets/musics/Spider-Man Across the Spider-Verse  Annihilate by Metro Boomin x Swae Lee x Lil Wayne x Offset.mp3");
+		this.load.audio("musicSuzume", "assets/musics/Suzume no Tojimari『Suzume』Theme Song.mp3");
 		this.load.audio("hitPaddle", "assets/sounds/Pong New Pong.mp3");
 		this.load.audio("hitBrick", "assets/sounds/Brick New Pong.mp3");
 		this.load.audio("hitWall", "assets/sounds/Brick New Pong.mp3");
@@ -118,7 +126,11 @@ export class NewPong extends AbstractPong {
 	}
 
 	protected createMusic(): void {
-		this.backgroundMusic = this.sound.add("music", { loop: true, volume: 0.5 });
+		let music = this.dataScene.music === "noMusic"	? "music" : this.dataScene.music;
+		this.backgroundMusic = this.sound.add(music, { loop: true, volume: 0.50 });
+		if(this.dataScene.music === "noMusic") {
+			this.backgroundMusic.setVolume(0);
+		}
 		this.backgroundMusic.play();
 
 		// Créer un evenement qui va etre appelé lors du 'resume' de cette scene
