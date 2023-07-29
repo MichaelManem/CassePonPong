@@ -1,0 +1,26 @@
+# Fichiers temporaires et de sauvegarde
+*~
+.*.swp
+.DS_Store
+
+# Fichiers de configuration de l'éditeur de texte ou de l'IDE
+# We don't add .vscode/ to the gitignore because we want share the settings we do
+.idea/
+*.suo
+*.user
+*.userprefs
+
+# Dossiers de dépendances et de build
+node_modules/
+dist/
+build/
+
+# Fichiers de journalisation
+*.log
+logs/
+
+# Fichiers de configuration secrets
+.env
+secrets.json
+
+

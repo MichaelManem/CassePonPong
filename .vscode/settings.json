@@ -1,0 +1,18 @@
+{
+    "tabnine.experimentalAutoImports": true,
+    "window.zoomLevel": 1,
+    "files.autoSave": "afterDelay",
+    "explorer.confirmDragAndDrop": false,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "terminal.integrated.env.windows": {},
+    "githubPullRequests.pullBranch": "never",
+    "regionHighlighter.borderWidth": "10px",
+    "regionHighlighter.defaultTheme": "Default Color",
+    "regionHighlighter.defaultColor": "rgba(13, 13, 13, 0.3)",
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "prettier.useTabs": true,
+    "prettier.printWidth": 120,
+    "prettier.insertPragma": false
+}
