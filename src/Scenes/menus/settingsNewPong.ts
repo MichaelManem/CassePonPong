@@ -63,6 +63,8 @@ export class SettingsNewPong extends AbstractMenu {
 	private meteoPongSizeDown: boolean = false;
 	private meteoPongSpeedUp: boolean = false;
 
+	private music: string = "music";
+
 	private chao: boolean = false;
 
 	constructor() {
@@ -74,8 +76,69 @@ export class SettingsNewPong extends AbstractMenu {
 		super.create();
 		this.createCheckBoxMeteo();
 		this.createCheckBoxChao();
+		this.createCheckBoxMusicAnime();
 	}
 
+	public createCheckBoxMusicAnime(): void {
+		const music = this.add.dom(this.WIDTH_WORLD * 0.83, this.HEIGHT_WORLD * 0.15).createFromHTML(`
+			<fieldset>
+				<legend>CHOOSE YOUR MUSIC !!!</legend>
+
+				<div>
+					<input type="submit" id="musicGintama" name="musicGintama" value="musicGintama">
+					<label for="musicGintama">Gintama Opening 13</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicOshinoko" name="musicOshinoko" value="musicOshinoko">
+					<label for="musicOshinoko">Oshinoko Op 1</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicEon" name="musicEon" value="musicEon">
+					<label for="musicEon">Eon Dancing with monsters</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicIgnite" name="musicIgnite" value="musicIgnite">
+					<label for="musicIgnite">Ignite</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicSpiderverse" name="musicSpiderverse" value="musicSpiderverse">
+					<label for="musicSpiderverse">Annihilate</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicSuzume" name="musicSuzume" value="musicSuzume">
+					<label for="musicSuzume">Suzume</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicNightOfFire" name="musicNightOfFire" value="musicNightOfFire">
+					<label for="musicNightOfFire">InitialD - Night of Fire</label>
+				</div>
+
+				<div>
+					<input type="submit" id="musicGasGasGas" name="musicGasGasGas" value="musicGasGasGas">
+					<label for="musicGasGasGas">InitialD - Gas Gas Gas</label>
+				</div>
+
+				<div>
+					<input type="submit" id="noMusic" name="noMusic" value="noMusic" 
+						checked>
+					<label for="noMusic">PAS DE MUSIC PLZ !</label>
+				</div>
+			</fieldset>
+	  	`);
+
+		// Add a click event listener to the save button
+		music.addListener('click');
+
+		music.on('click', (event: any) => {
+			this.music = event.target.id;
+		});
+	}
 
 
 	public createCheckBoxChao(): void {
@@ -235,7 +298,8 @@ export class SettingsNewPong extends AbstractMenu {
 							pongSizeDown: this.meteoPongSizeDown,
 							pongSpeedUp: this.meteoPongSpeedUp
 						},
-						chao: this.chao
+						chao: this.chao, 
+						music: this.music
 					}
 				);
 				break;
