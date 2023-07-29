@@ -37,12 +37,12 @@ export class SettingsNewPong extends AbstractMenu {
 	private readonly MAX_HEIGHT_PONG: number = 500;
 	private readonly MIN_HEIGHT_PONG: number = 10;
 	private readonly STEP_HEIGHT_PONG: number = 5;
-	private heightPong: number = 80;
+	private heightPong: number = 150;
 	private readonly BUTTON_NAME_WIDTH_PONG: string = "Pong width";
 	private readonly MAX_WIDTH_PONG: number = 200;
 	private readonly MIN_WIDTH_PONG: number = 10;
 	private readonly STEP_WIDTH_PONG: number = 5;
-	private widthPong: number = 10;
+	private widthPong: number = 25;
 	private readonly NAME_TEXTURE_PONG: string = "pongForShow";
 	private pongForShow!: Player;
 	private readonly BUTTON_NAME_SPEED_PONG: string = "Pong -> I am fast AF boy";
@@ -73,72 +73,17 @@ export class SettingsNewPong extends AbstractMenu {
 		this.menuTitle = "Game Parameters";
 		super.create();
 		this.createCheckBoxMeteo();
-		this.startGame();
 		this.createCheckBoxChao();
 	}
 
-	public startGame(): void {
-		const start = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.70).createFromHTML(`
-			<div>
-				<button type="button" id="startGame">Start Game</button>
-			</div>
-	  	`);
 
-		// Add a click event listener to the save button
-		start.addListener('click');
-
-		start.on('click', (event: any) => {
-			this.scene.start("NewPong",
-				{
-					buttonMap: this.buttonChooseMap,
-					nbBrickToMapRandom: this.nbBrickToMapRandom,
-					speedBall: this.speedBall,
-					sizeBall: this.sizeBall,
-					addSpeedBall: this.addSpeedBall,
-					nbBall: this.nbBall,
-					heightPong: this.heightPong,
-					widthPong: this.widthPong,
-					speedPong: this.speedPong,
-					scoreToWin: this.scoreToWin,
-					meteo: {
-						ballSizeUp: this.meteoBallSizeUp,
-						ballSizeDown: this.meteoBallSizeDown,
-						pongSizeUp: this.meteoPongSizeUp,
-						pongSizeDown: this.meteoPongSizeDown,
-						pongSpeedUp: this.meteoPongSpeedUp,
-						ballSizeRandom: this.meteoBallSizeRandom
-					},
-					chao: this.chao
-				}
-			);
-		});
-	}
-
-	public pongSize(): void {
-		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
-			<fieldset>
-				<legend>Size of the pong:</legend>
-
-				<input type="number" step="10" min="10" max="100" id="meteo_pong_size_up">
-			</fieldset>
-	  	`);
-
-		// Add a click event listener to the save button
-		checkBoxMeteo.addListener('click');
-
-		checkBoxMeteo.on('click', (event: any) => {
-			// if (event.target.id === 'meteo_pong_size_up') {
-			// 	this.meteoPongSizeUp = event.target.checked;
-			// }
-		});
-	}
 
 	public createCheckBoxChao(): void {
-		const chaos = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.88).createFromHTML(`
+		const chaos = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.85).createFromHTML(`
 			<fieldset>
 				<legend>ARE YOU READY FOR CHAOS ???</legend>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="chao" name="chao">
 					<label for="chao">Yes ??</label>
 				</div>
@@ -156,36 +101,36 @@ export class SettingsNewPong extends AbstractMenu {
 	}
 
 	public createCheckBoxMeteo(): void {
-		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.80).createFromHTML(`
+		const checkBoxMeteo = this.add.dom(this.WIDTH_WORLD * 0.80, this.HEIGHT_WORLD * 0.68).createFromHTML(`
 			<fieldset>
 				<legend>Choose your random modification in game:</legend>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="meteo_ball_size_random" name="meteo_ball_size_random">
 					<label for="meteo_ball_size_random">Ball Size Random</label>
 				</div>
 
-				<div>
+				<div  class="fielsetDiv">
 					<input type="checkbox" id="meteo_ball_size_up" name="meteo_ball_size_up">
 					<label for="meteo_ball_size_up">Ball Size Up</label>
 				</div>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="meteo_ball_size_down" name="meteo_ball_size_down">
 					<label for="meteo_ball_size_down">Ball Size Down</label>
 				</div>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="meteo_pong_size_up" name="meteo_pong_size_up">
 					<label for="meteo_pong_size_up">Pong Size Up</label>
 				</div>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="meteo_pong_size_down" name="meteo_pong_size_down">
 					<label for="meteo_pong_size_down">Pong Size Down</label>
 				</div>
 
-				<div>
+				<div class="fielsetDiv">
 					<input type="checkbox" id="meteo_pong_speed_up" name="meteo_pong_speed_up">
 					<label for="meteo_pong_speed_up">Pong Speed Up</label>
 				</div>

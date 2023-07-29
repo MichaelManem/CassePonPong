@@ -111,9 +111,9 @@ export class BrickManager {
             let newBrickY = MathUtils.getRandomArbitrary(this.scene.HEIGHT_WORLD * 0.20, this.scene.HEIGHT_WORLD * 0.95);
             while (hasIntersection || isOnSpwanBall) {
                 hasIntersection = false;
-                isOnSpwanBall = newBrickX > (this.scene.WIDTH_WORLD * 0.50 - this.BRICK_WIDTH) && 
-                                (newBrickY > (this.scene.HEIGHT_WORLD * 0.50 - this.BRICK_HEIGHT) && 
-                                newBrickY < (this.scene.HEIGHT_WORLD * 0.50 + this.BRICK_HEIGHT));
+                isOnSpwanBall = newBrickX > (this.scene.WIDTH_WORLD * 0.50 - this.BRICK_WIDTH) &&
+                    (newBrickY > (this.scene.HEIGHT_WORLD * 0.50 - this.BRICK_HEIGHT) &&
+                        newBrickY < (this.scene.HEIGHT_WORLD * 0.50 + this.BRICK_HEIGHT));
                 for (let iBrickXs = 0; iBrickXs < brickXs.length; iBrickXs++) {
                     let rectA = new Phaser.Geom.Rectangle(brickXs[iBrickXs], brickYs[iBrickXs], this.BRICK_WIDTH, this.BRICK_HEIGHT);
                     let rectB = new Phaser.Geom.Rectangle(newBrickX, newBrickY, this.BRICK_WIDTH, this.BRICK_HEIGHT);
